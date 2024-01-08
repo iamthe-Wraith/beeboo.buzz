@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
 	font-family: 'NightmareBeforeChristmas';
 	src: url('/fonts/NightmareBeforeChristmas.ttf') format('truetype');
 }
@@ -12,7 +12,7 @@
 	font-family: 'Balsamiq';
 	src: url('/fonts/BalsamiqSans-Italic.ttf') format('truetype');
 	font-style: italic;
-}
+} */
 
 html,
 body {
@@ -25,12 +25,26 @@ body {
 
 body {
 	/* when any colors change, be sure to update /lib/constants/colors as well */
-	--dark-100: #000000;
-	--dark-300: #0a0a0a;
-	--dark-500: #303030;
-	--light-100: #d1d1d1;
-	--light-500: #eaeaea;
-	--light-900: #ffffff;
+	--dark-000: oklch(0% 0 3);
+	--dark-100: oklch(10% 0 3);
+	--dark-200: oklch(15% 0 3);
+	--dark-300: oklch(20% 0 3);
+	--dark-400: oklch(25% 0 3);
+	--dark-500: oklch(30% 0 3);
+	--dark-600: oklch(35% 0 3);
+	--dark-700: oklch(40% 0 3);
+	--dark-800: oklch(45% 0 3);
+	--dark-900: oklch(50% 0 3);
+
+	--light-100: oklch(84% 0 3);
+	--light-200: oklch(86% 0 3);
+	--light-300: oklch(88% 0 3);
+	--light-400: oklch(90% 0 3);
+	--light-500: oklch(92% 0 3);
+	--light-600: oklch(94% 0 3);
+	--light-700: oklch(96% 0 3);
+	--light-800: oklch(98% 0 3);
+	--light-900: oklch(100% 0 3);
 
 	--primary-100: oklch(51.32% 0.178 169.52);
 	--primary-200: oklch(56.32% 0.178 169.52);
@@ -62,7 +76,15 @@ body {
 	--tertiary-800: oklch(56.91% 0.281 264.82);
 	--tertiary-900: oklch(61.91% 0.281 264.82);
 
+	--danger-100: oklch(46.26% 0.239 29.12);
+	--danger-200: oklch(48.26% 0.239 29.12);
+	--danger-300: oklch(50.26% 0.239 29.12);
+	--danger-400: oklch(52.26% 0.239 29.12);
 	--danger-500: oklch(54.26% 0.239 29.12);
+	--danger-600: oklch(56.26% 0.239 29.12);
+	--danger-700: oklch(58.26% 0.239 29.12);
+	--danger-800: oklch(60.26% 0.239 29.12);
+	--danger-900: oklch(62.26% 0.239 29.12);
 
 	--font-primary: NightmareBeforeChristmas, sans-serif;
 	--font-secondary: Balsamiq, sans-serif;
@@ -74,6 +96,7 @@ body * {
 	box-sizing: border-box;
 	font-family: var(--font-secondary);
 	color: var(--light-500);
+	transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
 a:focus {
@@ -120,7 +143,8 @@ h6 *,
 }
 
 h1,
-h1 * {
+h1 *,
+.h1 {
 	font-size: 2rem;
 	text-align: center;
 	line-height: 2.6rem;
@@ -132,7 +156,8 @@ h1 * {
 }
 
 h2,
-h2 * {
+h2 *,
+.h2 {
 	font-size: 1.75rem;
 	text-align: center;
 	line-height: 2.4rem;
@@ -144,7 +169,8 @@ h2 * {
 }
 
 h3,
-h3 * {
+h3 *,
+.h3 {
 	font-size: 1.5rem;
 	text-align: center;
 	line-height: 2.2rem;
@@ -156,7 +182,8 @@ h3 * {
 }
 
 h4,
-h4 * {
+h4 *,
+.h4 {
 	font-size: 1.3rem;
 	text-align: center;
 	line-height: 2rem;
@@ -168,14 +195,16 @@ h4 * {
 }
 
 h5,
-h5 * {
+h5 *,
+.h5 {
 	font-size: 1.2rem;
 	text-align: center;
 	line-height: 1.8rem;
 }
 
 h6,
-h6 * {
+h6 *,
+.h6 {
 	font-size: 0.9rem;
 	text-align: center;
 	line-height: 1.4rem;
