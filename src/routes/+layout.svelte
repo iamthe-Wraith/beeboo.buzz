@@ -1,6 +1,37 @@
 <script lang="ts">
+    import { PUBLIC_APP_ENV } from '$env/static/public';
     import './global.css';
 </script>
+
+<svelte:head>
+	{#if PUBLIC_APP_ENV === 'production'}
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+                default-src 'self' 'unsafe-inline';
+                style-src 'self' 'unsafe-inline';
+                font-src 'self'; 
+                connect-src https://ohmygtd.app ws://ohmygtd.app https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                img-src https://ohmygtd.app blob:; 
+                child-src blob:; 
+                worker-src blob:;"
+		/>
+	{/if}
+
+	{#if PUBLIC_APP_ENV === 'test'}
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="
+                default-src 'self' 'unsafe-inline';
+                style-src 'self' 'unsafe-inline';
+                font-src 'self'; 
+                connect-src http://localhost:5173 ws://localhost:5173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                img-src http://localhost:5173 blob:; 
+                child-src blob:; 
+                worker-src blob:;"
+		/>
+	{/if}
+</svelte:head>
 
 <header>
     <div class="logo">Oh My GTD</div>
