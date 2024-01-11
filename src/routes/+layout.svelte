@@ -1,6 +1,7 @@
 <script lang="ts">
     import { PUBLIC_APP_ENV } from '$env/static/public';
     import './global.css';
+    import Auth from '$lib/components/Auth.svelte';
 </script>
 
 <svelte:head>
@@ -35,6 +36,10 @@
 
 <header>
     <div class="logo">Oh My GTD</div>
+
+    <div>
+        <Auth />
+    </div>
 </header>
 
 <main>
