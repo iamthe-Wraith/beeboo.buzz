@@ -27,7 +27,7 @@
         border-radius: 0.25rem;
         font-weight: 500;
         
-        &:hover {
+        &:hover:not(:disabled) {
             cursor: pointer;
         }
 
@@ -41,8 +41,8 @@
             border: 1px solid var(--primary-500);
             color: var(--light-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 background-color: var(--primary-300);
                 border: 1px solid var(--primary-700);
             }
@@ -54,8 +54,8 @@
             border: none;
             color: var(--primary-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 color: var(--primary-700);
             }
         }
@@ -65,8 +65,8 @@
             border: 1px solid var(--secondary-500);
             color: var(--light-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 background-color: var(--secondary-200);
                 border: 1px solid var(--secondary-700);
             }
@@ -78,8 +78,8 @@
             border: none;
             color: var(--secondary-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 color: var(--secondary-700);
             }
         }
@@ -89,8 +89,8 @@
             border: 1px solid var(--tertiary-500);
             color: var(--light-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 background-color: var(--tertiary-300);
                 border: 1px solid var(--tertiary-700);
             }
@@ -102,8 +102,8 @@
             border: none;
             color: var(--tertiary-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 color: var(--tertiary-700);
             }
         }
@@ -113,8 +113,8 @@
             border: 1px solid var(--dark-500);
             color: var(--light-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 background-color: var(--dark-400);
                 border: 1px solid var(--dark-600);
             }
@@ -126,8 +126,8 @@
             border: none;
             color: var(--light-500);
 
-            &:hover,
-            &:focus {
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
                 color: var(--light-200);
             }
         }
