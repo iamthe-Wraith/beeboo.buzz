@@ -38,7 +38,7 @@
     <div class="logo">Oh My GTD</div>
 
     <div>
-        <Auth />
+        <Auth allowOpenFromQueryParams />
     </div>
 </header>
 

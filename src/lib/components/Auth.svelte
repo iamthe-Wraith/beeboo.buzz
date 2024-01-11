@@ -1,13 +1,30 @@
 <script lang="ts">
     import AuthModal from '$lib/components/modals/AuthModal.svelte';
 	import type { AuthMethod } from '$lib/types/modal';
+	import { onMount } from 'svelte';
 
     export let triggerType: 'both' | 'signin' | 'signup' = 'both';
+    export let allowOpenFromQueryParams = false;
 
     const id  = 'auth-modal';
     let open = false;
 
     let method: AuthMethod = 'signin';
+
+    onMount(() => {
+        if (allowOpenFromQueryParams) {
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            const signinFromQuery = params.get('signin');
+            const signupFromQuery = params.get('signup');
+
+            if (signinFromQuery || signupFromQuery) {
+                method = signinFromQuery ? 'signin' : 'signup';
+                open = true;
+            }
+        }
+    
+    })
 
     function onModalChange(e: CustomEvent<{ id: string, open: boolean }>) {
         if (e.detail.id === id) {
