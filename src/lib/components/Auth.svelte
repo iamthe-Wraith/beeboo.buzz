@@ -52,7 +52,7 @@
 <AuthModal
     {id}
     bind:open={open}
-    method={method}
+    bind:method={method}
     on:modal-change={onModalChange}
 />
 
