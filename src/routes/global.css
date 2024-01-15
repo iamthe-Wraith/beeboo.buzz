@@ -244,7 +244,7 @@ li:not(:last-child) {
 .error {
 	color: var(--danger-500);
 	font-size: 0.875rem;
-	line-height: 0.7rem;
+	line-height: 1.1rem;
 	text-indent: 0;
 }
 
