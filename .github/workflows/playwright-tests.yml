@@ -1,28 +1,37 @@
-# name: Run_Tests_on_PRs
+name: Test
 
-# on:
-#   pull_request:
+on:
+  pull_request:
 
-# env:
-#   PUBLIC_APP_ENV: test
-#   PUBLIC_SENTRY_DSN:
-#   DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+env:
+  PUBLIC_APP_ENV: test
+  PUBLIC_SENTRY_DSN:
+  DATABASE_URL: postgres://igor:password@localhost:5432/lab
 
-# jobs:
-#   test:
-#     runs-on: ubuntu-latest
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 21.3.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21.3.0
 
-#       - name: Install dependencies
-#         run: npm install
+      - name: Install dependencies
+        run: npm install
 
-#       - name: Run Playwright tests
-#         run: npm run test
+      - name: Start Postgres on Ubuntu
+        run: sudo service postgresql start
+
+      - name: Create Database User
+        run: sudo -u postgres psql --command="CREATE USER igor PASSWORD 'password'" --command="\du"
+
+      - name: Create Database
+        run: sudo -u postgres createdb lab --owner=igor
+
+      - name: Run tests
+        run: npm run test
