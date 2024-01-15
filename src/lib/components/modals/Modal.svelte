@@ -48,12 +48,17 @@
 
 <dialog
     {id}
+    data-testid={id}
     bind:this={modal}
     use:clickOutside
     on:click-outside={closeModal}
 >
     <header>
-        <button class="close" on:click={closeModal}>
+        <button
+            class="close" 
+            on:click={closeModal}
+            data-testid="close-modal-button"
+        >
             <Icon icon="ion:close" />
         </button>
         <h3 class="h5">{title}</h3>

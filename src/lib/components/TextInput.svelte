@@ -8,7 +8,7 @@
     export let required = false;
 
 	function typeAction(node: HTMLInputElement) {
-		node.type = type;
+		node.type = type || 'text';
 	}
 </script>
 
@@ -40,11 +40,11 @@
     />
     
     {#if text && !error}
-        <p>{text}</p>
+        <p data-testid={`${id}-text`}>{text}</p>
     {/if}
 
     {#if error}
-        <p class="error">{error}</p>
+        <p class="error" data-testid={`${id}-error`}>{error}</p>
     {/if}
 </div>
 

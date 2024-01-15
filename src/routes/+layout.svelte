@@ -34,7 +34,7 @@
 	{/if}
 </svelte:head>
 
-<header>
+<header data-testid="global-header">
     <div class="logo">Oh My GTD</div>
 
     <div>
@@ -42,11 +42,11 @@
     </div>
 </header>
 
-<main>
+<main data-testid="global-main">
     <slot></slot>  
 </main>
 
-<footer>
+<footer data-testid="global-footer">
     <div></div>
     <div>
         Copyright {new Date().getFullYear()}
