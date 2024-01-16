@@ -1,20 +1,23 @@
 <script lang="ts">
-    import Form from "../forms/Form.svelte";
+    import { enhance } from '$app/forms';
     import Button from "../Button.svelte";
-	import TextInput from "../TextInput.svelte";
-	import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
-	import { onMount } from "svelte";
+    import TextInput from "../TextInput.svelte";
+    import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
+    import { onMount } from "svelte";
+	import type { ActionResult } from '@sveltejs/kit';
 
     let email: string = '';
     let username: string = '';
     let password: string = '';
     let confirmPassword: string = '';
 
+    let genError: string = '';
     let emailError: string = '';
     let usernameError: string = '';
     let passwordError: string = '';
     let confirmPasswordError: string = '';
 
+    let processing = false;
     let disabled = true;
 
     $: (
@@ -84,6 +87,32 @@
         passwordError = '';
     }
 
+    function onSubmitResponse() {
+        processing = true;
+
+        return ({ result }: { result: ActionResult<{ message: string }> }) => {
+            if (result.type === 'failure') {
+                if (result.data) {
+                    if (result.data.email) {
+                        emailError = result.data.email as string;
+                    }
+
+                    if (result.data.username) {
+                        usernameError = result.data.username as string;
+                    }
+
+                    if (result.data.password) {
+                        passwordError = result.data.password as string;
+                    }
+                } else {
+                    genError = 'Something went wrong. Please try again later.';    
+                }
+            }
+
+            processing = false;
+        }
+    };
+
     function onUsernameBlur() {
         const validated = usernameSchema.safeParse(username.trim());
 
@@ -98,7 +127,12 @@
     }
 </script>
 
-<Form method="POST" action="/?/signup" data-testid={'signup-form'}>
+<form
+    method="POST" 
+    action="/?/signup" 
+    data-testid={'signup-form'}
+    use:enhance={onSubmitResponse}
+>
     <TextInput
         bind:value={email}
         required
@@ -144,24 +178,48 @@
         on:blur={onConfirmPasswordBlur}
     />
 
-    <div class="buttons-container" slot="footer">
-        <slot name="secondary-action" />
-        <Button
-            type="submit"
-            kind="primary"
-            disabled={disabled}
-        >
-            Sign Up
-        </Button>
-    </div>
-</Form>
+    <footer>
+        {#if genError}
+            <p class="error">{genError}</p>
+        {/if}
+        <div class="buttons-container">
+            <slot name="secondary-action" />
+            <Button
+                {processing}
+                type="submit"
+                disabled={disabled}
+            >
+                Sign Up
+            </Button>
+        </div>
+    </footer>
+</form>
 
 <style>
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+        width: 30rem;
+        height: auto;
+    }
+
+    footer {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding-top: 0.5rem;
+    }
+
     .buttons-container {
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-grow: 1;
         gap: 0.5rem;
+    }
+
+    p.error {
+        text-align: center;
     }
 </style>
