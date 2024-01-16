@@ -28,17 +28,23 @@ export const generatePasswordHash = (password: string): Promise<string> => {
 
 export const isValidPassword = (providedPassword: string, encryptedPassword: string): Promise<void> => {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(providedPassword, encryptedPassword, (err: Error | undefined, authenticated: boolean) => {
-      if (err) {
-        const error = new ApiError('An error occurred while validating password.', HttpStatus.INTERNAL_SERVER_ERROR);
-        reject(error);
-      } else {
-        if (authenticated) {
-          resolve();
+    if (providedPassword && encryptedPassword) {
+      bcrypt.compare(providedPassword, encryptedPassword, (err: Error | undefined, authenticated: boolean) => {
+        if (err) {
+          const error = new ApiError('An error occurred while validating password.', HttpStatus.INTERNAL_SERVER_ERROR);
+          reject(error);
         } else {
-          reject(new ApiError('Invalid email or password.', HttpStatus.AUTHENTICATION));
+          if (authenticated) {
+            resolve();
+          } else {
+            reject(new ApiError('Invalid email or password.', HttpStatus.AUTHENTICATION));
+          }
         }
-      }
-    });
+      });
+    } else if (!providedPassword) {
+      reject(new ApiError('Password is required.', HttpStatus.INVALID_ARG, 'password'));
+    } else {
+      reject(new ApiError('Encrypted password is required.', HttpStatus.INVALID_ARG, 'encryptedPassword'));
+    }
   });
 }

@@ -1,7 +1,7 @@
 import { prisma } from "$lib/db/client";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
 import { $Enums } from "@prisma/client";
-import { generatePasswordHash } from "./auth";
+import { generatePasswordHash } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
