@@ -14,6 +14,11 @@ export class ApiError extends Error {
 
   constructor(message: string, statusCode: NumericRange<400, 599>, field?: string, data?: Record<string, unknown>) {
     super(message);
+
+    if (!message) throw new Error('error message is required');
+    if (!statusCode) throw new Error('status code is required');
+    if (statusCode < 400 || statusCode > 599) throw new Error('status code must be between 400 and 599');
+
     this.field = field;
     this.data = data || {};
     this.statusCode = statusCode;
