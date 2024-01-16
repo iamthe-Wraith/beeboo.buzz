@@ -2,8 +2,9 @@ import { prisma } from "$lib/db/client";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
 import { $Enums } from "@prisma/client";
 import { generatePasswordHash } from "./auth";
-import type { IServiceResponse } from "../../types/services";
 import type { SafeParseSuccess } from "zod";
+import { ApiError } from "$lib/utils/api-error";
+import { HttpStatus } from "$lib/constants/error";
 
 export interface ISignupRequest {
     email: string;
@@ -11,31 +12,29 @@ export interface ISignupRequest {
     password: string;
 }
 
-export const signup = async ({ email, username, password }: ISignupRequest): Promise<IServiceResponse> => {
+export const signup = async ({ email, username, password }: ISignupRequest) => {
     const validatedEmail = emailSchema.safeParse(email.trim());
     const validatedUsername = usernameSchema.safeParse(username.trim());
     const validatedPassword = passwordSchema.safeParse(password.trim());
 
-    const errors = {} as Record<string, string>;
+    const errors: ApiError[] = [];
 
     if (!validatedEmail.success) {
         const formatted = validatedEmail.error.format();
-        errors.email = formatted._errors[0];
+        errors.push(new ApiError(formatted._errors[0], HttpStatus.UNPROCESSABLE, 'email', { email }));
     }
 
     if (!validatedUsername.success) {
         const formatted = validatedUsername.error.format();
-        errors.username = formatted._errors[0];
+        errors.push(new ApiError(formatted._errors[0], HttpStatus.UNPROCESSABLE, 'username', { username }));
     }
 
     if (!validatedPassword.success) {
         const formatted = validatedPassword.error.format();
-        errors.password = formatted._errors[0];
+        errors.push(new ApiError(formatted._errors[0], HttpStatus.UNPROCESSABLE, 'password', { password }));
     }
 
-    if (Object.keys(errors).length) {
-        return { success: false, errors };
-    }
+    if (Object.keys(errors).length) throw errors;
 
     try {
         const existingUser = await prisma.user.findFirst({
@@ -48,17 +47,17 @@ export const signup = async ({ email, username, password }: ISignupRequest): Pro
         });
 
         if (existingUser) {
-            const data = { success: false, errors: ({} as { email?: string; username?: string }) };
+            const errors: ApiError[] = [];
             
             if (existingUser.email === (validatedEmail as SafeParseSuccess<string>).data) {
-                data.errors.email = 'Email is already in use.';
+                errors.push(new ApiError('Email is already in use.', HttpStatus.CONFLICT, 'email', { email }));
             }
             
             if (existingUser.username === (validatedUsername as SafeParseSuccess<string>).data) {
-                data.errors.username = 'Username is already in use.';
+                errors.push(new ApiError('Username is already in use.', HttpStatus.CONFLICT, 'username', { username }));
             }
 
-            return data;
+            throw errors;
         }
 
         const hash = await generatePasswordHash((validatedPassword as SafeParseSuccess<string>).data);
@@ -71,8 +70,8 @@ export const signup = async ({ email, username, password }: ISignupRequest): Pro
             },
         });
 
-        return { success: true, data: { user } };
+        return user;
     } catch (err: unknown) {
-        return { success: false, errors: { general: (err as Error).message } };
+        throw ApiError.parse(err);
     }
 };

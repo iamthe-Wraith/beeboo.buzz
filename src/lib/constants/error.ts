@@ -1,4 +1,6 @@
-export const HttpStatus: Record<string, number> = {
+import type { NumericRange } from "@sveltejs/kit";
+
+export const HttpStatus: Record<string, NumericRange<400, 599>> = {
   AUTHENTICATION: 401,
   AUTHORIZATION: 403,
   CONFLICT: 409,

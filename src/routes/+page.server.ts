@@ -1,6 +1,8 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { signup } from '$lib/services/user';
+import { ApiError } from '$lib/utils/api-error';
+import { ApiResponse } from '$lib/utils/api-response';
 
 export const actions: Actions = {
 	signup: async ({ request }) => {
@@ -9,18 +11,21 @@ export const actions: Actions = {
         const username = data.get('username')!;
 		const password = data.get('password')!;
 
-        const res = await signup({
-            email: (email || '') as string, 
-            username: (username || '') as string, 
-            password: (password || '') as string 
-        });
+        try {
+            await signup({
+                email: (email || '') as string, 
+                username: (username || '') as string, 
+                password: (password || '') as string 
+            });
 
-        if (res.success) {
+            // the user session work will be handled in https://github.com/iamthe-Wraith/oh-my-gtd/issues/27
+
             // TODO: send email verification
-
+    
             redirect(302, '/dashboard');
-        } else {
-            return fail(res.statusCode || 400, res.errors || {});
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
         }
 	},
 };

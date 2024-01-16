@@ -5,6 +5,7 @@
     import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
     import { onMount } from "svelte";
 	import type { ActionResult } from '@sveltejs/kit';
+	import type { IApiError } from '$lib/utils/api-error';
 
     let email: string = '';
     let username: string = '';
@@ -92,18 +93,23 @@
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
             if (result.type === 'failure') {
-                if (result.data) {
-                    if (result.data.email) {
-                        emailError = result.data.email as string;
-                    }
-
-                    if (result.data.username) {
-                        usernameError = result.data.username as string;
-                    }
-
-                    if (result.data.password) {
-                        passwordError = result.data.password as string;
-                    }
+                if (result.data?.errors) {
+                    result.data.errors.map((e: IApiError) => {
+                        switch (e.field) {
+                            case 'email':
+                                emailError = e.message;
+                                break;
+                            case 'username':
+                                usernameError = e.message;
+                                break;
+                            case 'password':
+                                passwordError = e.message;
+                                break;
+                            default:
+                                genError = e.message;
+                                break;
+                        }
+                    })
                 } else {
                     genError = 'Something went wrong. Please try again later.';    
                 }

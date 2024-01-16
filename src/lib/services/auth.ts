@@ -1,6 +1,6 @@
 import { HASH_SALT_ROUNDS } from '$lib/constants/auth';
 import { HttpStatus } from '$lib/constants/error';
-import { ApiError } from '$lib/utils/error';
+import { ApiError } from '$lib/utils/api-error';
 import bcrypt from 'bcrypt';
 
 export const generatePasswordHash = (password: string): Promise<string> => {
@@ -10,8 +10,9 @@ export const generatePasswordHash = (password: string): Promise<string> => {
         if (err) {
           reject(err);
         } else {
-          bcrypt.hash(password, salt, (error: Error | undefined, hash: string) => {
-            if (error) {
+          bcrypt.hash(password, salt, (err: Error | undefined, hash: string) => {
+            if (err) {
+              const error = new ApiError('An error occurred while processing password.', HttpStatus.INTERNAL_SERVER_ERROR);
               reject(error);
             } else {
               resolve(hash);
@@ -29,7 +30,8 @@ export const isValidPassword = (providedPassword: string, encryptedPassword: str
   return new Promise((resolve, reject) => {
     bcrypt.compare(providedPassword, encryptedPassword, (err: Error | undefined, authenticated: boolean) => {
       if (err) {
-        reject(err);
+        const error = new ApiError('An error occurred while validating password.', HttpStatus.INTERNAL_SERVER_ERROR);
+        reject(error);
       } else {
         if (authenticated) {
           resolve();
