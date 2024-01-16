@@ -16,11 +16,7 @@ export const actions: Actions = {
         });
 
         if (res.success) {
-            // TODO: create session in Redis
-
-            // TODO: send email confirmation
-
-            // TODO: pass user data back in response
+            // TODO: send email verification
 
             redirect(302, '/dashboard');
         } else {
