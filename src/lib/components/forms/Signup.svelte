@@ -98,7 +98,7 @@
     }
 </script>
 
-<Form action="#" data-testid={'signup-form'}>
+<Form method="POST" action="/?/signup" data-testid={'signup-form'}>
     <TextInput
         bind:value={email}
         required
