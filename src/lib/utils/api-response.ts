@@ -4,7 +4,7 @@ import { ApiError } from "./api-error";
 interface IProps<T> {
     statusCode?: NumericRange<200, 599>;
     data?: T;
-    errors?: ApiError | ApiError[];
+    errors?: Error | Error[] | ApiError | ApiError[];
 }
 
 export class ApiResponse<T> {
@@ -15,7 +15,7 @@ export class ApiResponse<T> {
     constructor({ data, errors, statusCode }: IProps<T>) {
         if (statusCode) this._statusCode = statusCode;
         if (data) this._data = data;
-        if (errors) this._errors = errors;
+        if (errors) this._errors = ApiError.parse(errors);
     }
 
     get statusCode() {
@@ -43,6 +43,8 @@ export class ApiResponse<T> {
     }
 
     get errors() {
+        if (!this._errors) return null;
+
         return this._errors instanceof ApiError
             ? this._errors.toJSON()
             : (this._errors as ApiError[]).map((e) => e.toJSON());
