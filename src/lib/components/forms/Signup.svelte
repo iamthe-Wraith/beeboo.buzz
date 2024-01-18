@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
     import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
@@ -92,6 +93,10 @@
         processing = true;
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
+            if (result.type === 'redirect') {
+				goto(result.location);
+			}
+            
             if (result.type === 'failure') {
                 if (result.data?.errors) {
                     result.data.errors.map((e: IApiError) => {

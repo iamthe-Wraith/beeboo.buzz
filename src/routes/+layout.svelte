@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { PUBLIC_APP_ENV } from '$env/static/public';
+    import { PUBLIC_APP_ENV, PUBLIC_DATABASE_URL } from '$env/static/public';
     import './global.css';
     import Auth from '$lib/components/Auth.svelte';
 </script>
@@ -26,8 +26,8 @@
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
-                connect-src http://localhost:5173 ws://localhost:5173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
-                img-src http://localhost:5173 blob:; 
+                connect-src http://localhost:5173 http://localhost:4173 ws://localhost:5173 ws://localhost:4173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                img-src http://localhost:5173 http://localhost:4173 blob:; 
                 child-src blob:; 
                 worker-src blob:;"
 		/>
@@ -47,7 +47,10 @@
 </main>
 
 <footer data-testid="global-footer">
-    <div></div>
+    <div>
+        <p>env: { PUBLIC_APP_ENV }</p>
+        <p>env: { PUBLIC_DATABASE_URL }</p>
+    </div>
     <div>
         Copyright {new Date().getFullYear()}
     </div>

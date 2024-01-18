@@ -33,7 +33,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(500);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 500, message: "this is just a test", field: undefined, data: {} });
+        expect(response.errors).toEqual([{ statusCode: 500, message: "this is just a test", field: undefined, data: {} }]);
     });
 
     test("should create a new error ApiResponse with a status code", async () => {
@@ -44,7 +44,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(400);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 500, message: "this is just a test", field: undefined, data: {} });
+        expect(response.errors).toEqual([{ statusCode: 500, message: "this is just a test", field: undefined, data: {} }]);
     });
 
     test("should create a new error ApiResponse with an ApiError", async () => {
@@ -55,7 +55,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(409);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 409, message: "this is just a test", field: undefined, data: {} });
+        expect(response.errors).toEqual([{ statusCode: 409, message: "this is just a test", field: undefined, data: {} }]);
     });
 
     test("should create a new error ApiResponse with an ApiError with a field", async () => {
@@ -66,7 +66,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(409);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 409, message: "this is just a test", field: "email", data: {} });
+        expect(response.errors).toEqual([{ statusCode: 409, message: "this is just a test", field: "email", data: {} }]);
     });
 
     test("should create a new error ApiResponse with an ApiError with data", async () => {
@@ -77,7 +77,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(409);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 409, message: "this is just a test", field: undefined, data: { foo: "bar" } });
+        expect(response.errors).toEqual([{ statusCode: 409, message: "this is just a test", field: undefined, data: { foo: "bar" } }]);
     });
 
     test("should create a new error ApiResponse with an ApiError with a field and data", async () => {
@@ -88,7 +88,7 @@ describe("api-response", () => {
         expect(response.statusCode).toBe(409);
         expect(response.success).toBe(false);
         expect(response.data).toEqual({});
-        expect(response.errors).toEqual({ statusCode: 409, message: "this is just a test", field: "email", data: { foo: "bar" } });
+        expect(response.errors).toEqual([{ statusCode: 409, message: "this is just a test", field: "email", data: { foo: "bar" } }]);
     });
 
     test("should create a new error ApiResponse with an array of ApiErrors", async () => {

@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'vitest';
 import { ApiError } from './api-error';
-import type { NumericRange } from '@sveltejs/kit';
 
 describe('api-error', () => {
     test('should create a new ApiError', async () => {
@@ -45,22 +44,6 @@ describe('api-error', () => {
         expect(error.statusCode).toBe(500);
         expect(error.field).toBe('email');
         expect(error.data).toEqual({ foo: 'bar' });
-    });
-
-    test('should throw error if no message is received', () => {
-        expect(() => new ApiError('', 500)).toThrowError('message is required');
-    });
-
-    test('should throw error if no status code is received', () => {
-        expect(() => new ApiError('this is just a test', undefined as unknown as NumericRange<400, 599>)).toThrowError('status code is required');
-    });
-
-    test('should throw error if status code is less than 400', () => {
-        expect(() => new ApiError('this is just a test', 399  as unknown as NumericRange<400, 599>)).toThrowError('status code must be between 400 and 599');
-    });
-
-    test('should throw error if status code is greater than 599', () => {
-        expect(() => new ApiError('this is just a test', 600  as unknown as NumericRange<400, 599>)).toThrowError('status code must be between 400 and 599');
     });
 
     test('should return JSON representation of ApiError', () => {

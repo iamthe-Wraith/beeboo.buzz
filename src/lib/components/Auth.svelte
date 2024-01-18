@@ -23,7 +23,6 @@
                 open = true;
             }
         }
-    
     })
 
     function onModalChange(e: CustomEvent<{ id: string, open: boolean }>) {

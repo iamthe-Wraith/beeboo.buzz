@@ -4,7 +4,8 @@ on:
   pull_request:
 
 env:
-  PUBLIC_APP_ENV: test
+  NODE_ENV: ci
+  PUBLIC_APP_ENV: ci
   PUBLIC_SENTRY_DSN:
   DATABASE_URL: postgres://igor:password@localhost:5432/lab
 

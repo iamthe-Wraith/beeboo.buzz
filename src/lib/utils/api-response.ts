@@ -46,7 +46,7 @@ export class ApiResponse<T> {
         if (!this._errors) return null;
 
         return this._errors instanceof ApiError
-            ? this._errors.toJSON()
+            ? [this._errors.toJSON()]
             : (this._errors as ApiError[]).map((e) => e.toJSON());
     }
 }

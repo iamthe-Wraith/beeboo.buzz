@@ -21,11 +21,11 @@ export const actions: Actions = {
             // the user session work will be handled in https://github.com/iamthe-Wraith/oh-my-gtd/issues/27
 
             // TODO: send email verification
-    
-            redirect(302, '/dashboard');
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });
         }
+
+        redirect(302, '/dashboard');
 	},
 };

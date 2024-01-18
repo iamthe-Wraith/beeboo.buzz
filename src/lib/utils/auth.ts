@@ -1,6 +1,6 @@
-import { HASH_SALT_ROUNDS } from '$lib/constants/auth';
-import { HttpStatus } from '$lib/constants/error';
-import { ApiError } from '$lib/utils/api-error';
+import { HASH_SALT_ROUNDS } from '../constants/auth';
+import { HttpStatus } from '../constants/error';
+import { ApiError } from '../utils/api-error';
 import bcrypt from 'bcrypt';
 
 export const generatePasswordHash = (password: string): Promise<string> => {

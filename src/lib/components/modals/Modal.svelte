@@ -1,5 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte'
+    import { navigating } from '$app/stores';
     import Icon from '@iconify/svelte';
 	import { clickOutside } from '$lib/actions/click-outside';
 
@@ -10,6 +11,8 @@
     let modal: HTMLDialogElement;
 
     const dispatch = createEventDispatcher()
+
+    $: if($navigating) open = false;
 
     $: if (open) {
         openModal();
