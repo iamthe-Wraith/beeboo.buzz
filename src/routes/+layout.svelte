@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { PUBLIC_APP_ENV, PUBLIC_DATABASE_URL } from '$env/static/public';
+    import { PUBLIC_APP_ENV } from '$env/static/public';
     import './global.css';
     import Auth from '$lib/components/Auth.svelte';
 </script>
@@ -47,10 +47,7 @@
 </main>
 
 <footer data-testid="global-footer">
-    <div>
-        <p>env: { PUBLIC_APP_ENV }</p>
-        <p>env: { PUBLIC_DATABASE_URL }</p>
-    </div>
+    <div></div>
     <div>
         Copyright {new Date().getFullYear()}
     </div>
