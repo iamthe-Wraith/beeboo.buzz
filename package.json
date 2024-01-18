@@ -13,8 +13,8 @@
 		"test": "npm run test:integration:ci && npm run test:unit",
 		"test:unit": "vitest",
 		"test:integration:ci": "npx prisma migrate deploy && playwright test",
-		"test:integration:local": "dotenv -e .env.test -- npx prisma migrate deploy && playwright test",
-		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && playwright test --ui"
+		"test:integration:local": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test",
+		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test --ui"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.3.1",

@@ -1,13 +1,8 @@
 import pg from 'pg';
 
 export class Database {
-    // this data must match
     private config = {
-        username: process.env.DATABASE_USERNAME,
-        host: process.env.DATABASE_HOST,
-        database: process.env.DATABASE_NAME,
-        password: process.env.DATABASE_PASSWORD,
-        port: Number(process.env.DATABASE_PORT),
+        connectionString: process.env.DATABASE_URL,
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
     };

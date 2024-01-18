@@ -7,13 +7,7 @@ env:
   NODE_ENV: ci
   PUBLIC_APP_ENV: ci
   PUBLIC_SENTRY_DSN:
-  DATABASE_URL: postgres://igor:password@localhost:5432/lab?schema=public
-  DATABAES_USERNAME: igo
-  DATABASE_PASSWORD: password
-  DATABASE_NAME: lab
-  DATABASE_HOST: localhost
-  DATABASE_PORT: 5432
-  DATABASE_SCHEMA: public
+  DATABASE_URL: ${{ secrets.DATABASE_URL }} 
 
 jobs:
   test:
@@ -30,15 +24,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Start Postgres on Ubuntu
-        run: sudo service postgresql start
-
-      - name: Create Database User
-        run: sudo -u postgres psql --command="CREATE USER igor PASSWORD 'password'" --command="\du"
-
-      - name: Create Database
-        run: sudo -u postgres createdb lab --owner=igor
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
