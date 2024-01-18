@@ -1,13 +1,13 @@
 import pg from 'pg';
 
 export class Database {
-    // this data must match 
+    // this data must match
     private config = {
-        username: 'wraith',
-        host: 'localhost',
-        database: 'oh-my-gtd-tests-and-experiments',
-        password: '',
-        port: 5432,
+        username: process.env.DATABASE_USERNAME,
+        host: process.env.DATABASE_HOST,
+        database: process.env.DATABASE_NAME,
+        password: process.env.DATABASE_PASSWORD,
+        port: Number(process.env.DATABASE_PORT),
         idleTimeoutMillis: 30000,
         connectionTimeoutMillis: 2000,
     };

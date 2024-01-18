@@ -7,7 +7,13 @@ env:
   NODE_ENV: ci
   PUBLIC_APP_ENV: ci
   PUBLIC_SENTRY_DSN:
-  DATABASE_URL: postgres://igor:password@localhost:5432/lab
+  DATABASE_URL: postgres://igor:password@localhost:5432/lab?schema=public
+  DATABAES_USERNAME: igo
+  DATABASE_PASSWORD: password
+  DATABASE_NAME: lab
+  DATABASE_HOST: localhost
+  DATABASE_PORT: 5432
+  DATABASE_SCHEMA: public
 
 jobs:
   test:
