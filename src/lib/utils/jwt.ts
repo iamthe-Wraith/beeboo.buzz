@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { JWT_SESSION_SECRET } from '$env/static/private';
-import { SESSION_TOKEN_DURATION } from '$lib/constants/auth';
 import { ApiError } from '$lib/utils/api-error';
 import { Logger } from '$lib/services/logger';
 
@@ -19,10 +18,7 @@ export class JWT {
             return jwt.sign(
                 payload, 
                 JWT_SESSION_SECRET, 
-                {
-                    expiresIn: `${SESSION_TOKEN_DURATION} days`,
-                    ...(options || {}),
-                }
+                (options || {})
             );
         } catch (err) {
             Logger.error('Error creating session token: ', err);
