@@ -26,8 +26,8 @@
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
-                connect-src http://localhost:5173 ws://localhost:5173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
-                img-src http://localhost:5173 blob:; 
+                connect-src http://localhost:5173 http://localhost:4173 ws://localhost:5173 ws://localhost:4173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                img-src http://localhost:5173 http://localhost:4173 blob:; 
                 child-src blob:; 
                 worker-src blob:;"
 		/>

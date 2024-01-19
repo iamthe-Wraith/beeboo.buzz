@@ -10,15 +10,22 @@
 
     export let type: 'button' | 'submit' | 'reset' = 'button';
     export let kind: ButtonKind = 'primary';
+    export let processing: boolean = false;
 </script>
 
 <button
     {type}
-    class={kind}
+    class={`${kind} ${processing ? 'processing' : ''}`}
     {...$$restProps}
     on:click
 >
-    <slot />
+    {#if processing}
+        <div class="spinner-container">
+            <div class="spinner"></div>
+        </div>
+    {:else}
+        <slot />
+    {/if}
 </button>
 
 <style>
@@ -27,11 +34,11 @@
         border-radius: 0.25rem;
         font-weight: 500;
         
-        &:hover:not(:disabled) {
+        &:not(:disabled):not(.processing):hover {
             cursor: pointer;
         }
 
-        &:disabled {
+        &:not(.processing):disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
@@ -130,6 +137,35 @@
             &:focus:not(:disabled) {
                 color: var(--light-200);
             }
+        }
+    }
+
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 3rem;
+        width: 100%;
+        min-height: 1rem;
+        height: 100%;
+    }
+
+    .spinner {
+        width: 1rem;;
+        height: 1rem;
+        border: 2px solid var(--light-500);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
         }
     }
 </style>

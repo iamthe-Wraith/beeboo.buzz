@@ -1,4 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { faker } from '@faker-js/faker';
+import { test, expect } from './custom-test';
+import { generatePasswordHash } from '$lib/utils/auth';
+import { AccountType } from '@prisma/client';
 
 //#region signup
 test('sign up button exists in header', async ({ page }) => {
@@ -555,5 +558,175 @@ test('sign up form username field should show error message when username is too
     await expect(usernameError).toBeVisible();
     await expect(usernameError).toHaveText('Username must be at least 3 characters');
 })
+//#endregion
+
+//#region submit
+test('the submit button should become enabled when all fields are filled in, and there are no errors', async ({ page }) => {
+    await page.goto('/');
+
+    const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
+    await signUpButton.click();
+
+    const signUpForm = await page.getByTestId('signup-form');
+    await expect(signUpForm).toBeVisible();
+
+    const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
+    await expect(submitButton).toBeDisabled();
+
+    const emailField = await signUpForm.getByLabel('Email');
+    await emailField.fill('testuser@test.com');
+
+    const passwordField = await signUpForm.getByLabel('Password', { exact: true });
+    await passwordField.fill('Password123!');
+
+    const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
+    await confirmPasswordField.fill('Password123!');
+
+    await expect(submitButton).toBeEnabled();
+})
+
+test('the submit button should become disabled when all fields are filled in, but there are errors', async ({ page }) => {
+    await page.goto('/');
+
+    const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
+    await signUpButton.click();
+
+    const signUpForm = await page.getByTestId('signup-form');
+    await expect(signUpForm).toBeVisible();
+
+    const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
+    await expect(submitButton).toBeDisabled();
+
+    const emailField = await signUpForm.getByLabel('Email');
+    await emailField.fill('invalid');
+
+    const passwordField = await signUpForm.getByLabel('Password', { exact: true });
+    await passwordField.fill('Password123!');
+
+    const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
+    await confirmPasswordField.fill('Password123!');
+
+    await expect(submitButton).toBeDisabled();
+})
+
+test('clicking submit button should submit form and redirect user to /dashboard', async ({ page, database }) => {
+    await page.goto('/');
+
+    const email = faker.internet.email();
+
+    const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
+    await signUpButton.click();
+
+    const signUpForm = await page.getByTestId('signup-form');
+    await expect(signUpForm).toBeVisible();
+
+    const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
+    await expect(submitButton).toBeDisabled();
+
+    const emailField = await signUpForm.getByLabel('Email');
+    await emailField.fill(email);
+
+    const passwordField = await signUpForm.getByLabel('Password', { exact: true });
+    await passwordField.fill('Password123!');
+
+    const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
+    await confirmPasswordField.fill('Password123!');
+
+    await expect(submitButton).toBeEnabled();
+
+    await submitButton.click({force: true});
+    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+
+    const dashboard = await page.getByTestId('dashboard');
+    await expect(dashboard).toBeVisible();
+
+    await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
+});
+
+test('signup submission should fail if email is already in use', async ({ page, database }) => {
+    const email = faker.internet.email();
+
+    try {
+        await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type) VALUES ('${email}', '${email.split('@')[0]}', '${await generatePasswordHash('Password123!')}', '${AccountType.FREE}')`);
+
+        await page.goto('/');
+
+        const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
+        await signUpButton.click();
+
+        const signUpForm = await page.getByTestId('signup-form');
+        await expect(signUpForm).toBeVisible();
+
+        const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
+        await expect(submitButton).toBeDisabled();
+
+        const emailField = await signUpForm.getByLabel('Email');
+        await emailField.fill(email);
+
+        const usernameField = await signUpForm.getByLabel('Username');
+        await usernameField.fill(faker.internet.userName());
+
+        const passwordField = await signUpForm.getByLabel('Password', { exact: true });
+        await passwordField.fill('Password123!');
+
+        const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
+        await confirmPasswordField.fill('Password123!');
+
+        await expect(submitButton).toBeEnabled();
+
+        await submitButton.click({force: true});
+        await page.waitForResponse('**/signup', {timeout: 10000});
+
+        const emailError = await signUpForm.getByTestId('email-error');
+        await expect(emailError).toBeVisible();
+        await expect(emailError).toHaveText('Email is already in use.');
+    } finally {
+        await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
+    }
+});
+
+test('signup submission should fail if username is already in use', async ({ page, database }) => {
+    const email = faker.internet.email();
+    const username = faker.internet.userName();
+
+    try {
+        await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type) VALUES ('${email}', '${username}', '${await generatePasswordHash('Password123!')}', '${AccountType.FREE}')`);
+
+        await page.goto('/');
+
+        const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
+        await signUpButton.click();
+
+        const signUpForm = await page.getByTestId('signup-form');
+        await expect(signUpForm).toBeVisible();
+
+        const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
+        await expect(submitButton).toBeDisabled();
+
+        const emailField = await signUpForm.getByLabel('Email');
+        await emailField.fill(faker.internet.email());
+
+        const usernameField = await signUpForm.getByLabel('Username');
+        await usernameField.clear();
+        await usernameField.fill(username);
+
+        const passwordField = await signUpForm.getByLabel('Password', { exact: true });
+        await passwordField.fill('Password123!');
+
+        const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
+        await confirmPasswordField.fill('Password123!');
+
+        await expect(submitButton).toBeEnabled();
+
+        await submitButton.click({force: true});
+        await page.waitForResponse('**/signup', {timeout: 10000});
+
+        const usernameError = await signUpForm.getByTestId('username-error');
+        await expect(usernameError).toBeVisible();
+        await expect(usernameError).toHaveText('Username is already in use.');
+    } finally {
+        await database.executeQuery(`DELETE FROM "User" WHERE email = '${faker.internet.email()}'`);
+    }
+});
 //#endregion
 //#endregion
