@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { ApiResponse } from "./api-response";
 import { ApiError } from "./api-error";
 
-describe("api-response", () => {
+describe("utils - api-response", () => {
     test("should create a new success ApiResponse", async () => {
         const response = new ApiResponse({ data: { foo: "bar" } });
 
