@@ -20,8 +20,8 @@ export const actions: Actions = {
             });
 
             const session = new Session();
-            session.save(user);
-            session.setSessionCookie(cookies);
+            await session.save(user);
+            session.setCookie(cookies);
 
             // TODO: send email verification
         } catch (err) {

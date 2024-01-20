@@ -1,4 +1,4 @@
-import { prisma } from "$lib/db/client";
+import { prisma } from "$lib/storage/db";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
 import { $Enums } from "@prisma/client";
 import { generatePasswordHash } from "../utils/auth";

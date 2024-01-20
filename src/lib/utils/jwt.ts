@@ -9,7 +9,12 @@ dayjs.extend(utc);
 
 export class JWT {
     static read = (token: string) => {
-        return jwt.verify(token, JWT_SESSION_SECRET) as JwtPayload;
+        try {
+            return jwt.verify(token, JWT_SESSION_SECRET) as JwtPayload;
+        } catch (err) {
+            Logger.error('Error reading session token: ', err);
+            throw new ApiError('Error reading session token.', 500);
+        }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +27,6 @@ export class JWT {
             );
         } catch (err) {
             Logger.error('Error creating session token: ', err);
-
             throw new ApiError('Error creating session token.', 500);
         }
     }
