@@ -6,6 +6,8 @@ import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import type { Cookies } from "@sveltejs/kit";
 import { cache } from '$lib/storage/cache';
+import { PUBLIC_APP_ENV } from '$env/static/public';
+import { User as UserService } from './user';
 
 interface ISessionMetadata {
     iat: number | undefined;
@@ -43,12 +45,16 @@ export class Session {
         return this._user;
     }
 
-    /* STATIC METHODS */
-    public static deleteCookie = async (cookies: Cookies): Promise<void> => {
+    /* PUBLIC METHODS */
+    public delete = async (cookies: Cookies): Promise<void> => {
         cookies.delete('session', { path: '/' });
+
+        await cache.del(this.token);
+        this._token = '';
+
+        this._user = null;
     }
 
-    /* PUBLIC METHODS */
     public loadUser = async () => {
         if (!this.token) return;
 
@@ -63,13 +69,22 @@ export class Session {
                     exp: payload.exp
                 };
     
-                const user = await cache.get(`${payload.id}`);
+                const user = await cache.get(this.token);
     
                 if (user) {
-                    this._user = JSON.parse(user) as SessionUser;
+                    this._user = JSON.parse(user) as SessionUser;   
                 } else {
-                    Logger.info('Loading user from database...');
-                    // load user from database
+                    const fullUser = await UserService.getById(payload.id);
+                    if (fullUser) {
+                        this._user = {
+                            id: fullUser.id,
+                            email: fullUser.email,
+                            username: fullUser.username,
+                            accountType: fullUser.accountType,
+                            createdAt: fullUser.createdAt,
+                            updatedAt: fullUser.updatedAt
+                        };
+                    }
                 }
             }
         } catch (err) {
@@ -101,7 +116,7 @@ export class Session {
             this.token, 
             { 
                 httpOnly: true, 
-                secure: true, 
+                secure: PUBLIC_APP_ENV === 'production', 
                 sameSite: 'lax', 
                 path: '/', 
                 maxAge: (this.options.expiresIn as number)
@@ -124,7 +139,7 @@ export class Session {
             };
 
             await cache.set(
-                `${this.user.id}`,
+                this.token,
                 JSON.stringify(userCache),
                 'EX',
                 (this.options.expiresIn as number) / 1000,

@@ -14,7 +14,7 @@
 		"test:unit": "vitest",
 		"test:integration:ci": "npx prisma migrate deploy && playwright test",
 		"test:integration:local": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test",
-		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test --ui"
+		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test npx -- playwright test --ui"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.3.1",

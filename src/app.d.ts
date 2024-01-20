@@ -8,6 +8,8 @@ declare global {
 		// interface Error {}
 		interface Locals {
 			session: Session;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			metadata?: Record<string, any>;
 		}
 		// interface PageData {}
 		// interface PageState {}

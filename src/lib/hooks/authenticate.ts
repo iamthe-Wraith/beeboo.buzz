@@ -6,17 +6,15 @@ import type { Handle } from '@sveltejs/kit';
 export const authenticate: Handle = async ({ event, resolve }) => {
     const sessionToken = event.cookies.get('session');
 
+    event.locals.session = new Session(sessionToken);
+
     if (sessionToken) {
         try {
-            const session = new Session(sessionToken);
-            await session.loadUser();
-            event.locals.session = session;
+            await event.locals.session.loadUser();
         } catch (err) {
-            Session.deleteCookie(event.cookies);
+            event.locals.session.delete(event.cookies);
             Logger.error('Authentication error: ', err);
         }
-    } else {
-        event.locals.session = new Session();
     }
 
     return resolve(event);
