@@ -8,10 +8,16 @@ env:
   PUBLIC_APP_ENV: ci
   PUBLIC_SENTRY_DSN:
   DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+  REDIS_URL:
+  JWT_SESSION_SECRET: ${{ secrets.JWT_SESSION_SECRET }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [21.x]
+        redis-version: [7]
 
     steps:
       - name: Checkout code
@@ -21,6 +27,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21.3.0
+
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.7.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
 
       - name: Install dependencies
         run: npm install
