@@ -40,7 +40,7 @@
     />
     
     {#if text && !error}
-        <p data-testid={`${id}-text`}>{text}</p>
+        <p class="" data-testid={`${id}-text`}>{text}</p>
     {/if}
 
     {#if error}
@@ -69,7 +69,7 @@
 
         &:not(.error) {
             color: var(--dark-900);
-            line-height: 0.8rem;
+            line-height: 1rem;
         }
     }
 
