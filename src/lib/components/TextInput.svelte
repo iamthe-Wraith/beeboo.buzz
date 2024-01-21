@@ -40,7 +40,7 @@
     />
     
     {#if text && !error}
-        <p data-testid={`${id}-text`}>{text}</p>
+        <p class="input-text" data-testid={`${id}-text`}>{text}</p>
     {/if}
 
     {#if error}
@@ -67,9 +67,9 @@
     p {
         margin: 0;
 
-        &:not(.error) {
+        &.input-text {
             color: var(--dark-900);
-            line-height: 0.8rem;
+            line-height: 1rem;
         }
     }
 

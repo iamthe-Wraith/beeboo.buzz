@@ -172,7 +172,7 @@
         id="password"
         type="password"
         label="Password"
-        text="this is just a test"
+        text="Must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character."
         placeholder="Enter your password"
         error={passwordError}
         on:blur={onPasswordBlur}
