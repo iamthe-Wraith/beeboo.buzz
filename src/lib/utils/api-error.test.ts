@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ApiError } from './api-error';
 
-describe('api-error', () => {
+describe('utils - api-error', () => {
     test('should create a new ApiError', async () => {
         const error = new ApiError('this is just a test', 500);
 

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { generatePasswordHash, isValidPassword } from "./auth";
 
-describe("auth", () => {
+describe("utils - auth", () => {
     describe('generatePasswordHash', () => {
         test("should generate a password hash", async () => {
             const hash = await generatePasswordHash("password");

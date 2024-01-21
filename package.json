@@ -14,7 +14,7 @@
 		"test:unit": "vitest",
 		"test:integration:ci": "npx prisma migrate deploy && playwright test",
 		"test:integration:local": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test",
-		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test playwright test --ui"
+		"test:integration:local:ui": "dotenv -e .env.test -- npx prisma migrate deploy && dotenv -e .env.test npx -- playwright test --ui"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.3.1",
@@ -25,6 +25,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/bcrypt": "^5.0.2",
 		"@types/eslint": "8.56.0",
+		"@types/jsonwebtoken": "^9.0.5",
 		"@types/pg": "^8.10.9",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
@@ -47,6 +48,9 @@
 		"@prisma/client": "^5.8.0",
 		"@sentry/sveltekit": "^7.92.0",
 		"bcrypt": "^5.1.1",
+		"dayjs": "^1.11.10",
+		"ioredis": "^5.3.2",
+		"jsonwebtoken": "^9.0.2",
 		"pg": "^8.11.3",
 		"zod": "^3.22.4"
 	}
