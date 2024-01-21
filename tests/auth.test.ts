@@ -52,6 +52,9 @@ test('sign up form has username, email, password, and confirm password fields', 
     const passwordField = await signUpForm.getByLabel('Password', { exact: true });
     await expect(passwordField).toBeVisible();
 
+    const passwordText = await signUpForm.getByText('Must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character.', { exact: true });
+    await expect(passwordText).toBeVisible();
+
     const confirmPasswordField = await signUpForm.getByLabel('Confirm password');
     await expect(confirmPasswordField).toBeVisible();
 })
