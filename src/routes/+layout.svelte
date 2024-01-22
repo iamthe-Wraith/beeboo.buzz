@@ -2,6 +2,12 @@
     import { PUBLIC_APP_ENV } from '$env/static/public';
     import './global.css';
     import Auth from '$lib/components/Auth.svelte';
+    import type { LayoutData } from './$types';
+    import { user } from '$lib/stores/user';
+	
+    export let data: LayoutData;
+
+    $: if (data?.user) user.set(data.user);
 </script>
 
 <svelte:head>
@@ -38,7 +44,9 @@
     <div class="logo">Oh My GTD</div>
 
     <div>
-        <Auth allowOpenFromQueryParams />
+        {#if !$user}
+            <Auth allowOpenFromQueryParams />
+        {/if}
     </div>
 </header>
 

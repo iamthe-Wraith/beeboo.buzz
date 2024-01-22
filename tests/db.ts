@@ -1,3 +1,4 @@
+import { Logger } from '$lib/services/logger';
 import pg from 'pg';
 
 export class Database {
@@ -15,14 +16,14 @@ export class Database {
             await client.query(query);
         }
         catch (err) {
-            console.error("Error in connection/executing query:");
-            console.log('QUERY: ', query);
-            console.error('ERROR: ', err);
+            Logger.error("Error in connection/executing query:");
+            Logger.info('QUERY: ', query);
+            Logger.error('ERROR: ', err);
         }
         finally {
             await client.end()
                 .catch((error) => {
-                    console.error("Error ending db client connection:", error);
+                    Logger.error("Error ending db client connection:", error);
                 });
         }
     }

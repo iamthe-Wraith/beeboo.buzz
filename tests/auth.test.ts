@@ -643,6 +643,8 @@ test('clicking submit button should submit form and redirect user to /dashboard'
     const dashboard = await page.getByTestId('dashboard');
     await expect(dashboard).toBeVisible();
 
+    await expect(signUpButton).not.toBeVisible();
+
     await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
 });
 

@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { IApiError } from '$lib/utils/api-error';
+	import { user } from '$lib/stores/user';
 
     let email: string = '';
     let username: string = '';
@@ -118,6 +119,11 @@
                 } else {
                     genError = 'Something went wrong. Please try again later.';    
                 }
+            }
+
+            if (result.type === 'success') {
+                reset();
+                window.location.href = '/dashboard';
             }
 
             processing = false;

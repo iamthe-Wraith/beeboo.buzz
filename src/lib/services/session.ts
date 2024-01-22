@@ -7,14 +7,13 @@ import { HttpStatus } from "$lib/constants/error";
 import type { Cookies } from "@sveltejs/kit";
 import { cache } from '$lib/storage/cache';
 import { PUBLIC_APP_ENV } from '$env/static/public';
-import { User as UserService } from './user';
 
 interface ISessionMetadata {
     iat: number | undefined;
     exp: number | undefined;
 }
 
-type SessionUser = Omit<User, 'password'>;
+export type SessionUser = Omit<User, 'password'>;
 
 export class Session {
     private _user: SessionUser | null = null;
@@ -73,18 +72,6 @@ export class Session {
     
                 if (user) {
                     this._user = JSON.parse(user) as SessionUser;   
-                } else {
-                    const fullUser = await UserService.getById(payload.id);
-                    if (fullUser) {
-                        this._user = {
-                            id: fullUser.id,
-                            email: fullUser.email,
-                            username: fullUser.username,
-                            accountType: fullUser.accountType,
-                            createdAt: fullUser.createdAt,
-                            updatedAt: fullUser.updatedAt
-                        };
-                    }
                 }
             }
         } catch (err) {
