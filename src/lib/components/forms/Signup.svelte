@@ -93,7 +93,7 @@
     function onSubmitResponse() {
         processing = true;
 
-        return ({ result, update }: { result: ActionResult<{ message: string }>, update: () => void }) => {
+        return ({ result }: { result: ActionResult<{ message: string }> }) => {
             if (result.type === 'redirect') {
 				goto(result.location);
 			}

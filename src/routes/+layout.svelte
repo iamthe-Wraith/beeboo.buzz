@@ -3,9 +3,9 @@
     import './global.css';
     import Auth from '$lib/components/Auth.svelte';
     import type { LayoutData } from './$types';
-	import { user } from '$lib/stores/user';
+    import { user } from '$lib/stores/user';
 	
-	export let data: LayoutData;
+    export let data: LayoutData;
 
     $: if (data?.user) user.set(data.user);
 </script>
