@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { signup } from '$lib/services/auth';
 import { ApiError } from '$lib/utils/api-error';
@@ -28,7 +28,5 @@ export const actions: Actions = {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });
         }
-
-        redirect(302, '/dashboard');
 	},
 };
