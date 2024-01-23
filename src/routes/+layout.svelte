@@ -4,6 +4,7 @@
     import Auth from '$lib/components/Auth.svelte';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
+	import Signout from '$lib/components/forms/Signout.svelte';
 	
     export let data: LayoutData;
 
@@ -44,7 +45,9 @@
     <div class="logo">Oh My GTD</div>
 
     <div>
-        {#if !$user}
+        {#if $user}
+            <Signout />
+        {:else}
             <Auth allowOpenFromQueryParams />
         {/if}
     </div>

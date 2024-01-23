@@ -7,7 +7,6 @@
     import { onMount } from "svelte";
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { IApiError } from '$lib/utils/api-error';
-	import { user } from '$lib/stores/user';
 
     let email: string = '';
     let username: string = '';
