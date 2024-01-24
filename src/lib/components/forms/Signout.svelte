@@ -25,13 +25,14 @@
 <form
     method="POST" 
     action="/?/signout" 
-    data-testid={'signup-form'}
+    data-testid={'signout-form'}
     use:enhance={onSubmitResponse}
 >
     <Button
         kind="transparent"
         type="submit"
         processing={processing}
+        data-testid={'signout-button'}
     >
         Sign out
     </Button>

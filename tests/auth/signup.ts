@@ -1,9 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { test, expect } from './custom-test';
+import { test, expect } from '../custom-test';
 import { generatePasswordHash } from '$lib/utils/auth';
 import { AccountType } from '@prisma/client';
 
-//#region signup
 test('sign up button exists in header', async ({ page }) => {
     await page.goto('/');
 
@@ -733,5 +732,4 @@ test('signup submission should fail if username is already in use', async ({ pag
         await database.executeQuery(`DELETE FROM "User" WHERE email = '${faker.internet.email()}'`);
     }
 });
-//#endregion
 //#endregion
