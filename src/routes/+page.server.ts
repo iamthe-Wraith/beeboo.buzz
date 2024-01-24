@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { signup } from '$lib/services/auth';
 import { ApiError } from '$lib/utils/api-error';
@@ -6,6 +6,10 @@ import { ApiResponse } from '$lib/utils/api-response';
 import { Session } from '$lib/services/session';
 
 export const actions: Actions = {
+    signout: async ({ locals, cookies }) => {
+        locals.session?.delete(cookies);
+        return redirect(302, '/');
+    },
 	signup: async ({ request, cookies }) => {
 		const data = await request.formData();
 		const email = data.get('email')!;
