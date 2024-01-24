@@ -1,7 +1,7 @@
-import { faker } from '@faker-js/faker';
 import { test, expect } from '../custom-test';
 import { generatePasswordHash } from '$lib/utils/auth';
 import { AccountType } from '@prisma/client';
+import { getEmail, getUsername } from '../helpers';
 
 test('sign up button exists in header', async ({ page }) => {
     await page.goto('/');
@@ -614,7 +614,7 @@ test('the submit button should become disabled when all fields are filled in, bu
 test('clicking submit button should submit form and redirect user to /dashboard', async ({ page, database }) => {
     await page.goto('/');
 
-    const email = faker.internet.email();
+    const email = getEmail();
 
     const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
     await signUpButton.click();
@@ -648,7 +648,7 @@ test('clicking submit button should submit form and redirect user to /dashboard'
 });
 
 test('signup submission should fail if email is already in use', async ({ page, database }) => {
-    const email = faker.internet.email();
+    const email = getEmail();
 
     try {
         await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type) VALUES ('${email}', '${email.split('@')[0]}', '${await generatePasswordHash('Password123!')}', '${AccountType.FREE}')`);
@@ -668,7 +668,7 @@ test('signup submission should fail if email is already in use', async ({ page, 
         await emailField.fill(email);
 
         const usernameField = await signUpForm.getByLabel('Username');
-        await usernameField.fill(faker.internet.userName());
+        await usernameField.fill(getUsername());
 
         const passwordField = await signUpForm.getByLabel('Password', { exact: true });
         await passwordField.fill('Password123!');
@@ -679,7 +679,7 @@ test('signup submission should fail if email is already in use', async ({ page, 
         await expect(submitButton).toBeEnabled();
 
         await submitButton.click({force: true});
-        await page.waitForResponse('**/signup', {timeout: 10000});
+        // await page.waitForResponse('**/signup', {timeout: 10000});
 
         const emailError = await signUpForm.getByTestId('email-error');
         await expect(emailError).toBeVisible();
@@ -690,8 +690,8 @@ test('signup submission should fail if email is already in use', async ({ page, 
 });
 
 test('signup submission should fail if username is already in use', async ({ page, database }) => {
-    const email = faker.internet.email();
-    const username = faker.internet.userName();
+    const email = getEmail();
+    const username = getUsername();
 
     try {
         await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type) VALUES ('${email}', '${username}', '${await generatePasswordHash('Password123!')}', '${AccountType.FREE}')`);
@@ -708,7 +708,7 @@ test('signup submission should fail if username is already in use', async ({ pag
         await expect(submitButton).toBeDisabled();
 
         const emailField = await signUpForm.getByLabel('Email');
-        await emailField.fill(faker.internet.email());
+        await emailField.fill(getEmail());
 
         const usernameField = await signUpForm.getByLabel('Username');
         await usernameField.clear();
@@ -723,13 +723,13 @@ test('signup submission should fail if username is already in use', async ({ pag
         await expect(submitButton).toBeEnabled();
 
         await submitButton.click({force: true});
-        await page.waitForResponse('**/signup', {timeout: 10000});
+        // await page.waitForResponse('**/signup', {timeout: 10000});
 
         const usernameError = await signUpForm.getByTestId('username-error');
         await expect(usernameError).toBeVisible();
         await expect(usernameError).toHaveText('Username is already in use.');
     } finally {
-        await database.executeQuery(`DELETE FROM "User" WHERE email = '${faker.internet.email()}'`);
+        await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
     }
 });
 //#endregion
