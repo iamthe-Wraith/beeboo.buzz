@@ -1,9 +1,9 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
     import type { ActionResult } from '@sveltejs/kit';
-	import { goto } from '$app/navigation';
-	import Button from "../Button.svelte";
-	import { user } from '$lib/stores/user';
+    import { goto } from '$app/navigation';
+    import Button from "../Button.svelte";
+    import { user } from '$lib/stores/user';
 
     let processing = false;
 
@@ -14,8 +14,8 @@
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
             if (result.type === 'redirect') {
-				goto(result.location);
-			}
+                goto(result.location);
+            }
 
             processing = false;
         }

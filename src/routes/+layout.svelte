@@ -4,7 +4,7 @@
     import Auth from '$lib/components/Auth.svelte';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
-	import Signout from '$lib/components/forms/Signout.svelte';
+    import Signout from '$lib/components/forms/Signout.svelte';
 	
     export let data: LayoutData;
 
