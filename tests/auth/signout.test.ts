@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker';
 import { test, expect } from '../custom-test';
+import { getEmail } from '../helpers';
 
 test('sign out button exists in header when user is signed in', async ({ page, database }) => {
     await page.goto('/');
 
-    const email = faker.internet.email();
+    const email = getEmail();
 
     const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
     await signUpButton.click();
@@ -48,7 +48,7 @@ test('sign out button does not exist when user is not signed in', async ({ page 
 test('clicking the sign out button signs the user out', async ({ page, database }) => {
     await page.goto('/');
 
-    const email = faker.internet.email();
+    const email = getEmail();
 
     const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
     await signUpButton.click();
