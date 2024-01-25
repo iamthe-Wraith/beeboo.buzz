@@ -1,14 +1,11 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+    import { goto } from '$app/navigation';
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
-    import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
     import { onMount } from "svelte";
-	import type { ActionResult } from '@sveltejs/kit';
-	import type { IApiError } from '$lib/utils/api-error';
-	import { user } from '$lib/stores/user';
-	import type { SafeParseReturnType } from 'zod';
+    import type { ActionResult } from '@sveltejs/kit';
+    import type { IApiError } from '$lib/utils/api-error';
 
     let emailOrUsername: string = '';
     let password: string = '';
@@ -65,8 +62,8 @@
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
             if (result.type === 'redirect') {
-				goto(result.location);
-			}
+                goto(result.location);
+            }
             
             if (result.type === 'failure') {
                 if (result.data?.errors) {

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { AuthMethod } from "$lib/types/modal";
-	import Signup from "../forms/Signup.svelte";
+    import type { AuthMethod } from "$lib/types/modal";
+    import Signup from "../forms/Signup.svelte";
     import Modal from "./Modal.svelte";
     import Button from "../Button.svelte";
-	import Signin from "../forms/Signin.svelte";
+    import Signin from "../forms/Signin.svelte";
 
     export let id: string;
     export let open: boolean;
