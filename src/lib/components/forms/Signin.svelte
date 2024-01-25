@@ -39,24 +39,10 @@
     }
 
     function onEmailOrUsernameBlur() {
-        let validated: SafeParseReturnType<string, string>;
-        
         emailOrUsername = emailOrUsername.trim();
 
         if (!emailOrUsername) {
             emailOrUsernameError = 'Email or username is required';
-            return;
-        }
-
-        if (emailOrUsername.includes('@')) {
-            validated = emailSchema.safeParse(emailOrUsername.trim());
-        } else {
-            validated = usernameSchema.safeParse(emailOrUsername.trim());
-        }
-
-        if (!validated.success) {
-            const formatted = validated.error.format();
-            emailOrUsernameError = formatted._errors[0];
             return;
         }
         

@@ -74,9 +74,10 @@ test('sign up form has submit button', async ({ page }) => {
 
     const submitButton = await signUpForm.getByRole('button', { name: 'Sign up' });
     await expect(submitButton).toBeVisible();
+    await expect(submitButton).toBeDisabled();
 })
 
-test('sign up form has link to login form', async ({ page }) => {
+test('sign up form has button that will take user to sign in form', async ({ page }) => {
     await page.goto('/');
 
     const signUpButton = await page.getByTestId('global-header').getByRole('button', { name: 'Sign up' });
@@ -85,8 +86,14 @@ test('sign up form has link to login form', async ({ page }) => {
     const signUpForm = await page.getByTestId('signup-form');
     await expect(signUpForm).toBeVisible();
 
-    const loginLink = await signUpForm.getByRole('button', { name: 'Sign in' });
-    await expect(loginLink).toBeVisible();
+    const toSignInButton = await signUpForm.getByRole('button', { name: 'Sign in' });
+    await expect(toSignInButton).toBeVisible();
+    await toSignInButton.click();
+
+    const signInForm = await page.getByTestId('signin-form');
+    await expect(signInForm).toBeVisible();
+
+    await expect(signUpForm).not.toBeVisible();
 })
 
 test('sign up modal can be closed', async ({ page }) => {
