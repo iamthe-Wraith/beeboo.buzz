@@ -1,16 +1,17 @@
 <script lang="ts">
-	import type { AuthMethod } from "$lib/types/modal";
-	import Signup from "../forms/Signup.svelte";
+    import type { AuthMethod } from "$lib/types/modal";
+    import Signup from "../forms/Signup.svelte";
     import Modal from "./Modal.svelte";
     import Button from "../Button.svelte";
+    import Signin from "../forms/Signin.svelte";
 
     export let id: string;
     export let open: boolean;
     export let method: 'signin' | 'signup' = 'signin';
 
-    let resetSignup: () => void;
+    let reset: () => void;
 
-    $: if (!open) resetSignup?.();
+    $: if (!open) reset?.();
 
     function onChangeAuthMethod(m: AuthMethod) {
         return function() {
@@ -26,9 +27,22 @@
     on:modal-change
 >
     {#if method === 'signin'}
-        <div>login</div>
+        <Signin bind:reset={reset}>
+            <div slot="secondary-action">
+                <p>
+                    Don't have an account yet?
+                    
+                    <Button
+                        kind="primary-transparent"
+                        on:click={onChangeAuthMethod('signup')}
+                    >
+                        Sign Up
+                    </Button>
+                </p>
+            </div>
+        </Signin>
     {:else}
-        <Signup bind:reset={resetSignup}>
+        <Signup bind:reset={reset}>
             <div slot="secondary-action">
                 <p>
                     Already have an account?
