@@ -32,7 +32,7 @@ describe("utils - auth", () => {
     
         test("should throw error if password is invalid", async () => {
             const hash = await generatePasswordHash("password");
-            await expect(isValidPassword("invalid", hash)).rejects.toThrowError('Invalid email or password.');
+            await expect(isValidPassword("invalid", hash)).rejects.toThrowError('Invalid credentials.');
         });
     });
 });

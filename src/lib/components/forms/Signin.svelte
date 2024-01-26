@@ -69,7 +69,7 @@
                 if (result.data?.errors) {
                     result.data.errors.map((e: IApiError) => {
                         switch (e.field) {
-                            case 'emailOrUsername':
+                            case 'email_or_username':
                                 emailOrUsernameError = e.message;
                                 break;
                             case 'password':
@@ -125,7 +125,7 @@
 
     <footer>
         {#if genError}
-            <p class="error">{genError}</p>
+            <p class="error" data-testid="gen-error">{genError}</p>
         {/if}
         <div class="buttons-container">
             <slot name="secondary-action" />
