@@ -1,16 +1,56 @@
 import { prisma } from "$lib/storage/db";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
 import { $Enums } from "@prisma/client";
-import { generatePasswordHash } from "../utils/auth";
+import { generatePasswordHash, isValidPassword } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+
+export interface ISigninRequest {
+    emailOrUsername: string;
+    password: string;
+}
 
 export interface ISignupRequest {
     email: string;
     username: string;
     password: string;
 }
+
+export const signin = async ({ emailOrUsername, password }: ISigninRequest) => {
+    const errors: ApiError[] = [];
+
+    if (!emailOrUsername) {
+        errors.push(new ApiError('Email or username is required.', HttpStatus.UNPROCESSABLE, 'email_or_username', { emailOrUsername }));
+    }
+
+    if (!password) {
+        errors.push(new ApiError('Password is required.', HttpStatus.UNPROCESSABLE, 'password'));
+    }
+
+    if (Object.keys(errors).length) throw errors;
+
+    try {
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: emailOrUsername },
+                    { username: emailOrUsername },
+                ]
+            },
+        });
+
+        if (!user) {
+            throw new ApiError('Invalid credentials.', HttpStatus.UNAUTHORIZED, undefined, { emailOrUsername });
+        }
+
+        await isValidPassword(password, user.password);
+
+        return user;
+    } catch (err: unknown) {
+        throw ApiError.parse(err);
+    }
+};
 
 export const signup = async ({ email, username, password }: ISignupRequest) => {
     const validatedEmail = emailSchema.safeParse(email.trim());

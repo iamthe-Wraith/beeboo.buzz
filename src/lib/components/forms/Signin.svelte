@@ -69,7 +69,7 @@
                 if (result.data?.errors) {
                     result.data.errors.map((e: IApiError) => {
                         switch (e.field) {
-                            case 'emailOrUsername':
+                            case 'email_or_username':
                                 emailOrUsernameError = e.message;
                                 break;
                             case 'password':

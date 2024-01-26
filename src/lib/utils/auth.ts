@@ -37,7 +37,7 @@ export const isValidPassword = (providedPassword: string, encryptedPassword: str
           if (authenticated) {
             resolve();
           } else {
-            reject(new ApiError('Invalid email or password.', HttpStatus.AUTHENTICATION));
+            reject(new ApiError('Invalid credentials.', HttpStatus.AUTHENTICATION));
           }
         }
       });
