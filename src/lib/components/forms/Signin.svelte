@@ -127,8 +127,8 @@
         {#if genError}
             <p class="error" data-testid="gen-error">{genError}</p>
         {/if}
+
         <div class="buttons-container">
-            <slot name="secondary-action" />
             <Button
                 {processing}
                 type="submit"
@@ -136,6 +136,8 @@
             >
                 Sign In
             </Button>
+
+            <slot name="secondary-action" />
         </div>
     </footer>
 </form>
@@ -158,6 +160,7 @@
 
     .buttons-container {
         display: flex;
+        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
         flex-grow: 1;
