@@ -70,6 +70,7 @@
         &.input-text {
             color: var(--dark-900);
             line-height: 1rem;
+            text-align: left;
         }
     }
 

@@ -618,7 +618,7 @@ test('the submit button should become disabled when all fields are filled in, bu
     await expect(submitButton).toBeDisabled();
 })
 
-test('clicking submit button should submit form and redirect user to /dashboard', async ({ page, database }) => {
+test('clicking submit button should submit form and redirect user to /dashboard when sign up is successful', async ({ page, database }) => {
     await page.goto('/');
 
     const email = getEmail();
