@@ -8,8 +8,8 @@ import { Session } from '$lib/services/session';
 export const actions: Actions = {
     signin: async ({ request, cookies }) => {
         const data = await request.formData();
-		const emailOrUsername = data.get('email_or_username')!;
-		const password = data.get('password')!;
+        const emailOrUsername = data.get('email_or_username')!;
+        const password = data.get('password')!;
 
         try {
             const user = await signin({
