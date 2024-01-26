@@ -125,7 +125,7 @@
 
     <footer>
         {#if genError}
-            <p class="error">{genError}</p>
+            <p class="error" data-testid="gen-error">{genError}</p>
         {/if}
         <div class="buttons-container">
             <slot name="secondary-action" />
