@@ -21,9 +21,10 @@
     <button
         class="mobile-global-nav-trigger"
         data-testid="mobile-global-nav-trigger"
+        aria-label="Menu"
         on:click={openNav}
     >
-        <Icon icon="ion:menu-outline" />
+        <Icon data-testid="mobile-global-nav-trigger-icon" icon="ion:menu-outline" />
     </button>
 {/if}
 

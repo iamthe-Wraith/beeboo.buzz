@@ -48,11 +48,11 @@
             <Logo />
         </div>
     
-        <div class="mobile-nav-container">
+        <div data-testid="mobile-nav-container" class="mobile-nav-container">
             <MobileGlobalNav />
         </div>
 
-        <div class="desktop-nav-container">
+        <div data-testid="desktop-nav-container" class="desktop-nav-container">
             <GlobalNav />
         </div>
     </header>

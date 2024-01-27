@@ -32,11 +32,15 @@
     </div>
 
     <div class="lower-nav">
-        <a class="user-info-container" href="/settings">
-            <div class="avatar-container">
+        <a
+            class="user-info-container"
+            href="/settings"
+            data-testid="settings-link"
+        >
+            <div class="avatar-container" data-testid="user-avatar">
                 <Avatar size="medium" />
             </div>
-            <div class="user-info">
+            <div class="user-info" data-testid="user-email">
                 <div class="email">{ $user?.email }</div>
             </div>
         </a>
