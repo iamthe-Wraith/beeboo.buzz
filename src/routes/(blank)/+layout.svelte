@@ -1,10 +1,11 @@
 <script lang="ts">
     import { PUBLIC_APP_ENV } from '$env/static/public';
-    import './global.css';
+    import '../global.css';
     import Auth from '$lib/components/Auth.svelte';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
     import Signout from '$lib/components/forms/Signout.svelte';
+	import Logo from '$lib/components/Logo.svelte';
 	
     export let data: LayoutData;
 
@@ -42,7 +43,7 @@
 </svelte:head>
 
 <header data-testid="global-header">
-    <div class="logo">Oh My GTD</div>
+    <Logo />
 
     <div>
         {#if $user}
@@ -77,11 +78,6 @@
 
     header {
         height: 4rem;
-
-        & .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
     }
 
     footer {
