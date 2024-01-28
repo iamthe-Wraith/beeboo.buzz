@@ -12,10 +12,24 @@ datasource db {
 
 model User {
   id            Int           @id @default(autoincrement())
+  ownerId       Int?
   email         String        @unique
   username      String        @unique
   password      String
   accountType   AccountType   @map("account_type")
+  contexts      Context[]
+  createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
+}
+
+model Context {
+  id            Int           @id @default(autoincrement())
+  name          String
+  description   String?
+  ownerId       Int
+  owner         User          @relation(fields: [ownerId], references: [id])
+  order         Float
+  role          ContextRole   @default(NONE)
   createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
@@ -25,4 +39,11 @@ enum AccountType {
   PAID
   ADMIN
   SUPER_ADMIN
+}
+
+enum ContextRole {
+  NONE
+  INBOX
+  PROJECTS
+  WAITING
 }
