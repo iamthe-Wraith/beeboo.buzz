@@ -2,9 +2,14 @@
     import Icon from "@iconify/svelte";
     import GlobalNav from "./GlobalNav.svelte";
     import { clickOutside } from "$lib/actions/click-outside";
+	import { onMount } from "svelte";
 
     let mobileGlobalNav: HTMLDialogElement;
     let open = false;
+
+    onMount(() => {
+        window.addEventListener('resize', closeNav);
+    })
 
     function closeNav() {
         mobileGlobalNav?.close();

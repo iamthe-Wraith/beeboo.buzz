@@ -3,6 +3,8 @@
     import '../global.css';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
+	import { contexts } from '$lib/stores/contexts';
+	import { errors } from '$lib/stores/errors';
     import Logo from '$lib/components/Logo.svelte';
     import GlobalNav from '$lib/components/GlobalNav.svelte';
     import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';
@@ -10,6 +12,8 @@
     export let data: LayoutData;
 
     $: if (data?.user) user.set(data.user);
+    $: if (data?.contexts) contexts.set(data.contexts);
+    $: if (data?.errors) errors.set(data.errors);
 </script>
 
 <svelte:head>
@@ -96,6 +100,7 @@
             width: 100%;
             height: 100%;
             padding: 0 0 1rem;
+            overflow: hidden;
         }
     }
 
@@ -125,12 +130,13 @@
 
     .desktop-nav-container {
         display: none;
+        overflow: hidden;
 
         @media (min-width: 768px) {
             display: block;
             width: 100%;
-            height: 100%;
-            padding-top: 1rem;
+            height: calc(100% - 4rem);
+            overflow: auto;
         }
     }
 

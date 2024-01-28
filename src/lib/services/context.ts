@@ -3,6 +3,7 @@ import { ContextRole, type User } from "@prisma/client";
 import type { PrismaTransaction } from "../../types/prisma";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+import type { SessionUser } from "./session";
 
 export interface IContextRequest {
     name: string;
@@ -92,6 +93,13 @@ export const createManyContexts = async (contexts: IContextRequest[], user: User
                 ownerId: user.id
             }
         }),
+    });
+};
+
+export const getContexts = async (user: SessionUser) => {
+    return await prisma.context.findMany({
+        where: { ownerId: user.id },
+        orderBy: { order: 'asc' },
     });
 };
 
