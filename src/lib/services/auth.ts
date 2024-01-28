@@ -1,10 +1,12 @@
 import { prisma } from "$lib/storage/db";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
-import { $Enums } from "@prisma/client";
+import { $Enums, type User } from "@prisma/client";
 import { generatePasswordHash, isValidPassword } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+import { createDefaultUserContexts } from "./context";
+import { Logger } from "./logger";
 
 export interface ISigninRequest {
     emailOrUsername: string;
@@ -76,6 +78,8 @@ export const signup = async ({ email, username, password }: ISignupRequest) => {
 
     if (Object.keys(errors).length) throw errors;
 
+    let user: User;
+
     try {
         const existingUser = await prisma.user.findFirst({
             where: {
@@ -101,7 +105,8 @@ export const signup = async ({ email, username, password }: ISignupRequest) => {
         }
 
         const hash = await generatePasswordHash((validatedPassword as SafeParseSuccess<string>).data);
-        const user = await prisma.user.create({
+
+        user = await prisma.user.create({
             data: {
                 email: (validatedEmail as SafeParseSuccess<string>).data,
                 username: (validatedUsername as SafeParseSuccess<string>).data,
@@ -109,9 +114,21 @@ export const signup = async ({ email, username, password }: ISignupRequest) => {
                 accountType: $Enums.AccountType.FREE,
             },
         });
-
-        return user;
     } catch (err: unknown) {
+        Logger.error(err);
         throw ApiError.parse(err);
     }
+
+    try {
+        await prisma.$transaction(async (tx) => {
+            await createDefaultUserContexts(user, tx);
+            // TODO: create user settings
+
+            return true;
+        });
+    } catch (err: unknown) {
+        Logger.error(err);
+    }
+
+    return user;
 };
