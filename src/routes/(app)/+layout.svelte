@@ -3,9 +3,9 @@
     import '../global.css';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
-	import Logo from '$lib/components/Logo.svelte';
-	import GlobalNav from '$lib/components/GlobalNav.svelte';
-	import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';
+    import Logo from '$lib/components/Logo.svelte';
+    import GlobalNav from '$lib/components/GlobalNav.svelte';
+    import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';
 	
     export let data: LayoutData;
 
@@ -14,9 +14,9 @@
 
 <svelte:head>
 	{#if PUBLIC_APP_ENV === 'production'}
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
@@ -24,13 +24,13 @@
                 img-src https://ohmygtd.app blob:; 
                 child-src blob:; 
                 worker-src blob:;"
-		/>
+        />
 	{/if}
 
 	{#if PUBLIC_APP_ENV === 'test'}
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
@@ -38,7 +38,7 @@
                 img-src http://localhost:5173 http://localhost:4173 blob:; 
                 child-src blob:; 
                 worker-src blob:;"
-		/>
+        />
 	{/if}
 </svelte:head>
 

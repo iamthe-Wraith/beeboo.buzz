@@ -1,9 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { user } from '$lib/stores/user';
-	import { onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import Signout from './forms/Signout.svelte';
-	import Avatar from './Avatar.svelte';
+    import Avatar from './Avatar.svelte';
 
     let nav: HTMLElement;
 

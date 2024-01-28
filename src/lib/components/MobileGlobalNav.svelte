@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Icon from "@iconify/svelte";
-	import GlobalNav from "./GlobalNav.svelte";
-	import { clickOutside } from "$lib/actions/click-outside";
+    import Icon from "@iconify/svelte";
+    import GlobalNav from "./GlobalNav.svelte";
+    import { clickOutside } from "$lib/actions/click-outside";
 
     let mobileGlobalNav: HTMLDialogElement;
     let open = false;
@@ -59,33 +59,33 @@
 
     /* https://svelte.dev/examples/modal */
     dialog::backdrop {
-		background: rgba(0, 0, 0, 0.3);
-	}
+        background: rgba(0, 0, 0, 0.3);
+    }
 
     dialog[open] {
-		animation: slide 0.3s;
-	}
+        animation: slide 0.3s;
+    }
 
-	@keyframes slide {
-		from {
-			transform: translate3d(-16rem, 0, 0);
-		}
-		to {
-			transform: translate3d(0);
-		}
-	}
+    @keyframes slide {
+        from {
+            transform: translate3d(-16rem, 0, 0);
+        }
+        to {
+            transform: translate3d(0);
+        }
+    }
 
 	dialog[open]::backdrop {
-		animation: fade 0.2s ease-out;
+        animation: fade 0.2s ease-out;
 	}
 
 	@keyframes fade {
-		from {
-			opacity: 0;
-		}
-		to {
-			opacity: 1;
-		}
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
 	}
 
     .mobile-global-nav-trigger {
