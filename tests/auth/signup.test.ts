@@ -515,7 +515,7 @@ test.describe('sign up', () => {
                 password, 
                 confirmPassword: password,
             });
-        
+
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
         
             const dashboard = await page.getByTestId('dashboard');

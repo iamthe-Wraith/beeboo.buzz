@@ -1,11 +1,29 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { user } from '$lib/stores/user';
+	import { errors } from '$lib/stores/errors';
+	import { contexts } from '$lib/stores/contexts';
     import { onMount } from 'svelte';
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
+	import { type Context } from '@prisma/client';
+	import { ContextRole } from '../../types/contexts';
 
     let nav: HTMLElement;
+
+    let loadingError: string;
+    let contextsWithRoles: Context[] = [];
+    let contextsWithoutRoles: Context[] = [];
+
+    $: if ($errors && $errors.length) {
+            const error = $errors.find(e => e.field === 'contexts');
+            if (error) loadingError = error.message;
+        }
+
+    $: if ($contexts && $contexts.length) {
+            contextsWithRoles = $contexts.filter(c => c.role !== ContextRole.NONE);
+            contextsWithoutRoles = $contexts.filter(c => c.role === ContextRole.NONE);
+        }
 
     onMount(() => {
         nav.addEventListener('click', e => {
@@ -23,12 +41,46 @@
     bind:this={nav}
 >
     <div class="upper-nav">
-        <a
-            href="/dashboard" 
-            class={$page.url.pathname === '/dashboard' ? 'active' : ''}
-        >
-            Dashboard
-        </a>
+        <div class="nav-section">
+            <a
+                href="/dashboard" 
+                class={$page.url.pathname === '/dashboard' ? 'active' : ''}
+            >
+                Dashboard
+            </a>
+        </div>
+
+        {#if loadingError}
+            <div class="loading-error">
+                {loadingError}
+            </div>
+        {/if}
+        
+        {#if !loadingError && contextsWithRoles.length}
+            <div class="nav-section">
+                {#each contextsWithRoles as context}
+                    <a
+                        href={`/${context.role.toLocaleLowerCase()}`}
+                        class={$page.url.pathname === `/contexts/${context.id}` ? 'active' : ''}
+                    >
+                        {context.name}
+                    </a>
+                {/each}
+            </div>
+        {/if}
+
+        {#if !loadingError && contextsWithoutRoles.length}
+            <div class="nav-section">
+                {#each contextsWithoutRoles as context}
+                    <a
+                        href={`/contexts/${context.id}`}
+                        class={$page.url.pathname === `/contexts/${context.id}` ? 'active' : ''}
+                    >
+                        {context.name}
+                    </a>
+                {/each}
+            </div>
+        {/if}
     </div>
 
     <div class="lower-nav">
@@ -61,15 +113,29 @@
         align-items: stretch;
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        overflow: auto;
     }
 
     .upper-nav {
+        & .loading-error {
+            padding: 3rem 0 1rem;
+            text-align: center;
+            color: var(--dark-700);
+        }
+
+        & .nav-section {
+            padding: 0.5rem 0;
+
+            &:not(:last-of-type) {
+                border-bottom: 1px solid var(--dark-400);
+            }
+        }
+
         & a {
             display: block;
             width: 100%;
             padding: 0.5rem 1rem;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             text-decoration: none;
 
@@ -84,7 +150,7 @@
             }
 
             @media (min-width: 768px) {
-                padding: 0.5rem;
+                padding: 0.5rem 1rem;
             }
         }
     }

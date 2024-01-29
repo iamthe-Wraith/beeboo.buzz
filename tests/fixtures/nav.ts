@@ -13,6 +13,8 @@ export class NavFixture {
     public userAvatar: Locator;
     public userEmail: Locator;
 
+    public contextLinks: Record<string, Locator>;
+
     public signoutButton: Locator;
 
     public copyright: Locator;
@@ -33,6 +35,17 @@ export class NavFixture {
         this.settingsLink = this.nav.getByTestId('settings-link');
         this.userAvatar = this.settingsLink.getByTestId('user-avatar');
         this.userEmail = this.settingsLink.getByTestId('user-email');
+
+        this.contextLinks = {
+            inbox: this.nav.getByRole('link', { name: 'Inbox' }),
+            projects: this.nav.getByRole('link', { name: 'Projects' }),
+            waitingFor: this.nav.getByRole('link', { name: 'Waiting For' }),
+            atHome: this.nav.getByRole('link', { name: 'At Home' }),
+            atWork: this.nav.getByRole('link', { name: 'At Work' }),
+            atComputer: this.nav.getByRole('link', { name: 'At Computer' }),
+            anywhere: this.nav.getByRole('link', { name: 'Anywhere' }),
+            phoneCalls: this.nav.getByRole('link', { name: 'Phone Calls' }),
+        };
 
         this.signoutButton = this.nav.getByTestId('signout-button');
 

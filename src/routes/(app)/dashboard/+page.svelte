@@ -2,4 +2,4 @@
 	import { user } from '$lib/stores/user';
 </script>
 
-<div data-testid="dashboard">dashboard for { $user?.username }</div>
+<div data-testid="dashboard">dashboard - {$user?.username}</div>
