@@ -1,12 +1,13 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { user } from '$lib/stores/user';
+	import { errors } from '$lib/stores/errors';
+	import { contexts } from '$lib/stores/contexts';
     import { onMount } from 'svelte';
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
-	import { errors } from '$lib/stores/errors';
-	import { contexts } from '$lib/stores/contexts';
-	import { ContextRole, type Context } from '@prisma/client';
+	import { type Context } from '@prisma/client';
+	import { ContextRole } from '../../types/contexts';
 
     let nav: HTMLElement;
 
@@ -53,7 +54,9 @@
             <div class="loading-error">
                 {loadingError}
             </div>
-        {:else if $contexts && $contexts.length}
+        {/if}
+        
+        {#if !loadingError && contextsWithRoles.length}
             <div class="nav-section">
                 {#each contextsWithRoles as context}
                     <a
@@ -64,7 +67,9 @@
                     </a>
                 {/each}
             </div>
+        {/if}
 
+        {#if !loadingError && contextsWithoutRoles.length}
             <div class="nav-section">
                 {#each contextsWithoutRoles as context}
                     <a
