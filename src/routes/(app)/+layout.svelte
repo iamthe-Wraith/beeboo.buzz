@@ -3,8 +3,8 @@
     import '../global.css';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
-	import { contexts } from '$lib/stores/contexts';
-	import { errors } from '$lib/stores/errors';
+    import { contexts } from '$lib/stores/contexts';
+    import { errors } from '$lib/stores/errors';
     import Logo from '$lib/components/Logo.svelte';
     import GlobalNav from '$lib/components/GlobalNav.svelte';
     import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Context } from "@prisma/client";
-	import type { PageData } from "./$types";
-	import { contexts } from "$lib/stores/contexts";
+    import type { Context } from "@prisma/client";
+    import type { PageData } from "./$types";
+    import { contexts } from "$lib/stores/contexts";
 
     export let data: PageData;
 
