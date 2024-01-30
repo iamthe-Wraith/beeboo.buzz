@@ -8,7 +8,9 @@
     let open = false;
 
     onMount(() => {
-        window.addEventListener('resize', closeNav);
+        window.addEventListener('resize', () => {
+            if (open) closeNav();
+        });
     })
 
     function closeNav() {
