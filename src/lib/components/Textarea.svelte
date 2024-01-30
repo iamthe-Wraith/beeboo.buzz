@@ -44,10 +44,14 @@
 
 <style>
     .textarea-container {
+        --textarea-width: 100%;
+        --textarea-height: 6rem;
+
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        width: 100%;
+        width: var(--textarea-width);
+        height: var(--textarea-height);
     }
 
     label {
@@ -69,7 +73,7 @@
     }
 
     textarea {
-        justify-self: stretch;
+        flex-grow: 1;
         width: 100%;
         padding: 0.5rem;
         border: 1px solid var(--dark-600);
