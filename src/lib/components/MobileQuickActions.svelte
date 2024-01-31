@@ -3,9 +3,14 @@
 	import NewQuickTask from "./modals/NewQuickTask.svelte";
 
 </script>
-<div class="mobile-quick-actions">
+
+<div
+    class="mobile-quick-actions"
+    data-testid="mobile-quick-actions"
+>
     <NewQuickTask let:openNewQuickTaskModal>
         <Button
+            data-testid="new-quick-project-button"
             kind="secondary"
             on:click={() => console.log('test1')}
         >
@@ -13,6 +18,7 @@
         </Button>
 
         <Button
+            data-testid="new-quick-task-button"
             kind="primary"
             on:click={openNewQuickTaskModal}
         >

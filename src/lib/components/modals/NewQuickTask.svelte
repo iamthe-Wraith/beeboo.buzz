@@ -20,7 +20,7 @@
 <slot {openNewQuickTaskModal} />
 
 <Modal
-    id="new-quick-task"
+    id="new-quick-task-modal"
     bind:open
     title="New Task"
     on:modal-change={onModalChange}

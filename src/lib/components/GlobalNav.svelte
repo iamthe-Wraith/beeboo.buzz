@@ -44,8 +44,12 @@
 >
     <div class="upper-nav">
         {#if !loadingError}
-            <div class="nav-section quick-actions">
+            <div
+                data-testid="quick-actions"
+                class="nav-section quick-actions"
+            >
                 <Button
+                    data-testid="new-quick-project-button"
                     kind="secondary"
                     on:click={() => console.log('test1')}
                 >
@@ -54,6 +58,7 @@
                 
                 <NewQuickTask let:openNewQuickTaskModal>
                     <Button
+                        data-testid="new-quick-task-button"
                         kind="primary"
                         on:click={openNewQuickTaskModal}
                     >

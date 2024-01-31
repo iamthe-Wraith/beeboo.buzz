@@ -11,9 +11,12 @@ export class Database {
     public async executeQuery(query: string) {
         const client = new pg.Client(this.config);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let result: pg.QueryResult<any>;
+
         try {
             await client.connect();
-            await client.query(query);
+            result = await client.query(query);
         }
         catch (err) {
             Logger.error("Error in connection/executing query:");
@@ -26,5 +29,7 @@ export class Database {
                     Logger.error("Error ending db client connection:", error);
                 });
         }
+
+        if (result!) return result.rows;
     }
 }

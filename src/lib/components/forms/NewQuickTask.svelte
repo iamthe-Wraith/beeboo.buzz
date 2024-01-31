@@ -8,6 +8,8 @@
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
 
+    type FormField = 'title' | 'notes';
+
     export let onCancel: () => void = () => {};
 
     let processing = false;
@@ -61,16 +63,31 @@
             }
 
             if (result.type === 'success') {
-                reset();
-
-                console.log('success!', result);
-                
+                reset();                
                 onCancel?.();
             }
 
             processing = false;
         }
     };
+
+    function onBlur(field: FormField) {
+        return function() {
+            switch (field) {
+                case 'title':
+                    title = title.trim();
+                    if (!title) {
+                        titleError = 'Title is required.';
+                    } else {
+                        titleError = '';
+                    }
+                    break;
+                case 'notes':
+                    notes = notes.trim();
+                    break;
+            }
+        }
+    }
 
     function reset() {
         title = '';
@@ -85,13 +102,14 @@
     use:enhance={onSubmitResponse}
 >
     <TextInput
+        required
         id="title"
         data-testid="new-quick-task-title"
         label="Title"
         placeholder="Task Title"
         error={titleError}
         bind:value={title}
-        required
+        on:blur={onBlur('title')}
     />
 
     <Textarea
@@ -101,6 +119,7 @@
         placeholder="Task Notes"
         error={notesError}
         bind:value={notes}
+        on:blur={onBlur('notes')}
     />
 
     {#if genError}
@@ -124,7 +143,6 @@
             data-testid="new-quick-task-cancel"
             kind="transparent"
             type="button"
-            {disabled}
             on:click={onCancelClick}
         >
             Cancel

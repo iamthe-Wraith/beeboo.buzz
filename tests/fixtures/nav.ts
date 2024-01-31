@@ -1,5 +1,11 @@
 import type { Locator, Page, ViewportSize } from "@playwright/test";
 
+interface IQuickActions {
+    container: Locator;
+    newProject: Locator;
+    newTask: Locator;
+}
+
 export class NavFixture {
     public isMobile: boolean;
 
@@ -12,6 +18,8 @@ export class NavFixture {
     public settingsLink: Locator;
     public userAvatar: Locator;
     public userEmail: Locator;
+
+    public desktopQuickActions: IQuickActions;
 
     public contextLinks: Record<string, Locator>;
 
@@ -35,6 +43,12 @@ export class NavFixture {
         this.settingsLink = this.nav.getByTestId('settings-link');
         this.userAvatar = this.settingsLink.getByTestId('user-avatar');
         this.userEmail = this.settingsLink.getByTestId('user-email');
+
+        this.desktopQuickActions = {
+            container: this.nav.getByTestId('quick-actions'),
+            newProject: this.nav.getByTestId('quick-actions').getByTestId('new-quick-project-button'),
+            newTask: this.nav.getByTestId('quick-actions').getByTestId('new-quick-task-button'),
+        };
 
         this.contextLinks = {
             inbox: this.nav.getByRole('link', { name: 'Inbox' }),
