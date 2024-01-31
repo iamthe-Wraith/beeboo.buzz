@@ -8,6 +8,8 @@
     import Avatar from './Avatar.svelte';
 	import { type Context } from '@prisma/client';
 	import { ContextRole } from '../../types/contexts';
+	import NewQuickTask from './modals/NewQuickTask.svelte';
+	import Button from './Button.svelte';
 
     let nav: HTMLElement;
 
@@ -41,6 +43,31 @@
     bind:this={nav}
 >
     <div class="upper-nav">
+        {#if !loadingError}
+            <div
+                data-testid="quick-actions"
+                class="nav-section quick-actions"
+            >
+                <Button
+                    data-testid="new-quick-project-button"
+                    kind="secondary"
+                    on:click={() => console.log('test1')}
+                >
+                    New Project
+                </Button>
+                
+                <NewQuickTask let:openNewQuickTaskModal>
+                    <Button
+                        data-testid="new-quick-task-button"
+                        kind="primary"
+                        on:click={openNewQuickTaskModal}
+                    >
+                        New Task
+                    </Button>
+                </NewQuickTask>
+            </div>
+        {/if}
+
         <div class="nav-section">
             <a
                 href="/dashboard" 
@@ -61,7 +88,7 @@
                 {#each contextsWithRoles as context}
                     <a
                         href={`/${context.role.toLocaleLowerCase()}`}
-                        class={$page.url.pathname === `/contexts/${context.id}` ? 'active' : ''}
+                        class={$page.url.pathname === `/${context.role.toLocaleLowerCase()}` ? 'active' : ''}
                     >
                         {context.name}
                     </a>
@@ -128,6 +155,18 @@
 
             &:not(:last-of-type) {
                 border-bottom: 1px solid var(--dark-400);
+            }
+        }
+
+        & .quick-actions {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 1rem 0.5rem;
+
+            @media (min-width: 768px) {
+                display: grid;
             }
         }
 

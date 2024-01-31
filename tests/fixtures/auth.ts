@@ -20,7 +20,12 @@ export class AuthFixture {
     }
 
     public async cleanup(email: string, database: Database): Promise<void> {
-        await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
+        const result = await database.executeQuery(`SELECT id FROM "User" WHERE email = '${email}'`);
+
+        if (result?.length) {
+            await database.executeQuery(`DELETE FROM "Context" WHERE "owner_id" = ${result[0].id}`);
+            await database.executeQuery(`DELETE FROM "User" WHERE email = '${email}'`);
+        }
     };
 
     public async createUser({ email, username, password, accountType }: INewUserRequest, database: Database): Promise<void> {

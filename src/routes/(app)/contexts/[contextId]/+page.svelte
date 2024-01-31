@@ -8,7 +8,6 @@
     let context: Context | null;
 
     $: context = $contexts?.find(c => c.id === data.contextId) || null;
-    $: console.log(data);
 </script>
 
 {#if context}

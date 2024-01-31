@@ -54,6 +54,29 @@ test.describe('nav', () => {
             await signin.cleanup(email, database);
         });
 
+        test('quick actions should not be shown', async ({ page, viewport, database }) => {
+            if (viewport && viewport.width >= 768) test.skip();
+
+            const email = getEmail();
+            const password = 'Password123!';
+            const signin = new SignInFixture(page);
+            const nav = new NavFixture(page, viewport);
+
+            await signin.createUser({ email, password }, database);
+
+            await page.goto('/');
+
+            await signin.signIn({ emailOrUsername: email, password });
+
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+
+            await expect(nav.menuButton).toBeVisible();
+
+            await expect(nav.nav.getByTestId('quick-actions')).not.toBeVisible();
+
+            await signin.cleanup(email, database);
+        });
+
         test.describe('links', () => {
             test('nav should have default links', async ({ page, viewport, database }) => {
                 if (viewport && viewport.width >= 768) test.skip();
@@ -139,6 +162,33 @@ test.describe('nav', () => {
     });
 
     test.describe('desktop nav', () => {
+        test.describe('quick actions', () => {
+            test('should have quick action buttons', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width < 768) test.skip();
+    
+                const email = getEmail();
+                const password = 'Password123!';
+                const signin = new SignInFixture(page);
+                const nav = new NavFixture(page, viewport);
+    
+                await signin.createUser({ email, password }, database);
+    
+                await page.goto('/');
+    
+                await signin.signIn({ emailOrUsername: email, password });
+
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+    
+                await expect(nav.menuButton).not.toBeVisible();
+
+                await expect(nav.desktopQuickActions.container).toBeVisible();
+                await expect(nav.desktopQuickActions.newProject).toBeVisible();
+                await expect(nav.desktopQuickActions.newTask).toBeVisible();
+    
+                await signin.cleanup(email, database);
+            });
+        });
+
         test.describe('links', () => {
             test('nav should have default links', async ({ page, viewport, database }) => {
                 if (viewport && viewport.width < 768) test.skip();

@@ -103,13 +103,15 @@ body * {
 				opacity 0.2s ease-in-out;
 }
 
-input {
+input,
+textarea {
 	outline: none;
 }
 
 a,
 button,
 input,
+textarea,
 select {
 	outline: none;
 

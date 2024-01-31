@@ -195,7 +195,7 @@
         on:blur={onConfirmPasswordBlur}
     />
 
-    <footer>
+    <div class="signout-footer">
         {#if genError}
             <p class="error">{genError}</p>
         {/if}
@@ -211,7 +211,7 @@
 
             <slot name="secondary-action" />
         </div>
-    </footer>
+    </div>
 </form>
 
 <style>
@@ -219,11 +219,12 @@
         display: flex;
         flex-direction: column;
         gap: 1.1rem;
-        width: 30rem;
+        width: 80vw;
+        max-width: 30rem;
         height: auto;
     }
 
-    footer {
+    .signout-footer {
         display: flex;
         flex-direction: column;
         align-items: stretch;

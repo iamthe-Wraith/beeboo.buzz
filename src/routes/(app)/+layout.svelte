@@ -8,6 +8,7 @@
     import Logo from '$lib/components/Logo.svelte';
     import GlobalNav from '$lib/components/GlobalNav.svelte';
     import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';
+	import MobileQuickActions from '$lib/components/MobileQuickActions.svelte';
 	
     export let data: LayoutData;
 
@@ -64,6 +65,8 @@
     <main data-testid="global-main">
         <slot></slot>  
     </main>
+
+    <MobileQuickActions />
 </div>
 
 <style>
@@ -76,11 +79,13 @@
             "main";
         height: 100vh;
         width: 100vw;
+        padding-bottom: 4rem;
 
         @media (min-width: 768px) {
             grid-template-rows: 1fr;
             grid-template-columns: 16rem 1fr;
             grid-template-areas: "header main";
+            padding-bottom: 0;
         }
     }
 
@@ -108,12 +113,13 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        width: 16rem;
+        width: auto;
         height: 100%;
         margin-right: 1rem;
 
         @media (min-width: 768px) {
             justify-content: center;
+            width: 100%;
             height: 4rem;
             margin-right: 0;
             border-bottom: 1px solid var(--dark-400);

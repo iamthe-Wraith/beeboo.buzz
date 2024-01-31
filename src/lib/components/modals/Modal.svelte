@@ -56,7 +56,7 @@
     use:clickOutside
     on:click-outside={closeModal}
 >
-    <header>
+    <div class="modal-header">
         <button
             class="close" 
             on:click={closeModal}
@@ -65,7 +65,7 @@
             <Icon icon="ion:close" />
         </button>
         <h3 class="h5">{title}</h3>
-    </header>
+    </div>
 
     <section>
         <slot />
@@ -111,7 +111,7 @@
 		}
 	}
 
-    header {
+    .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;

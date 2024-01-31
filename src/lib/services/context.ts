@@ -96,8 +96,8 @@ export const createManyContexts = async (contexts: IContextRequest[], user: User
     });
 };
 
-export const getContexts = async (user: SessionUser) => {
-    return await prisma.context.findMany({
+export const getContexts = async (user: SessionUser, tx?: PrismaTransaction) => {
+    return await (tx || prisma).context.findMany({
         where: { ownerId: user.id },
         orderBy: { order: 'asc' },
     });

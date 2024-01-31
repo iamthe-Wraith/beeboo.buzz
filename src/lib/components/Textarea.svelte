@@ -4,15 +4,10 @@
     export let label = '';
     export let text = '';
     export let error = '';
-    export let type: HTMLInputElement['type'] = 'text';
     export let required = false;
-
-	function typeAction(node: HTMLInputElement) {
-		node.type = type || 'text';
-	}
 </script>
 
-<div class="input-container">
+<div class="textarea-container">
     {#if label}
         <label for={id}>
             {label}
@@ -22,13 +17,12 @@
         </label>
     {/if}
 
-    <input
+    <textarea
         {id}
         {required}
         name={id}
         class={error ? 'error' : ''}
         bind:value
-        use:typeAction
         {...$$restProps}
         on:change
         on:click
@@ -49,11 +43,15 @@
 </div>
 
 <style>
-    .input-container {
+    .textarea-container {
+        --textarea-width: 100%;
+        --textarea-height: 6rem;
+
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        width: 100%;
+        width: var(--textarea-width);
+        height: var(--textarea-height);
     }
 
     label {
@@ -74,7 +72,8 @@
         }
     }
 
-    input {
+    textarea {
+        flex-grow: 1;
         width: 100%;
         padding: 0.5rem;
         border: 1px solid var(--dark-600);

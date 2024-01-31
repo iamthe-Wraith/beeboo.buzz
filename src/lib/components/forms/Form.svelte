@@ -1,8 +1,8 @@
 <form {...$$restProps}>
     <slot />
-    <footer>
+    <div class="form-footer">
         <slot name="footer" />
-    </footer>
+    </div>
 </form>
 
 <style>
@@ -14,7 +14,7 @@
         height: auto;
     }
 
-    footer {
+    .form-footer {
         display: flex;
         justify-content: flex-end;
         padding-top: 0.5rem;
