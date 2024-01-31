@@ -1,9 +1,8 @@
 <script lang="ts">
+    import ContextLayout from "$lib/components/ContextLayout.svelte";
     import type { PageData } from "./$types";
 
     export let data: PageData;
-
-    $: console.log(data);
 </script>
 
-<div>Waiting for</div>
+<ContextLayout context={data.context} tasks={data.tasks} />
