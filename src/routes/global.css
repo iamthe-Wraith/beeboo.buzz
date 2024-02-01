@@ -90,13 +90,40 @@ body {
 	--font-secondary: Balsamiq, sans-serif;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+input,
+label,
+button,
+a,
+li,
+ul,
+ol,
+textarea,
+select,
+option,
+form,
+section,
+header,
+footer,
+main,
+nav {
+	color: var(--light-500);
+}
+
 body * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 	font-family: var(--font-secondary);
 	font-size: 0.875rem;
-	color: var(--light-500);
 	transition: color 0.2s ease-in-out,
 				background-color 0.2s ease-in-out,
 				border-color 0.2s ease-in-out,

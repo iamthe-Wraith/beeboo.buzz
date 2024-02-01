@@ -1,16 +1,20 @@
 <script lang="ts">
-	import type { Task } from "@prisma/client";
+    import type { Task as TaskModel } from "@prisma/client";
+    import Task from "./Task.svelte";
 
-    export let tasks: Task[] = [];
+    export let tasks: TaskModel[] = [];
 </script>
 
 <div class="task-list-container">
-    <div>{ tasks.length } tasks...</div>
+    {#each tasks as task (task.id)}
+        <Task {task} />
+    {/each}
 </div>
 
 <style>
     .task-list-container {
         display: flex;
         flex-direction: column;
+        gap: 0.75rem;
     }
 </style>

@@ -7,10 +7,19 @@
 </script>
 
 <div class="container">
-    <div>
-        <h1>{ context?.name }</h1>
+    <div class="header">
+        <div>
+            <h1>{ context?.name }</h1>
+            <span class="tasks-count">
+                {tasks.length} tasks
+            </span>
+        </div>
+
+        <div>
+            
+        </div>
     </div>
-    <div>
+    <div class="main-content">
         <TaskList { tasks } />
     </div>
 </div>
@@ -21,5 +30,28 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0 0 1rem;
+        border-bottom: 1px solid var(--dark-500);
+
+        & h1 {
+            font-size: 2rem;
+        }
+
+        & .tasks-count {
+            font-size: 0.85rem;
+            color: var(--dark-900);
+        }
+    }
+
+    .main-content {
+        flex-grow: 1;
+        overflow: auto;
     }
 </style>
