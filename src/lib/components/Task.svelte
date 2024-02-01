@@ -17,11 +17,13 @@
 <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
     <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
         <form>
-            <button type="submit" />
+            <button type="submit">
+                <Icon icon="ion:checkmark-outline" />
+            </button>
         </form>
     </div>
     <button
-        class="task"
+        class="task {daysUntilDue < 0 ? 'past-due' : ''}"
         on:click={onTaskClick}
     >
         <div class="task-main">
@@ -32,9 +34,9 @@
             {#if task.dueDate}
                 <div class="due-date">
                     {#if daysUntilDue < 0}
-                        <p class="error">Was due {Math.abs(daysUntilDue)} days ago</p>
+                        <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
                     {:else if daysUntilDue === 0}
-                        <p>Due Today</p>
+                        <p class="due-today">Due Today</p>
                     {:else if daysUntilDue === 1}
                         <p>Due Tomorrow</p>
                     {:else}
@@ -70,16 +72,18 @@
         display: flex;
         justify-content: space-between;
         align-items: stretch;
-        border: 1px solid transparent;
         border-radius: 0.25rem;
+        transition: 0.25s ease-in-out transform, 0.25s ease-in-out border;
 
-        &:has(.task:hover) {
-            border: 1px solid var(--primary-500);
-            cursor: pointer;
+        &:has(.task:hover),
+        &:has(.task:focus-visible) {
+            /* border: 1px solid var(--primary-200); */
+            transform: scale(1.01);
         }
 
-        &.past-due:has(.task:hover) {
-            border: 1px solid var(--danger-100);
+        &:has(.task:focus-visible) {
+            outline: 1px dashed var(--light-500);
+		    outline-offset: 2px;
         }
     }
 
@@ -96,7 +100,7 @@
         background: var(--primary-200);
 
         &.past-due {
-            background: var(--danger-100);
+            background: var(--danger-400);
         }
 
         & form {
@@ -108,16 +112,27 @@
         }
 
         & button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 1.75rem;
             height: 1.75rem;
-            border: 1px solid var(--dark-500);
+            border: none;
             border-radius: 0.25rem;
             background: var(--dark-300);
-            outline: none;
+
+            & svg {
+                font-size: 3rem;
+                transition: 0.25s ease-in-out opacity;
+                opacity: 0;
+            }
 
             &:hover {
-                border: 1px solid var(--primary-500);
                 cursor: pointer;
+
+                & svg {
+                    opacity: 0.75;
+                }
             }
         }
     }
@@ -128,11 +143,24 @@
         flex-grow: 1;
         gap: 1rem;
         padding: 0.5rem 1rem;
-        border: none;
+        border: 1px solid transparent;
+        border-left: none;
         border-top-right-radius: 0.25rem;
         border-bottom-right-radius: 0.25rem;
         background: var(--dark-400);
         outline: none;
+        transition: 0.25s ease-in-out border;
+        
+        &:hover {
+            border: 1px solid var(--primary-200);
+            border-left: none; 
+            cursor: pointer;
+        }
+
+        &.past-due:hover {
+            border: 1px solid var(--danger-400);
+            border-left: none;
+        }
     }
 
     .task-main {
@@ -150,11 +178,15 @@
 
         & .due-date {
             & p {
-                font-size: 0.9rem;
+                font-size: 0.8rem;
                 color: var(--dark-900);
 
-                &.error {
-                    color: var(--danger-100);
+                &.past-due {
+                    color: var(--danger-400);
+                }
+
+                &.due-today {
+                    color: var(--primary-500);
                 }
             }
         }

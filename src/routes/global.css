@@ -76,15 +76,15 @@ body {
 	--tertiary-800: oklch(56.91% 0.281 264.82);
 	--tertiary-900: oklch(61.91% 0.281 264.82);
 
-	--danger-100: oklch(46.26% 0.239 29.12);
-	--danger-200: oklch(48.26% 0.239 29.12);
-	--danger-300: oklch(50.26% 0.239 29.12);
-	--danger-400: oklch(52.26% 0.239 29.12);
-	--danger-500: oklch(54.26% 0.239 29.12);
-	--danger-600: oklch(56.26% 0.239 29.12);
-	--danger-700: oklch(58.26% 0.239 29.12);
-	--danger-800: oklch(60.26% 0.239 29.12);
-	--danger-900: oklch(62.26% 0.239 29.12);
+	--danger-100: oklch(45.15% 0.269 23.82);
+	--danger-200: oklch(50.15% 0.269 23.82);
+	--danger-300: oklch(55.15% 0.269 23.82);
+	--danger-400: oklch(60.15% 0.269 23.82);
+	--danger-500: oklch(65.15% 0.269 23.82);
+	--danger-600: oklch(70.15% 0.269 23.82);
+	--danger-700: oklch(75.15% 0.269 23.82);
+	--danger-800: oklch(80.15% 0.269 23.82);
+	--danger-900: oklch(85.15% 0.269 23.82);
 
 	--font-primary: NightmareBeforeChristmas, sans-serif;
 	--font-secondary: Balsamiq, sans-serif;
