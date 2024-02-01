@@ -7,6 +7,7 @@
     import type { ActionResult } from "@sveltejs/kit";
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
 
     type FormField = 'title' | 'notes';
 
@@ -64,7 +65,7 @@
 
             if (result.type === 'success') {
                 reset();                
-                onCancel?.();
+                window.location.reload();
             }
 
             processing = false;
