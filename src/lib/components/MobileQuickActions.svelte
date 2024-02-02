@@ -1,6 +1,6 @@
 <script>
 	import Button from "./Button.svelte";
-	import NewQuickTask from "./modals/NewQuickTask.svelte";
+	import NewQuickTask from "./modals/NewQuickTaskModal.svelte";
 
 </script>
 

@@ -3,69 +3,68 @@
     import type { Task } from "@prisma/client";
 	import TaskIcon from "./TaskIcon.svelte";
 	import dayjs from "dayjs";
+	import TaskModal from "./modals/TaskModal.svelte";
 
     export let task: Task;
 
     const daysUntilDue = dayjs(task.dueDate).diff(dayjs(), "day");
     const hasTags = false;
-
-    function onTaskClick() {
-        console.log('task clicked: ', task);
-    }
 </script>
 
-<div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-    <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-        <form>
-            <button type="submit">
-                <Icon icon="ion:checkmark-outline" />
-            </button>
-        </form>
-    </div>
-    <button
-        class="task {daysUntilDue < 0 ? 'past-due' : ''}"
-        on:click={onTaskClick}
-    >
-        <div class="task-main">
-            <div>
-                <p class="title">{task.title}</p>
-            </div>
-
-            {#if task.dueDate}
-                <div class="due-date">
-                    {#if daysUntilDue < 0}
-                        <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
-                    {:else if daysUntilDue === 0}
-                        <p class="due-today">Due Today</p>
-                    {:else if daysUntilDue === 1}
-                        <p>Due Tomorrow</p>
-                    {:else}
-                        <p>Due in {daysUntilDue} days</p>
-                    {/if}
+<TaskModal {task} let:openTaskModal>
+    <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
+        <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
+            <form>
+                <button type="submit">
+                    <Icon icon="ion:checkmark-outline" />
+                </button>
+            </form>
+        </div>
+        <button
+            class="task {daysUntilDue < 0 ? 'past-due' : ''}"
+            on:click={openTaskModal}
+        >
+            <div class="task-main">
+                <div>
+                    <p class="title">{task.title}</p>
                 </div>
-            {/if}
-            
-            {#if hasTags}
-                <div class="task-tags"></div>
-            {/if}
-        </div>
-        <div class="task-icons">
-            {#if daysUntilDue < 0}
-                <TaskIcon
-                    icon="ion:alert-circle-outline" 
-                    text="Past Due"
-                />
-            {/if}
-
-            {#if task.notes}
-                <TaskIcon
-                    icon="ion:document-text-outline" 
-                    text="Has Notes"
-                />
-            {/if}
-        </div>
-    </button>
-</div>
+    
+                {#if task.dueDate}
+                    <div class="due-date">
+                        {#if daysUntilDue < 0}
+                            <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
+                        {:else if daysUntilDue === 0}
+                            <p class="due-today">Due Today</p>
+                        {:else if daysUntilDue === 1}
+                            <p>Due Tomorrow</p>
+                        {:else}
+                            <p>Due in {daysUntilDue} days</p>
+                        {/if}
+                    </div>
+                {/if}
+                
+                {#if hasTags}
+                    <div class="task-tags"></div>
+                {/if}
+            </div>
+            <div class="task-icons">
+                {#if daysUntilDue < 0}
+                    <TaskIcon
+                        icon="ion:alert-circle-outline" 
+                        text="Past Due"
+                    />
+                {/if}
+    
+                {#if task.notes}
+                    <TaskIcon
+                        icon="ion:document-text-outline" 
+                        text="Has Notes"
+                    />
+                {/if}
+            </div>
+        </button>
+    </div>
+</TaskModal>
 
 <style>
     .task-container {
@@ -140,8 +139,10 @@
     .task {
         display: flex;
         justify-content: flex-start;
+        align-items: stretch;
         flex-grow: 1;
         gap: 1rem;
+        min-height: 3.5rem;
         padding: 0.5rem 1rem;
         border: 1px solid transparent;
         border-left: none;
@@ -195,6 +196,7 @@
     .task-icons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+        align-items: end;
         direction: rtl;
         gap: 0.5rem;
         width: 4rem;
