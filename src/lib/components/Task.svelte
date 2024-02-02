@@ -15,8 +15,8 @@
     <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
         <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
             <form>
-                <button type="submit">
-                    <Icon icon="ion:checkmark-outline" />
+                <button type="submit" data-testid="task-complete-button">
+                    <Icon icon="ion:checkmark-outline" data-testid="task-complete-button-icon"/>
                 </button>
             </form>
         </div>
@@ -52,6 +52,7 @@
                     <TaskIcon
                         icon="ion:alert-circle-outline" 
                         text="Past Due"
+                        testid="past-due-icon"
                     />
                 {/if}
     
@@ -59,6 +60,7 @@
                     <TaskIcon
                         icon="ion:document-text-outline" 
                         text="Has Notes"
+                        testid="notes-icon"
                     />
                 {/if}
             </div>

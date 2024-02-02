@@ -1,11 +1,12 @@
 <script lang="ts">
 	import Icon, { type IconifyIcon } from "@iconify/svelte";
 
+    export let testid: string;
     export let icon: string | IconifyIcon;
     export let text: string;
 </script>
 
-<div class="task-icon no-default-color">
+<div class="task-icon no-default-color" data-testid={testid}>
     <span>
         <Icon {icon} aria-label={text} />
     </span>

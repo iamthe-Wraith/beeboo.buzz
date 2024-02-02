@@ -6,17 +6,17 @@
     export let tasks: Task[];
 </script>
 
-<div class="container">
+<div class="container" data-testid="context-layout">
     <div class="header">
         <div>
-            <h1>{ context?.name }</h1>
-            <span class="tasks-count">
+            <h1 data-testid="context-title">{ context?.name }</h1>
+            <span class="tasks-count" data-testid="tasks-count">
                 {tasks.length} tasks
             </span>
         </div>
 
         <div>
-            
+            <!-- left empty intentionally for now -->
         </div>
     </div>
     <div class="main-content">
