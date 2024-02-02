@@ -7,21 +7,25 @@
     import type { ActionResult } from "@sveltejs/kit";
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-
-    type FormField = 'title' | 'notes';
+	import type { Task } from "@prisma/client";
+	import dayjs from "dayjs";
+	
+    type FormField = 'title' | 'notes' | 'dueDate';
 
     export let onCancel: () => void = () => {};
+    export let task: Task | null = null;
 
     let processing = false;
-    let title = '';
-    let notes = '';
+    let title = task?.title || '';
+    let notes = task?.notes || '';
     let disabled = true;
 
     let titleError = '';
     let notesError = '';
     let genError = '';
 
+    $: title = task?.title || '';
+    $: notes = task?.notes || '';
     $: disabled = title === '';
     
     onMount(() => {
@@ -51,7 +55,7 @@
                                 titleError = e.message;
                                 break;
                             case 'notes':
-                                notes = e.message;
+                                notesError = e.message;
                                 break;
                             default:
                                 genError = e.message;
@@ -97,15 +101,15 @@
 </script>
 
 <form
-    data-testid="new-quick-task-form"
+    data-testid="task-form"
     method="POST" 
-    action="/tasks?/create"
+    action=""
     use:enhance={onSubmitResponse}
 >
     <TextInput
         required
         id="title"
-        data-testid="new-quick-task-title"
+        data-testid="task-title"
         label="Title"
         placeholder="Task Title"
         error={titleError}
@@ -115,7 +119,7 @@
 
     <Textarea
         id="notes"
-        data-testid="new-quick-task-notes"
+        data-testid="task-notes"
         label="Notes"
         placeholder="Task Notes"
         error={notesError}
@@ -123,25 +127,29 @@
         on:blur={onBlur('notes')}
     />
 
+    {#if task?.dueDate}
+        <p>Due on {task?.dueDate ? dayjs(task?.dueDate).format('MMM DD, YYYY') : ''}</p>
+    {/if}
+
     {#if genError}
-        <p class="error" data-testid="new-quick-task-gen-error">{genError}</p>
+        <p class="error" data-testid="task-gen-error">{genError}</p>
     {/if}
 
     <div class="buttons-container">
         <Button
-            id="new-quick-task-create"
-            data-testid="new-quick-task-create"
+            id="task-create"
+            data-testid="task-create"
             kind="primary"
             type="submit"
             {disabled}
             {processing}
         >
-            Create
+            {!!task ? 'Update' : 'Create'}
         </Button>
     
         <Button
-            id="new-quick-task-cancel"
-            data-testid="new-quick-task-cancel"
+            id="task-cancel"
+            data-testid="task-cancel"
             kind="transparent"
             type="button"
             on:click={onCancelClick}

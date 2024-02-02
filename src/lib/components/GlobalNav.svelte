@@ -8,7 +8,7 @@
     import Avatar from './Avatar.svelte';
 	import { type Context } from '@prisma/client';
 	import { ContextRole } from '../../types/contexts';
-	import NewQuickTask from './modals/NewQuickTask.svelte';
+	import NewQuickTask from './modals/NewQuickTaskModal.svelte';
 	import Button from './Button.svelte';
 
     let nav: HTMLElement;

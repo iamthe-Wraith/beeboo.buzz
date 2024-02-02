@@ -44,6 +44,15 @@ export const create = async (request: ICreateTaskRequest, user: SessionUser) => 
     });
 };
 
+export const getTasks = (context: Context, user: SessionUser) => {
+    return prisma.task.findMany({
+        where: {
+            contextId: context.id,
+            ownerId: user.id,
+        },
+    });
+};
+
 const isValidNewTaskRequest = (task: ICreateTaskRequest) => {
     if (!task.title) return new ApiError('Title is required.', HttpStatus.Unprocessable, 'title');
 

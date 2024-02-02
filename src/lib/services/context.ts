@@ -96,6 +96,24 @@ export const createManyContexts = async (contexts: IContextRequest[], user: User
     });
 };
 
+export const getContextById = async (id: number, user: SessionUser, tx?: PrismaTransaction) => {
+    return await (tx || prisma).context.findFirst({
+        where: {
+            ownerId: user.id,
+            id,
+        },
+    });
+};
+
+export const getContextByRole = async (role: ContextRole, user: SessionUser, tx?: PrismaTransaction) => {
+    return await (tx || prisma).context.findFirst({
+        where: {
+            ownerId: user.id,
+            role,
+        },
+    });
+};
+
 export const getContexts = async (user: SessionUser, tx?: PrismaTransaction) => {
     return await (tx || prisma).context.findMany({
         where: { ownerId: user.id },

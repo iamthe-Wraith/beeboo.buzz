@@ -63,4 +63,12 @@ export class QuickActionsFixture {
         this.taskCancelButton = this.taskForm.getByTestId('new-quick-task-cancel');
         this.taskCreateButton = this.taskForm.getByTestId('new-quick-task-create');
     }
+
+    public async openTaskModal() {
+        if (this.isMobile) {
+            await this.mobileQuickActions.newTask.click();
+        } else {
+            await this.desktopQuickActions.newTask.click();
+        }
+    }
 }
