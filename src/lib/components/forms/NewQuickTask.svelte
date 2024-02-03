@@ -99,7 +99,7 @@
 <form
     data-testid="new-quick-task-form"
     method="POST" 
-    action="/tasks?/create"
+    action="/tasks?/quickCreate"
     use:enhance={onSubmitResponse}
 >
     <TextInput

@@ -1,3 +1,5 @@
+// Thanks you Syntax.fm for this code: https://github.com/syntaxfm/website/blob/main/src/actions/click_outside.ts
+
 import type { Action } from 'svelte/action';
 
 interface Attributes {
@@ -12,7 +14,7 @@ export const clickOutside: Action<HTMLElement, unknown, Attributes> = (node: HTM
 			);
 		}
 	};
-
+	
 	node.addEventListener('click', handleClick, true);
 
 	return {

@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { type Context } from '@prisma/client';
+    import { onMount } from 'svelte';
     import { page } from '$app/stores';
+	import { ContextRole } from '../../types/contexts';
     import { user } from '$lib/stores/user';
 	import { errors } from '$lib/stores/errors';
 	import { contexts } from '$lib/stores/contexts';
-    import { onMount } from 'svelte';
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
-	import { type Context } from '@prisma/client';
-	import { ContextRole } from '../../types/contexts';
 	import NewQuickTask from './modals/NewQuickTaskModal.svelte';
 	import Button from './Button.svelte';
 
