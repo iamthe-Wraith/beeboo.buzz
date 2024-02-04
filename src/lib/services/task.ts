@@ -4,6 +4,11 @@ import { getContextById, getContexts } from "./context";
 import type { SessionUser } from "./session";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+import dayjs from "dayjs";
+
+interface IGetOptions {
+    includeCompleted: boolean;
+}
 
 interface ICreateTaskRequest {
     title: string;
@@ -15,25 +20,32 @@ interface IUpdateTaskRequest {
     id: number;
     title?: string;
     notes?: string;
+    completed?: boolean;
     contextId?: number;
 }
 
 const MAX_TITLE_LENGTH = 100;
 
-export const getTaskById = (id: number, user: SessionUser) => {
+const defaultGetOptions: IGetOptions = {
+    includeCompleted: false,
+};
+
+export const getTaskById = (id: number, user: SessionUser, options: IGetOptions = defaultGetOptions) => {
     return prisma.task.findMany({
         where: {
             id,
             ownerId: user.id,
+            completed: !!options.includeCompleted,
         },
     });
 };
 
-export const getTasksByContext = (context: Context, user: SessionUser) => {
+export const getTasksByContext = (context: Context, user: SessionUser, options: IGetOptions = defaultGetOptions) => {
     return prisma.task.findMany({
         where: {
             contextId: context.id,
             ownerId: user.id,
+            completed: !!options.includeCompleted,
         },
     });
 };
@@ -62,6 +74,15 @@ export const isValidNewTaskRequest = (task: ICreateTaskRequest) => {
 export const isValidUpdateTaskRequest = (task: IUpdateTaskRequest) => {
     const errors: ApiError[] = [];
 
+    if (
+        !task.title && 
+        !task.notes && 
+        !task.contextId && 
+        task.completed === undefined
+    ) {
+        errors.push(new ApiError('No updatable data received.', HttpStatus.Unprocessable));
+    }
+
     if (task.title) {
         if (task.title.length > MAX_TITLE_LENGTH) {
             errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.Unprocessable, 'title'));
@@ -73,6 +94,10 @@ export const isValidUpdateTaskRequest = (task: IUpdateTaskRequest) => {
         if (isNaN(contextId)) {
             errors.push(new ApiError('Context id must be a number.', HttpStatus.Unprocessable, 'contextId'));
         }
+    }
+
+    if (task.completed !== undefined && typeof task.completed !== 'boolean') {
+        errors.push(new ApiError('Invalid completed value received.', HttpStatus.Unprocessable, 'completed'));
     }
 
     return errors;
@@ -115,7 +140,7 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
 
     if (validationErrors.length) throw validationErrors;
 
-    const { id, title, notes, contextId } = request;
+    const { id, title, notes, contextId, completed } = request;
 
     return prisma.$transaction(async (tx) => {
         let context: Context | null = null;
@@ -125,12 +150,23 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
             if (!context) throw new ApiError(`Context not found.`, HttpStatus.NotFound, 'context', { context: contextId });
         }
 
-        const task = await prisma.task.update({
+        const data: {
+            title?: string;
+            notes?: string;
+            contextId?: number;
+            completed?: boolean;
+        } = {};
+
+        if (title) data.title = title;
+        if (notes) data.notes = notes;
+        if (context) data.contextId = context.id;
+        if (completed !== undefined) data.completed = !!completed;
+
+        const task = await tx.task.update({
             where: { id, ownerId: user.id },
             data: {
-                title,
-                notes,
-                contextId: context?.id,
+                ...data,
+                updatedAt: dayjs().utc().toDate(),
             },
         });
 

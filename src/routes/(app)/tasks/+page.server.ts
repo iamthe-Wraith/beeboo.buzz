@@ -38,11 +38,22 @@ export const actions: Actions = {
         const id = parseInt(data.get('id')! as string);
         const title = data.get('title')! as string;
         const notes = data.get('notes')! as string;
-        const contextData = JSON.parse(data.get('contextId')! as string);
-        const contextId = parseInt(contextData.value);
+        const completed = data.get('completed') === 'true';
+        const rawContextData = data.get('contextId')! as string;
+        let contextId: number | undefined = undefined;
+        if (rawContextData) {
+            const contextData = JSON.parse(rawContextData);
+            contextId = parseInt(contextData.value);
+        }
 
         try {
-            const task = await updateTask({ id, title, notes, contextId }, locals.session.user);
+            const task = await updateTask({
+                id, 
+                title, 
+                notes, 
+                completed,
+                contextId
+            }, locals.session.user);
             return { task };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
