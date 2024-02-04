@@ -123,6 +123,10 @@
     action={!!task ? `/tasks?/update` : '/tasks?/create'}
     use:enhance={onSubmitResponse}
 >
+    {#if !!task}
+        <input type="hidden" name="id" value={task?.id} />
+    {/if}
+
     <div class="row">
         <TextInput
             required

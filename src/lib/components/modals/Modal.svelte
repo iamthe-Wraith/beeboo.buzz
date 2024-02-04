@@ -81,7 +81,6 @@
         border: 1px solid var(--dark-600);
         border-radius: 0.5rem;
         transform: translate(-50%, -50%);
-        overflow: hidden;
         z-index: 1002;
     }
     

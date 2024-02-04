@@ -2,7 +2,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
-import { create } from '$lib/services/task';
+import { quickCreateTask, updateTask } from '$lib/services/task';
 import { HttpStatus } from '$lib/constants/error';
 
 export const actions: Actions = {
@@ -23,7 +23,7 @@ export const actions: Actions = {
         const notes = data.get('notes')! as string;
 
         try {
-            const task = await create({ title, notes }, locals.session.user);
+            const task = await quickCreateTask({ title, notes }, locals.session.user);
 
             return { task };
         } catch (err) {
@@ -35,14 +35,18 @@ export const actions: Actions = {
         if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
+        const id = parseInt(data.get('id')! as string);
         const title = data.get('title')! as string;
         const notes = data.get('notes')! as string;
         const contextData = JSON.parse(data.get('contextId')! as string);
         const contextId = parseInt(contextData.value);
 
-        console.log('updating task');
-        console.log('title: ', title);
-        console.log('notes: ', notes);
-        console.log('contextId: ', contextId);
+        try {
+            const task = await updateTask({ id, title, notes, contextId }, locals.session.user);
+            return { task };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
     }
 };
