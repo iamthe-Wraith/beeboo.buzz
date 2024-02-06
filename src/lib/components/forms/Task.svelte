@@ -179,7 +179,7 @@
     <div class="buttons-container">
         <Button
             id="task-create"
-            data-testid="task-create"
+            data-testid={!!task ? 'task-update' : 'task-create'}
             kind="primary"
             type="submit"
             {disabled}

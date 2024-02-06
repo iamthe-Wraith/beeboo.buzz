@@ -6,7 +6,7 @@
     export let error = '';
 </script>
 
-<div class="dropdown {error ? 'error' : ''}">
+<div class="dropdown {error ? 'error' : ''}" id={`${id}-container`}>
     {#if label}
         <label for={id}>
             {label}

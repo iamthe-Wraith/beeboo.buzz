@@ -30,6 +30,6 @@ export class Database {
                 });
         }
 
-        if (result!) return result.rows;
+        return result! ? result.rows : [];
     }
 }
