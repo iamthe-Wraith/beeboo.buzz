@@ -9,6 +9,7 @@
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
 	import NewQuickTask from './modals/NewQuickTaskModal.svelte';
+    import NewQuickProject from './modals/NewQuickProjectModal.svelte';
 	import Button from './Button.svelte';
 
     let nav: HTMLElement;
@@ -48,13 +49,15 @@
                 data-testid="quick-actions"
                 class="nav-section quick-actions"
             >
-                <Button
-                    data-testid="new-quick-project-button"
-                    kind="secondary"
-                    on:click={() => console.log('test1')}
-                >
-                    New Project
-                </Button>
+                <NewQuickProject let:openNewQuickProjectModal>
+                    <Button
+                        data-testid="new-quick-project-button"
+                        kind="secondary"
+                        on:click={openNewQuickProjectModal}
+                    >
+                        New Project
+                    </Button>
+                </NewQuickProject>
                 
                 <NewQuickTask let:openNewQuickTaskModal>
                     <Button
@@ -93,6 +96,13 @@
                         {context.name}
                     </a>
                 {/each}
+
+                <a
+                    href="/projects"
+                    class={$page.url.pathname === `/projects}` ? 'active' : ''}
+                >
+                    Projects
+                </a>
             </div>
         {/if}
 

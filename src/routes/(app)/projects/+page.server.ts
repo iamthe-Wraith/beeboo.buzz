@@ -1,10 +1,25 @@
-import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { fail } from '@sveltejs/kit';
+import type { Actions } from './$types';
+import { ApiError } from '$lib/utils/api-error';
+import { ApiResponse } from '$lib/utils/api-response';
+import { HttpStatus } from '$lib/constants/error';
+import { quickCreateProject } from '$lib/services/project';
 
-export const load: PageServerLoad = async ({ locals }) => {
-    if (!locals.session.user) redirect(303, '/?signin=true');
+export const actions: Actions = {
+    quickCreate: async ({ request, locals }) => {
+        if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
 
-    return {
-        dummy: 'this is a dummy message.',
-    }
+        const data = await request.formData();
+        const title = data.get('title')! as string;
+        const notes = data.get('notes')! as string;
+
+        try {
+            const project = await quickCreateProject({ title, notes }, locals.session.user);
+
+            return { project };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
 };

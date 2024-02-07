@@ -19,11 +19,6 @@ export const createDefaultUserContexts = async (user: User, ptx?: PrismaTransact
             role: ContextRole.INBOX,
         },
         {
-            name: 'Projects',
-            description: 'Big or small, this is a place for all your projects.',
-            role: ContextRole.PROJECTS,
-        },
-        {
             name: 'Waiting For',
             description: 'Put all those things you\'re waiting on (but not doing yourself) here.',
             role: ContextRole.WAITING,

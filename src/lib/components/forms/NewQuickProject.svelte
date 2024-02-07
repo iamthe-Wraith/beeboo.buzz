@@ -96,17 +96,17 @@
 </script>
 
 <form
-    data-testid="new-quick-task-form"
+    data-testid="new-quick-project-form"
     method="POST" 
-    action="/tasks?/quickCreate"
+    action="/projects?/quickCreate"
     use:enhance={onSubmitResponse}
 >
     <TextInput
         required
         id="title"
-        data-testid="new-quick-task-title"
+        data-testid="new-quick-project-title"
         label="Title"
-        placeholder="Task Title"
+        placeholder="Project Title"
         error={titleError}
         bind:value={title}
         on:blur={onBlur('title')}
@@ -114,22 +114,22 @@
 
     <Textarea
         id="notes"
-        data-testid="new-quick-task-notes"
+        data-testid="new-quick-project-notes"
         label="Notes"
-        placeholder="Task Notes"
+        placeholder="Project Notes"
         error={notesError}
         bind:value={notes}
         on:blur={onBlur('notes')}
     />
 
     {#if genError}
-        <p class="error" data-testid="new-quick-task-gen-error">{genError}</p>
+        <p class="error" data-testid="new-quick-project-gen-error">{genError}</p>
     {/if}
 
     <div class="buttons-container">
         <Button
-            id="new-quick-task-create"
-            data-testid="new-quick-task-create"
+            id="new-quick-project-create"
+            data-testid="new-quick-project-create"
             kind="primary"
             type="submit"
             {disabled}
@@ -139,8 +139,8 @@
         </Button>
     
         <Button
-            id="new-quick-task-cancel"
-            data-testid="new-quick-task-cancel"
+            id="new-quick-project-cancel"
+            data-testid="new-quick-project-cancel"
             kind="transparent"
             type="button"
             on:click={onCancelClick}

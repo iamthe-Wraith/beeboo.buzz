@@ -1,5 +1,6 @@
 <script>
 	import Button from "./Button.svelte";
+	import NewQuickProject from "./modals/NewQuickProjectModal.svelte";
 	import NewQuickTask from "./modals/NewQuickTaskModal.svelte";
 
 </script>
@@ -8,15 +9,17 @@
     class="mobile-quick-actions"
     data-testid="mobile-quick-actions"
 >
-    <NewQuickTask let:openNewQuickTaskModal>
+    <NewQuickProject let:openNewQuickProjectModal>
         <Button
             data-testid="new-quick-project-button"
             kind="secondary"
-            on:click={() => console.log('test1')}
+            on:click={openNewQuickProjectModal}
         >
             New Project
         </Button>
+    </NewQuickProject>
 
+    <NewQuickTask let:openNewQuickTaskModal>
         <Button
             data-testid="new-quick-task-button"
             kind="primary"

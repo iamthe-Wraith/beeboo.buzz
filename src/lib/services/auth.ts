@@ -1,6 +1,6 @@
 import { prisma } from "$lib/storage/db";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
-import { $Enums, type User } from "@prisma/client";
+import { $Enums } from "@prisma/client";
 import { generatePasswordHash, isValidPassword } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
@@ -78,8 +78,6 @@ export const signup = async ({ email, username, password }: ISignupRequest) => {
 
     if (Object.keys(errors).length) throw errors;
 
-    let user: User;
-
     try {
         const existingUser = await prisma.user.findFirst({
             where: {
@@ -106,29 +104,23 @@ export const signup = async ({ email, username, password }: ISignupRequest) => {
 
         const hash = await generatePasswordHash((validatedPassword as SafeParseSuccess<string>).data);
 
-        user = await prisma.user.create({
-            data: {
-                email: (validatedEmail as SafeParseSuccess<string>).data,
-                username: (validatedUsername as SafeParseSuccess<string>).data,
-                password: hash,
-                accountType: $Enums.AccountType.FREE,
-            },
+        return await prisma.$transaction(async (tx) => {
+            const user = await prisma.user.create({
+                data: {
+                    email: (validatedEmail as SafeParseSuccess<string>).data,
+                    username: (validatedUsername as SafeParseSuccess<string>).data,
+                    password: hash,
+                    accountType: $Enums.AccountType.FREE,
+                },
+            });
+
+            await createDefaultUserContexts(user, tx);
+            // TODO: create user settings
+
+            return user;
         });
     } catch (err: unknown) {
         Logger.error(err);
         throw ApiError.parse(err);
     }
-
-    try {
-        await prisma.$transaction(async (tx) => {
-            await createDefaultUserContexts(user, tx);
-            // TODO: create user settings
-
-            return true;
-        });
-    } catch (err: unknown) {
-        Logger.error(err);
-    }
-
-    return user;
 };
