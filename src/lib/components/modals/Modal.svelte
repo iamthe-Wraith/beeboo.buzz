@@ -81,16 +81,18 @@
         border: 1px solid var(--dark-600);
         border-radius: 0.5rem;
         transform: translate(-50%, -50%);
-        overflow: hidden;
         z-index: 1002;
     }
+    
     /* https://svelte.dev/examples/modal */
     dialog::backdrop {
 		background: rgba(0, 0, 0, 0.3);
 	}
+
     dialog[open] {
 		animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
+
 	@keyframes zoom {
 		from {
 			transform: translate(-50%, -50%) scale(0.95);
@@ -99,9 +101,11 @@
 			transform: translate(-50%, -50%) scale(1);
 		}
 	}
+
 	dialog[open]::backdrop {
 		animation: fade 0.2s ease-out;
 	}
+    
 	@keyframes fade {
 		from {
 			opacity: 0;

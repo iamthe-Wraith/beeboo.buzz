@@ -84,5 +84,9 @@
         &.error {
             border-color: var(--danger-500);
         }
+
+        &::placeholder {
+            color: var(--dark-700);
+        }
     }
 </style>

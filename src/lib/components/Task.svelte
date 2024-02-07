@@ -4,6 +4,7 @@
 	import TaskIcon from "./TaskIcon.svelte";
 	import dayjs from "dayjs";
 	import TaskModal from "./modals/TaskModal.svelte";
+	import CompleteTask from "./forms/CompleteTask.svelte";
 
     export let task: Task;
 
@@ -14,11 +15,7 @@
 <TaskModal {task} let:openTaskModal>
     <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
         <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-            <form>
-                <button type="submit" data-testid="task-complete-button">
-                    <Icon icon="ion:checkmark-outline" data-testid="task-complete-button-icon"/>
-                </button>
-            </form>
+            <CompleteTask {task} />
         </div>
         <button
             class="task {daysUntilDue < 0 ? 'past-due' : ''}"

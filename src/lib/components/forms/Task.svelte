@@ -1,42 +1,56 @@
 <script lang="ts">
+    import type { ActionResult } from "@sveltejs/kit";
     import { onMount } from "svelte";
+    import { enhance } from "$app/forms";
+    import { goto } from "$app/navigation";
+	import type { Context, Task } from "@prisma/client";
+	import dayjs from "dayjs";
+    import { contexts } from '$lib/stores/contexts';
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
     import Textarea from "../Textarea.svelte";
-    import { enhance } from "$app/forms";
-    import type { ActionResult } from "@sveltejs/kit";
     import type { IApiError } from "$lib/utils/api-error";
-    import { goto } from "$app/navigation";
-	import type { Task } from "@prisma/client";
-	import dayjs from "dayjs";
+	import Dropdown from "../Dropdown.svelte";
+	import { ContextRole } from "../../../types/contexts";
 	
     type FormField = 'title' | 'notes' | 'dueDate';
 
     export let onCancel: () => void = () => {};
     export let task: Task | null = null;
 
+    const context = $contexts?.find(c => c.id === task?.contextId);
+
     let processing = false;
     let title = task?.title || '';
     let notes = task?.notes || '';
+    let contextValue = context ? { label: context.name, value: context.id } : null;
+    let contextItems = $contexts ? $contexts.map(c => ({ label: c.name, value: c.id })) : [];
     let disabled = true;
 
     let titleError = '';
     let notesError = '';
+    let contextError = '';
     let genError = '';
 
-    $: title = task?.title || '';
-    $: notes = task?.notes || '';
-    $: disabled = title === '';
+    $: disabled = title === '' || !!titleError || !!notesError || !!contextError || !!processing;
     
     onMount(() => {
-        reset();
-
         return reset;
     })
 
     function onCancelClick() {
         reset();
         onCancel?.();
+    }
+
+    function onContextChange(e: CustomEvent<{ label: string; value: number }>) {
+        contextError = '';
+        contextValue = e.detail;
+    }
+
+    function onContextClear() {
+        contextError = 'A context is required.';
+        contextValue = null;
     }
 
     function onSubmitResponse() {
@@ -56,6 +70,9 @@
                                 break;
                             case 'notes':
                                 notesError = e.message;
+                                break;
+                            case 'contextId':
+                                contextError = e.message;
                                 break;
                             default:
                                 genError = e.message;
@@ -95,37 +112,61 @@
     }
 
     function reset() {
-        title = '';
-        notes = '';
+        title = task?.title || '';
+        notes = task?.notes || '';
     }
 </script>
 
 <form
     data-testid="task-form"
     method="POST" 
-    action=""
+    action={!!task ? `/tasks?/update` : '/tasks?/create'}
     use:enhance={onSubmitResponse}
 >
-    <TextInput
-        required
-        id="title"
-        data-testid="task-title"
-        label="Title"
-        placeholder="Task Title"
-        error={titleError}
-        bind:value={title}
-        on:blur={onBlur('title')}
-    />
+    {#if !!task}
+        <input type="hidden" name="id" value={task?.id} />
+    {/if}
 
-    <Textarea
-        id="notes"
-        data-testid="task-notes"
-        label="Notes"
-        placeholder="Task Notes"
-        error={notesError}
-        bind:value={notes}
-        on:blur={onBlur('notes')}
-    />
+    <div class="row">
+        <TextInput
+            required
+            id="title"
+            data-testid="task-title"
+            label="Title"
+            placeholder="Task Title"
+            error={titleError}
+            bind:value={title}
+            on:blur={onBlur('title')}
+        />
+    </div>
+
+    <div class="row">
+        <Textarea
+            id="notes"
+            data-testid="task-notes"
+            label="Notes"
+            placeholder="Task Notes"
+            error={notesError}
+            bind:value={notes}
+            on:blur={onBlur('notes')}
+        />
+    </div>
+
+    <div class="row">
+        <Dropdown
+            id="context"
+            label="Context"
+            name="contextId"
+            items={contextItems}
+            placeholder="Select a Context"
+            value={contextValue}
+            error={contextError}
+            on:change={onContextChange}
+            on:clear={onContextClear}
+        />
+
+        <div></div>
+    </div>
 
     {#if task?.dueDate}
         <p>Due on {task?.dueDate ? dayjs(task?.dueDate).format('MMM DD, YYYY') : ''}</p>
@@ -138,7 +179,7 @@
     <div class="buttons-container">
         <Button
             id="task-create"
-            data-testid="task-create"
+            data-testid={!!task ? 'task-update' : 'task-create'}
             kind="primary"
             type="submit"
             {disabled}
@@ -164,7 +205,17 @@
         flex-direction: column;
         gap: 1rem;
         width: 80vw;
-        max-width: 30rem;
+        max-width: 40rem;
+
+        & .row {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+
+            & > * {
+                flex: 1;
+            }
+        }
     }
 
     .error {

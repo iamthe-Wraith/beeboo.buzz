@@ -244,32 +244,7 @@ h6 *,
 	line-height: 1.4rem;
 }
 
-ol,
-ul {
-	padding: 1rem 0 1rem 2rem;
-}
-
-ol:not(:last-child),
-ul:not(:last-child) {
-	margin-bottom: 1rem;
-}
-
-li {
-	font-size: 0.9rem;
-	line-height: 1.5rem;
-
-	@media (min-width: 768px) {
-		font-size: 1rem;
-		line-height: 1.8rem;
-	}
-}
-
-li:not(:last-child) {
-	margin-bottom: 0.5rem;
-}
-
 /* helper classes */
-
 .error {
 	color: var(--danger-500);
 	font-size: 0.875rem;

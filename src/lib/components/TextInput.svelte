@@ -79,11 +79,15 @@
         padding: 0.5rem;
         border: 1px solid var(--dark-600);
         border-radius: 0.25rem;
-        color: var(--color-text-primary);
-        background-color: var(--color-bg-secondary);
+        color: var(--light-500);
+        background-color: var(--dark-200);
 
         &.error {
             border-color: var(--danger-500);
+        }
+
+        &::placeholder {
+            color: var(--dark-700);
         }
     }
 </style>
