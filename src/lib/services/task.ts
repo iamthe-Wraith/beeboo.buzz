@@ -122,7 +122,7 @@ export const quickCreateTask = async (request: ICreateTaskRequest, user: Session
             if (!context) throw new ApiError('Inbox not found.', HttpStatus.NotFound, 'context');
         }
 
-        const task = await prisma.task.create({
+        const task = await tx.task.create({
             data: {
                 title,
                 notes,
