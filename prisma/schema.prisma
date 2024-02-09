@@ -65,6 +65,7 @@ model Task {
   projectId     Int?          @map("project_id")
   project       Project?      @relation(fields: [projectId], references: [id])
   projectOrder  Float?        @map("project_order")
+  isActive      Boolean       @default(true) @map("is_active")
   createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
