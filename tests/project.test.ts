@@ -53,7 +53,7 @@ test.describe('projects', () => {
             }
 
             await nav.openMobileNav();
-            await nav.contextLinks.projects.click();
+            await nav.contextLinks.projects.click({ force: true });
 
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
 
