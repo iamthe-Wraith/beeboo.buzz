@@ -8,7 +8,33 @@ interface ICreateProjectRequest {
     notes: string;
 }
 
+interface IGetOptions {
+    includeCompleted: boolean;
+}
+
+interface IGetProjectQuery {
+    id?: number;
+    ownerId: number;
+    completed?: boolean;
+}
+
 const MAX_TITLE_LENGTH = 100;
+
+const defaultGetOptions: IGetOptions = {
+    includeCompleted: false,
+};
+
+export const getProjects = async (user: SessionUser, options: IGetOptions = defaultGetOptions) => {
+    const query: IGetProjectQuery = {
+        ownerId: user.id,
+    }
+
+    if (!options.includeCompleted) query.completed = false;
+
+    return prisma.project.findMany({
+        where: { ...query },
+    });
+};
 
 export const isValidNewProjectRequest = (project: ICreateProjectRequest) => {
     const errors: ApiError[] = [];

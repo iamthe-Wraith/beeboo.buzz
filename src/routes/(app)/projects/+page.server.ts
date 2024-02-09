@@ -1,9 +1,9 @@
-import { fail } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
 import { HttpStatus } from '$lib/constants/error';
-import { quickCreateProject } from '$lib/services/project';
+import { getProjects, quickCreateProject } from '$lib/services/project';
 
 export const actions: Actions = {
     quickCreate: async ({ request, locals }) => {
@@ -22,4 +22,12 @@ export const actions: Actions = {
             return fail(response.statusCode, { errors: response.errors });
         }
     },
+};
+
+export const load: PageServerLoad = async ({ locals }) => {
+    if (!locals.session.user) redirect(303, '/?signin=true');
+
+    const projects = await getProjects(locals.session.user);
+
+    return { projects };
 };
