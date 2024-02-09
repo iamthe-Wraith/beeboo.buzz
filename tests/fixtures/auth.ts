@@ -24,6 +24,7 @@ export class AuthFixture {
 
         if (result?.length) {
             await database.executeQuery(`DELETE FROM "Task" WHERE "owner_id" = '${result[0].id}'`);
+            await database.executeQuery(`DELETE FROM "Project" WHERE "owner_id" = '${result[0].id}'`);
             await database.executeQuery(`DELETE FROM "Context" WHERE "owner_id" = '${result[0].id}'`);
             await database.executeQuery(`DELETE FROM "User" WHERE "email" = '${email}'`);
         }

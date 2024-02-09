@@ -46,10 +46,10 @@ test.describe('tasks', () => {
             for (let i = 0; i < tasks.length; i++) {
                 const task = tasks[i];
                 await quickActions.openTaskModal();
-                await quickActions.taskTitle.fill(task.title);
-                if (task.notes) await quickActions.taskNotes.fill(task.notes);
-                await quickActions.taskCreateButton.click();
-                await expect(quickActions.taskModal).not.toBeVisible();
+                await quickActions.task.title.fill(task.title);
+                if (task.notes) await quickActions.task.notes.fill(task.notes);
+                await quickActions.task.createButton.click();
+                await expect(quickActions.task.modal).not.toBeVisible();
             }
 
             await nav.openMobileNav();
@@ -83,9 +83,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -124,10 +124,10 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskNotes.fill(taskData.notes);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.notes.fill(taskData.notes);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -161,9 +161,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -199,9 +199,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -237,9 +237,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -282,9 +282,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -331,9 +331,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -390,9 +390,9 @@ test.describe('tasks', () => {
             const [user] = await database.executeQuery(`SELECT * FROM "User" WHERE "email" = '${email}'`);
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();
@@ -447,9 +447,9 @@ test.describe('tasks', () => {
             await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
             await quickActions.openTaskModal();
-            await quickActions.taskTitle.fill(taskData.title);
-            await quickActions.taskCreateButton.click();
-            await expect(quickActions.taskModal).not.toBeVisible();
+            await quickActions.task.title.fill(taskData.title);
+            await quickActions.task.createButton.click();
+            await expect(quickActions.task.modal).not.toBeVisible();
 
             await nav.openMobileNav();
             await nav.contextLinks.inbox.click();

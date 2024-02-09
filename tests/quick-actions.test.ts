@@ -29,7 +29,174 @@ test.describe('quick actions', () => {
             await signin.cleanup(email, database);
         });
 
-        // quick project tests go here...
+        test.describe('new project', () => {
+            test('clicking new project quick action should open new project modal with new project form', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width >= 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.mobileQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await expect(quickActions.project.form).toBeVisible();
+
+                await expect(quickActions.project.title).toBeVisible();
+                await expect(quickActions.project.notes).toBeVisible();
+                await expect(quickActions.project.cancelButton).toBeVisible();
+                await expect(quickActions.project.createButton).toBeVisible();
+                await expect(quickActions.project.createButton).toBeDisabled();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test('clicking close button should close new project modal', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width >= 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.mobileQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await quickActions.project.modalClose.click();
+
+                await expect(quickActions.project.modal).not.toBeVisible();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test('clicking cancel button should close new project modal', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width >= 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.mobileQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await quickActions.project.cancelButton.click();
+
+                await expect(quickActions.project.modal).not.toBeVisible();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test.describe('creating new project', () => {
+                test('should create new project when only a title is provided', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width >= 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.mobileQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.fill('Test Project');
+                    await quickActions.project.createButton.click();
+    
+                    await expect(quickActions.project.modal).not.toBeVisible();
+            
+                    await signup.cleanup(email, database);
+                });
+
+                test('should create new project when title and notes are provided', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width >= 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.mobileQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.fill('Test Project');
+                    await quickActions.project.notes.fill('Test notes');
+
+                    await quickActions.project.createButton.click();
+    
+                    await expect(quickActions.project.modal).not.toBeVisible();
+            
+                    await signup.cleanup(email, database);
+                });
+
+                test('should show error if title is empty', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width >= 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.mobileQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.focus();
+                    await page.keyboard.press('Tab');
+
+                    await expect(quickActions.project.titleError).toBeVisible();
+                    await expect(quickActions.project.titleError).toHaveText('Title is required.');
+
+                    await expect(quickActions.project.createButton).toBeDisabled();
+            
+                    await signup.cleanup(email, database);
+                });
+            });
+        });
 
         test.describe('new task', () => {
             test('clicking new task quick action should open new task modal with new task form', async ({ page, viewport, database }) => {
@@ -48,16 +215,16 @@ test.describe('quick actions', () => {
         
                 await quickActions.mobileQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await expect(quickActions.taskForm).toBeVisible();
+                await expect(quickActions.task.form).toBeVisible();
 
-                await expect(quickActions.taskTitle).toBeVisible();
-                await expect(quickActions.taskNotes).toBeVisible();
-                await expect(quickActions.taskCancelButton).toBeVisible();
-                await expect(quickActions.taskCreateButton).toBeVisible();
-                await expect(quickActions.taskCreateButton).toBeDisabled();
+                await expect(quickActions.task.title).toBeVisible();
+                await expect(quickActions.task.notes).toBeVisible();
+                await expect(quickActions.task.cancelButton).toBeVisible();
+                await expect(quickActions.task.createButton).toBeVisible();
+                await expect(quickActions.task.createButton).toBeDisabled();
         
                 await signup.cleanup(email, database);
             });
@@ -78,12 +245,12 @@ test.describe('quick actions', () => {
         
                 await quickActions.mobileQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await quickActions.taskModalClose.click();
+                await quickActions.task.modalClose.click();
 
-                await expect(quickActions.taskModal).not.toBeVisible();
+                await expect(quickActions.task.modal).not.toBeVisible();
         
                 await signup.cleanup(email, database);
             });
@@ -104,12 +271,12 @@ test.describe('quick actions', () => {
         
                 await quickActions.mobileQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await quickActions.taskCancelButton.click();
+                await quickActions.task.cancelButton.click();
 
-                await expect(quickActions.taskModal).not.toBeVisible();
+                await expect(quickActions.task.modal).not.toBeVisible();
         
                 await signup.cleanup(email, database);
             });
@@ -131,12 +298,12 @@ test.describe('quick actions', () => {
             
                     await quickActions.mobileQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.fill('Test Task');
-                    await quickActions.taskCreateButton.click();
+                    await quickActions.task.title.fill('Test Task');
+                    await quickActions.task.createButton.click();
     
-                    await expect(quickActions.taskModal).not.toBeVisible();
+                    await expect(quickActions.task.modal).not.toBeVisible();
             
                     await signup.cleanup(email, database);
                 });
@@ -157,14 +324,14 @@ test.describe('quick actions', () => {
             
                     await quickActions.mobileQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.fill('Test Task');
-                    await quickActions.taskNotes.fill('Test notes');
+                    await quickActions.task.title.fill('Test Task');
+                    await quickActions.task.notes.fill('Test notes');
 
-                    await quickActions.taskCreateButton.click();
+                    await quickActions.task.createButton.click();
     
-                    await expect(quickActions.taskModal).not.toBeVisible();
+                    await expect(quickActions.task.modal).not.toBeVisible();
             
                     await signup.cleanup(email, database);
                 });
@@ -185,15 +352,15 @@ test.describe('quick actions', () => {
             
                     await quickActions.mobileQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.focus();
+                    await quickActions.task.title.focus();
                     await page.keyboard.press('Tab');
 
-                    await expect(quickActions.taskTitleError).toBeVisible();
-                    await expect(quickActions.taskTitleError).toHaveText('Title is required.');
+                    await expect(quickActions.task.titleError).toBeVisible();
+                    await expect(quickActions.task.titleError).toHaveText('Title is required.');
 
-                    await expect(quickActions.taskCreateButton).toBeDisabled();
+                    await expect(quickActions.task.createButton).toBeDisabled();
             
                     await signup.cleanup(email, database);
                 });
@@ -205,7 +372,174 @@ test.describe('quick actions', () => {
         // note: testing for buttons to exist is done in nav tests as
         // quick actions buttons are in the global nav on desktop.
 
-        // quick project tests go here...
+        test.describe('new project', () => {
+            test('clicking new project quick action should open new project modal with new project form', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width < 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.desktopQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await expect(quickActions.project.form).toBeVisible();
+
+                await expect(quickActions.project.title).toBeVisible();
+                await expect(quickActions.project.notes).toBeVisible();
+                await expect(quickActions.project.cancelButton).toBeVisible();
+                await expect(quickActions.project.createButton).toBeVisible();
+                await expect(quickActions.project.createButton).toBeDisabled();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test('clicking close button should close new project modal', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width < 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.desktopQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await quickActions.project.modalClose.click();
+
+                await expect(quickActions.project.modal).not.toBeVisible();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test('clicking cancel button should close new project modal', async ({ page, viewport, database }) => {
+                if (viewport && viewport.width < 768) test.skip();
+        
+                const email = getEmail();
+                const password = 'Password123!';
+                const signup = new SignUpFixture(page);
+                const quickActions = new QuickActionsFixture(page, viewport);
+        
+                await page.goto('/');
+        
+                await signup.signUp({ email, password, confirmPassword: password });
+        
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        
+                await quickActions.desktopQuickActions.newProject.click();
+        
+                await expect(quickActions.project.modal).toBeVisible();
+                await expect(quickActions.project.modalClose).toBeVisible();
+
+                await quickActions.project.cancelButton.click();
+
+                await expect(quickActions.project.modal).not.toBeVisible();
+        
+                await signup.cleanup(email, database);
+            });
+
+            test.describe('creating new project', () => {
+                test('should create new project when only a title is provided', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width < 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.desktopQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.fill('Test Project');
+                    await quickActions.project.createButton.click();
+    
+                    await expect(quickActions.project.modal).not.toBeVisible();
+            
+                    await signup.cleanup(email, database);
+                });
+
+                test('should create new project when title and notes are provided', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width < 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.desktopQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.fill('Test Project');
+                    await quickActions.project.notes.fill('Test notes');
+
+                    await quickActions.project.createButton.click();
+    
+                    await expect(quickActions.project.modal).not.toBeVisible();
+            
+                    await signup.cleanup(email, database);
+                });
+
+                test('should show error if title is empty', async ({ page, viewport, database }) => {
+                    if (viewport && viewport.width < 768) test.skip();
+            
+                    const email = getEmail();
+                    const password = 'Password123!';
+                    const signup = new SignUpFixture(page);
+                    const quickActions = new QuickActionsFixture(page, viewport);
+            
+                    await page.goto('/');
+            
+                    await signup.signUp({ email, password, confirmPassword: password });
+            
+                    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                    await quickActions.desktopQuickActions.newProject.click();
+            
+                    await expect(quickActions.project.modal).toBeVisible();
+
+                    await quickActions.project.title.focus();
+                    await page.keyboard.press('Tab');
+
+                    await expect(quickActions.project.titleError).toBeVisible();
+                    await expect(quickActions.project.titleError).toHaveText('Title is required.');
+
+                    await expect(quickActions.project.createButton).toBeDisabled();
+            
+                    await signup.cleanup(email, database);
+                });
+            });
+        });
 
         test.describe('new task', () => {
             test('clicking new task quick action should open new task modal with new task form', async ({ page, viewport, database }) => {
@@ -224,16 +558,16 @@ test.describe('quick actions', () => {
         
                 await quickActions.desktopQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await expect(quickActions.taskForm).toBeVisible();
+                await expect(quickActions.task.form).toBeVisible();
 
-                await expect(quickActions.taskTitle).toBeVisible();
-                await expect(quickActions.taskNotes).toBeVisible();
-                await expect(quickActions.taskCancelButton).toBeVisible();
-                await expect(quickActions.taskCreateButton).toBeVisible();
-                await expect(quickActions.taskCreateButton).toBeDisabled();
+                await expect(quickActions.task.title).toBeVisible();
+                await expect(quickActions.task.notes).toBeVisible();
+                await expect(quickActions.task.cancelButton).toBeVisible();
+                await expect(quickActions.task.createButton).toBeVisible();
+                await expect(quickActions.task.createButton).toBeDisabled();
         
                 await signup.cleanup(email, database);
             });
@@ -254,12 +588,12 @@ test.describe('quick actions', () => {
         
                 await quickActions.desktopQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await quickActions.taskModalClose.click();
+                await quickActions.task.modalClose.click();
 
-                await expect(quickActions.taskModal).not.toBeVisible();
+                await expect(quickActions.task.modal).not.toBeVisible();
         
                 await signup.cleanup(email, database);
             });
@@ -280,12 +614,12 @@ test.describe('quick actions', () => {
         
                 await quickActions.desktopQuickActions.newTask.click();
         
-                await expect(quickActions.taskModal).toBeVisible();
-                await expect(quickActions.taskModalClose).toBeVisible();
+                await expect(quickActions.task.modal).toBeVisible();
+                await expect(quickActions.task.modalClose).toBeVisible();
 
-                await quickActions.taskCancelButton.click();
+                await quickActions.task.cancelButton.click();
 
-                await expect(quickActions.taskModal).not.toBeVisible();
+                await expect(quickActions.task.modal).not.toBeVisible();
         
                 await signup.cleanup(email, database);
             });
@@ -307,12 +641,12 @@ test.describe('quick actions', () => {
             
                     await quickActions.desktopQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.fill('Test Task');
-                    await quickActions.taskCreateButton.click();
+                    await quickActions.task.title.fill('Test Task');
+                    await quickActions.task.createButton.click();
     
-                    await expect(quickActions.taskModal).not.toBeVisible();
+                    await expect(quickActions.task.modal).not.toBeVisible();
             
                     await signup.cleanup(email, database);
                 });
@@ -333,14 +667,14 @@ test.describe('quick actions', () => {
             
                     await quickActions.desktopQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.fill('Test Task');
-                    await quickActions.taskNotes.fill('Test notes');
+                    await quickActions.task.title.fill('Test Task');
+                    await quickActions.task.notes.fill('Test notes');
 
-                    await quickActions.taskCreateButton.click();
+                    await quickActions.task.createButton.click();
     
-                    await expect(quickActions.taskModal).not.toBeVisible();
+                    await expect(quickActions.task.modal).not.toBeVisible();
             
                     await signup.cleanup(email, database);
                 });
@@ -361,15 +695,15 @@ test.describe('quick actions', () => {
             
                     await quickActions.desktopQuickActions.newTask.click();
             
-                    await expect(quickActions.taskModal).toBeVisible();
+                    await expect(quickActions.task.modal).toBeVisible();
 
-                    await quickActions.taskTitle.focus();
+                    await quickActions.task.title.focus();
                     await page.keyboard.press('Tab');
 
-                    await expect(quickActions.taskTitleError).toBeVisible();
-                    await expect(quickActions.taskTitleError).toHaveText('Title is required.');
+                    await expect(quickActions.task.titleError).toBeVisible();
+                    await expect(quickActions.task.titleError).toHaveText('Title is required.');
 
-                    await expect(quickActions.taskCreateButton).toBeDisabled();
+                    await expect(quickActions.task.createButton).toBeDisabled();
             
                     await signup.cleanup(email, database);
                 });
