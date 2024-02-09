@@ -8,12 +8,14 @@ import dayjs from "dayjs";
 
 interface IGetOptions {
     includeCompleted: boolean;
+    includeInactive: boolean;
 }
 
 interface ICreateTaskRequest {
     title: string;
     notes: string;
     contextId?: number;
+    isActive?: boolean;
 }
 
 interface IUpdateTaskRequest {
@@ -22,31 +24,49 @@ interface IUpdateTaskRequest {
     notes?: string;
     completed?: boolean;
     contextId?: number;
+    isActive?: boolean;
+}
+
+interface IGetTaskQuery {
+    id?: number;
+    ownerId: number;
+    completed?: boolean;
+    contextId?: number;
+    isActive?: boolean;
 }
 
 const MAX_TITLE_LENGTH = 100;
 
 const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
+    includeInactive: false,
 };
 
 export const getTaskById = (id: number, user: SessionUser, options: IGetOptions = defaultGetOptions) => {
+    const query: IGetTaskQuery = {
+        id,
+        ownerId: user.id,
+        completed: !!options.includeCompleted,
+    };
+
+    if (!options.includeInactive) query.isActive = true;
+
     return prisma.task.findMany({
-        where: {
-            id,
-            ownerId: user.id,
-            completed: !!options.includeCompleted,
-        },
+        where: { ...query },
     });
 };
 
 export const getTasksByContext = (context: Context, user: SessionUser, options: IGetOptions = defaultGetOptions) => {
+    const query: IGetTaskQuery = {
+        ownerId: user.id,
+        contextId: context.id,
+        completed: !!options.includeCompleted,
+    };
+
+    if (!options.includeInactive) query.isActive = true;
+
     return prisma.task.findMany({
-        where: {
-            contextId: context.id,
-            ownerId: user.id,
-            completed: !!options.includeCompleted,
-        },
+        where: { ...query },
     });
 };
 
@@ -66,6 +86,10 @@ export const isValidNewTaskRequest = (task: ICreateTaskRequest) => {
         if (isNaN(contextId)) {
             errors.push(new ApiError('Context id must be a number.', HttpStatus.Unprocessable, 'contextId'));
         }
+    }
+
+    if (task.isActive !== undefined && typeof task.isActive !== 'boolean') {
+        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.Unprocessable, 'isActive'));
     }
 
     return errors;
@@ -98,6 +122,10 @@ export const isValidUpdateTaskRequest = (task: IUpdateTaskRequest) => {
 
     if (task.completed !== undefined && typeof task.completed !== 'boolean') {
         errors.push(new ApiError('Invalid completed value received.', HttpStatus.Unprocessable, 'completed'));
+    }
+
+    if (task.isActive !== undefined && typeof task.isActive !== 'boolean') {
+        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.Unprocessable, 'isActive'));
     }
 
     return errors;
@@ -140,7 +168,7 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
 
     if (validationErrors.length) throw validationErrors;
 
-    const { id, title, notes, contextId, completed } = request;
+    const { id, title, notes, contextId, completed, isActive } = request;
 
     return prisma.$transaction(async (tx) => {
         let context: Context | null = null;
@@ -155,12 +183,14 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
             notes?: string;
             contextId?: number;
             completed?: boolean;
+            isActive?: boolean;
         } = {};
 
         if (title) data.title = title;
         if (notes) data.notes = notes;
         if (context) data.contextId = context.id;
         if (completed !== undefined) data.completed = !!completed;
+        if (isActive !== undefined) data.isActive = !!isActive;
 
         const task = await tx.task.update({
             where: { id, ownerId: user.id },
