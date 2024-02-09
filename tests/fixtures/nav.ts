@@ -21,7 +21,16 @@ export class NavFixture {
 
     public desktopQuickActions: IQuickActions;
 
-    public contextLinks: Record<string, Locator>;
+    public contextLinks: {
+        inbox: Locator;
+        projects: Locator;
+        waitingFor: Locator;
+        atHome: Locator;
+        atWork: Locator;
+        atComputer: Locator;
+        anywhere: Locator;
+        phoneCalls: Locator;
+    };
 
     public signoutButton: Locator;
 

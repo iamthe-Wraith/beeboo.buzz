@@ -79,6 +79,14 @@ export class QuickActionsFixture {
         this.project.createButton = this.project.form.getByTestId('new-quick-project-create');
     }
 
+    public async openProjectModal() {
+        if (this.isMobile) {
+            await this.mobileQuickActions.newProject.click();
+        } else {
+            await this.desktopQuickActions.newProject.click();
+        }
+    }
+
     public async openTaskModal() {
         if (this.isMobile) {
             await this.mobileQuickActions.newTask.click();

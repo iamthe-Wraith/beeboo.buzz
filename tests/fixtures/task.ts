@@ -11,7 +11,6 @@ export class TaskFixture {
     
     public icons: {
         pastDue: Locator;
-        notes: Locator;
     }
 
     public modal: Locator;
@@ -45,7 +44,6 @@ export class TaskFixture {
 
         this.icons = {
             pastDue: this.container.getByTestId('past-due-icon'),
-            notes: this.container.getByTestId('notes-icon'),
         };
 
         this.modal = this.page.getByTestId('task-modal');
