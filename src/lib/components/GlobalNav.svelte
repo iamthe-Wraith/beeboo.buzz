@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { type Context } from '@prisma/client';
+    import { type Context } from '@prisma/client';
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
-	import { ContextRole } from '../../types/contexts';
+    import { ContextRole } from '../../types/contexts';
     import { user } from '$lib/stores/user';
-	import { errors } from '$lib/stores/errors';
-	import { contexts } from '$lib/stores/contexts';
+    import { errors } from '$lib/stores/errors';
+    import { contexts } from '$lib/stores/contexts';
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
-	import NewQuickTask from './modals/NewQuickTaskModal.svelte';
+    import NewQuickTask from './modals/NewQuickTaskModal.svelte';
     import NewQuickProject from './modals/NewQuickProjectModal.svelte';
-	import Button from './Button.svelte';
+    import Button from './Button.svelte';
 
     let nav: HTMLElement;
 
