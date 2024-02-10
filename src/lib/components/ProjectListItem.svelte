@@ -1,91 +1,79 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
-    import type { Task } from "@prisma/client";
-	import TaskIcon from "./TaskIcon.svelte";
+    import type { Project } from "@prisma/client";
+	import IconWithTooltip from "./IconWithTooltip.svelte";
 	import dayjs from "dayjs";
-	import TaskModal from "./modals/TaskModal.svelte";
-	import CompleteTask from "./forms/CompleteTask.svelte";
+	import CompleteProject from "./forms/CompleteProject.svelte";
 
-    export let task: Task;
+    export let project: Project;
 
-    const daysUntilDue = dayjs(task.dueDate).diff(dayjs(), "day");
+    const daysUntilDue = dayjs(project.dueDate).diff(dayjs(), "day");
     const hasTags = false;
 </script>
 
-<TaskModal {task} let:openTaskModal>
-    <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-        <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-            <CompleteTask {task} />
-        </div>
-        <button
-            class="task {daysUntilDue < 0 ? 'past-due' : ''}"
-            on:click={openTaskModal}
-        >
-            <div class="task-main">
-                <div>
-                    <p class="title">{task.title}</p>
-                </div>
-    
-                {#if task.dueDate}
-                    <div class="due-date">
-                        {#if daysUntilDue < 0}
-                            <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
-                        {:else if daysUntilDue === 0}
-                            <p class="due-today">Due Today</p>
-                        {:else if daysUntilDue === 1}
-                            <p>Due Tomorrow</p>
-                        {:else}
-                            <p>Due in {daysUntilDue} days</p>
-                        {/if}
-                    </div>
-                {/if}
-                
-                {#if hasTags}
-                    <div class="task-tags"></div>
-                {/if}
-            </div>
-            <div class="task-icons">
-                {#if daysUntilDue < 0}
-                    <TaskIcon
-                        icon="ion:alert-circle-outline" 
-                        text="Past Due"
-                        testid="past-due-icon"
-                    />
-                {/if}
-    
-                {#if task.notes}
-                    <TaskIcon
-                        icon="ion:document-text-outline" 
-                        text="Has Notes"
-                        testid="notes-icon"
-                    />
-                {/if}
-            </div>
-        </button>
+<div class="project-container {daysUntilDue < 0 ? 'past-due' : ''}">
+    <div class="complete-project-container {daysUntilDue < 0 ? 'past-due' : ''}">
+        <CompleteProject {project} />
     </div>
-</TaskModal>
+    <a
+        class="project {daysUntilDue < 0 ? 'past-due' : ''}"
+        href="#"
+    >
+        <div class="project-main">
+            <div>
+                <p class="title">{project.title}</p>
+            </div>
+
+            {#if project.dueDate}
+                <div class="due-date">
+                    {#if daysUntilDue < 0}
+                        <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
+                    {:else if daysUntilDue === 0}
+                        <p class="due-today">Due Today</p>
+                    {:else if daysUntilDue === 1}
+                        <p>Due Tomorrow</p>
+                    {:else}
+                        <p>Due in {daysUntilDue} days</p>
+                    {/if}
+                </div>
+            {/if}
+            
+            {#if hasTags}
+                <div class="project-tags"></div>
+            {/if}
+        </div>
+        <div class="project-icons">
+            {#if daysUntilDue < 0}
+                <IconWithTooltip
+                    icon="ion:alert-circle-outline" 
+                    text="Past Due"
+                    testid="past-due-icon"
+                />
+            {/if}
+        </div>
+    </a>
+</div>
 
 <style>
-    .task-container {
+    .project-container {
         display: flex;
         justify-content: space-between;
         align-items: stretch;
         border-radius: 0.25rem;
         transition: 0.25s ease-in-out transform, 0.25s ease-in-out border;
 
-        &:has(.task:hover),
-        &:has(.task:focus-visible) {
+        &:has(.project:hover),
+        &:has(.project:focus-visible) {
             /* border: 1px solid var(--primary-200); */
             transform: scale(1.01);
         }
 
-        &:has(.task:focus-visible) {
+        &:has(.project:focus-visible) {
             outline: 1px dashed var(--light-500);
 		    outline-offset: 2px;
         }
     }
 
-    .complete-task-container {
+    .complete-project-container {
         display: flex;
         justify-content: center;
         align-items: flex-start;
@@ -135,7 +123,7 @@
         }
     }
 
-    .task {
+    .project {
         display: flex;
         justify-content: flex-start;
         align-items: stretch;
@@ -149,6 +137,7 @@
         border-bottom-right-radius: 0.25rem;
         background: var(--dark-400);
         outline: none;
+        text-decoration: none;
         transition: 0.25s ease-in-out border;
         
         &:hover {
@@ -163,7 +152,7 @@
         }
     }
 
-    .task-main {
+    .project-main {
         display: flex;
         flex-direction: column;
         flex-grow: 1;
@@ -192,7 +181,7 @@
         }
     }
 
-    .task-icons {
+    .project-icons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         align-items: end;

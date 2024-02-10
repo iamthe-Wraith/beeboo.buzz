@@ -12,6 +12,7 @@ const config: PlaywrightTestConfig = {
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	use: {
 		bypassCSP: true,
+		screenshot: 'only-on-failure',
 	},
 	projects: [
 		{

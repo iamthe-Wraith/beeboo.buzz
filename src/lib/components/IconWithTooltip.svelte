@@ -6,7 +6,7 @@
     export let text: string;
 </script>
 
-<div class="task-icon no-default-color" data-testid={testid}>
+<div class="icon-with-tooltip no-default-color" data-testid={testid}>
     <span>
         <Icon {icon} aria-label={text} />
     </span>
@@ -14,7 +14,7 @@
 </div>
 
 <style>
-    .task-icon {
+    .icon-with-tooltip {
         position: relative;
         display: flex;
         justify-content: center;
