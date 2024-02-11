@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Icon, { type IconifyIcon } from "@iconify/svelte";
+	import Icon, { type IconName } from "./Icon.svelte";
 
     export let testid: string;
-    export let icon: string | IconifyIcon;
+    export let icon: IconName;
     export let text: string;
 </script>
 
 <div class="icon-with-tooltip no-default-color" data-testid={testid}>
     <span>
-        <Icon {icon} aria-label={text} />
+        <Icon name={icon} aria-label={text} />
     </span>
     <span>{text}</span>
 </div>

@@ -2,8 +2,8 @@
     import { goto } from "$app/navigation";
     import { enhance } from "$app/forms";
     import type { Task } from "@prisma/client";
-    import Icon from "@iconify/svelte";
 	import type { ActionResult } from "@sveltejs/kit";
+	import Icon from "../Icon.svelte";
 
     export let task: Task;
 
@@ -40,6 +40,6 @@
     <input type="hidden" name="completed" value="true" />
 
     <button type="submit" data-testid="task-complete-button">
-        <Icon icon="ion:checkmark-outline" data-testid="task-complete-button-icon"/>
+        <Icon name="checkmark" data-testid="task-complete-button-icon"/>
     </button>
 </form>
