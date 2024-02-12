@@ -24,6 +24,15 @@ const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
 };
 
+export const getProjectById = async (id: number, user: SessionUser) => {
+    return prisma.project.findFirst({
+        where: {
+            id,
+            ownerId: user.id,
+        },
+    });
+};
+
 export const getProjects = async (user: SessionUser, options: IGetOptions = defaultGetOptions) => {
     const query: IGetProjectQuery = {
         ownerId: user.id,

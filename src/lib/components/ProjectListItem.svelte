@@ -16,7 +16,7 @@
     </div>
     <a
         class="project {daysUntilDue < 0 ? 'past-due' : ''}"
-        href="#"
+        href={`/projects/${project.id}`}
     >
         <div class="project-main">
             <div>
