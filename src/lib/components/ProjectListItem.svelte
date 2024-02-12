@@ -44,7 +44,7 @@
         <div class="project-icons">
             {#if daysUntilDue < 0}
                 <IconWithTooltip
-                    icon="ion:alert-circle-outline" 
+                    icon="alert-circle" 
                     text="Past Due"
                     testid="past-due-icon"
                 />

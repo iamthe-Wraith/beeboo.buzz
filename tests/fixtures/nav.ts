@@ -79,5 +79,7 @@ export class NavFixture {
         if (!this.isMobile) return;
         
         await this.menuButton?.click({ force: true });
+
+        await this.page.waitForTimeout(250);
     }
 }

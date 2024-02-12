@@ -25,7 +25,7 @@
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
-                connect-src https://ohmygtd.app ws://ohmygtd.app https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                connect-src https://ohmygtd.app ws://ohmygtd.app https://api.unisvg.com/ *.sentry.io blob:; 
                 img-src https://ohmygtd.app blob:; 
                 child-src blob:; 
                 worker-src blob:;"
@@ -39,7 +39,7 @@
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
-                connect-src http://localhost:5173 http://localhost:4173 ws://localhost:5173 ws://localhost:4173 https://api.unisvg.com/ https://api.iconify.design/ *.sentry.io blob:; 
+                connect-src http://localhost:5173 http://localhost:4173 ws://localhost:5173 ws://localhost:4173 https://api.unisvg.com/ *.sentry.io blob:; 
                 img-src http://localhost:5173 http://localhost:4173 blob:; 
                 child-src blob:; 
                 worker-src blob:;"

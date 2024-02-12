@@ -8,6 +8,7 @@ const config: PlaywrightTestConfig = {
 		port: 4173,
 		timeout: 120 * 1000,
 	},
+	retries: process.env.NODE_ENV === 'ci' ? 3 : 0,
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	use: {

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
     import GlobalNav from "./GlobalNav.svelte";
     import { clickOutside } from "$lib/actions/click-outside";
 	import { onMount } from "svelte";
+	import Icon from "./Icon.svelte";
 
     let mobileGlobalNav: HTMLDialogElement;
     let open = false;
@@ -31,7 +31,7 @@
         aria-label="Menu"
         on:click={openNav}
     >
-        <Icon data-testid="mobile-global-nav-trigger-icon" icon="ion:menu-outline" />
+        <Icon data-testid="mobile-global-nav-trigger-icon" name="menu" />
     </button>
 {/if}
 

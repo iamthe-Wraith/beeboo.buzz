@@ -1,8 +1,8 @@
 <script lang="ts">
     import { createEventDispatcher, onMount } from 'svelte'
     import { navigating } from '$app/stores';
-    import Icon from '@iconify/svelte';
 	import { clickOutside } from '$lib/actions/click-outside';
+	import Icon from '../Icon.svelte';
 
     export let id: string;
     export let open: boolean;
@@ -62,7 +62,7 @@
             on:click={closeModal}
             data-testid="close-modal-button"
         >
-            <Icon icon="ion:close" />
+            <Icon name="close" />
         </button>
         <h3 class="h5">{title}</h3>
     </div>
