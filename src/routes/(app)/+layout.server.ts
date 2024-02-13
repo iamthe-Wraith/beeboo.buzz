@@ -15,7 +15,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 			contexts = await getContexts(locals.session.user);
 		} catch (err) {
 			Logger.error(err);
-			errors.push(new ApiError('Failed to load contexts.', HttpStatus.INTERNAL_SERVER_ERROR, 'contexts').toJSON());
+			errors.push(new ApiError('Failed to load contexts.', HttpStatus.SERVER, 'contexts').toJSON());
 		}
 	}
 

@@ -75,21 +75,21 @@ export const isValidNewTaskRequest = (task: ICreateTaskRequest) => {
 
     if (task.title) {
         if (task.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.Unprocessable, 'title'));
+            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         }
     } else {
-        errors.push(new ApiError('Title is required.', HttpStatus.Unprocessable, 'title'));
+        errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
     }
 
     if (task.contextId) {
         const contextId = parseInt(task.contextId as unknown as string);
         if (isNaN(contextId)) {
-            errors.push(new ApiError('Context id must be a number.', HttpStatus.Unprocessable, 'contextId'));
+            errors.push(new ApiError('Context id must be a number.', HttpStatus.UNPROCESSABLE, 'contextId'));
         }
     }
 
     if (task.isActive !== undefined && typeof task.isActive !== 'boolean') {
-        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.Unprocessable, 'isActive'));
+        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.UNPROCESSABLE, 'isActive'));
     }
 
     return errors;
@@ -104,28 +104,28 @@ export const isValidUpdateTaskRequest = (task: IUpdateTaskRequest) => {
         !task.contextId && 
         task.completed === undefined
     ) {
-        errors.push(new ApiError('No updatable data received.', HttpStatus.Unprocessable));
+        errors.push(new ApiError('No updatable data received.', HttpStatus.UNPROCESSABLE));
     }
 
     if (task.title) {
         if (task.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.Unprocessable, 'title'));
+            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         } 
     }
 
     if (task.contextId) {
         const contextId = parseInt(task.contextId as unknown as string);
         if (isNaN(contextId)) {
-            errors.push(new ApiError('Context id must be a number.', HttpStatus.Unprocessable, 'contextId'));
+            errors.push(new ApiError('Context id must be a number.', HttpStatus.UNPROCESSABLE, 'contextId'));
         }
     }
 
     if (task.completed !== undefined && typeof task.completed !== 'boolean') {
-        errors.push(new ApiError('Invalid completed value received.', HttpStatus.Unprocessable, 'completed'));
+        errors.push(new ApiError('Invalid completed value received.', HttpStatus.UNPROCESSABLE, 'completed'));
     }
 
     if (task.isActive !== undefined && typeof task.isActive !== 'boolean') {
-        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.Unprocessable, 'isActive'));
+        errors.push(new ApiError('Invalid isActive value received.', HttpStatus.UNPROCESSABLE, 'isActive'));
     }
 
     return errors;
@@ -144,10 +144,10 @@ export const quickCreateTask = async (request: ICreateTaskRequest, user: Session
 
         if (contextId) {
             context = userContexts.find((c) => c.id === contextId);
-            if (!context) throw new ApiError(`Context with id: ${contextId} not found.`, HttpStatus.NotFound, 'context', { context: contextId });
+            if (!context) throw new ApiError(`Context with id: ${contextId} not found.`, HttpStatus.NOT_FOUND, 'context', { context: contextId });
         } else {
             context = userContexts.find((c) => c.role === ContextRole.INBOX);
-            if (!context) throw new ApiError('Inbox not found.', HttpStatus.NotFound, 'context');
+            if (!context) throw new ApiError('Inbox not found.', HttpStatus.NOT_FOUND, 'context');
         }
 
         const task = await tx.task.create({
@@ -175,7 +175,7 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
 
         if (contextId) {
             context = await getContextById(contextId, user, tx);
-            if (!context) throw new ApiError(`Context not found.`, HttpStatus.NotFound, 'context', { context: contextId });
+            if (!context) throw new ApiError(`Context not found.`, HttpStatus.NOT_FOUND, 'context', { context: contextId });
         }
 
         const data: {
@@ -200,7 +200,7 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
             },
         });
 
-        if (!task) throw new ApiError(`Task not found.`, HttpStatus.NotFound, 'task', { task: id });
+        if (!task) throw new ApiError(`Task not found.`, HttpStatus.NOT_FOUND, 'task', { task: id });
 
         return task;
     });

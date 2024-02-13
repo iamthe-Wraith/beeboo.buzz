@@ -93,7 +93,7 @@ export class Session {
             await this.cacheUser();
         } catch (err) {
             Logger.error(err);
-            throw new ApiError("Failed to create session token", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ApiError("Failed to create session token", HttpStatus.SERVER);
         }
     }
 

@@ -12,7 +12,7 @@ export const generatePasswordHash = (password: string): Promise<string> => {
         } else {
           bcrypt.hash(password, salt, (err: Error | undefined, hash: string) => {
             if (err) {
-              const error = new ApiError('An error occurred while processing password.', HttpStatus.INTERNAL_SERVER_ERROR);
+              const error = new ApiError('An error occurred while processing password.', HttpStatus.SERVER);
               reject(error);
             } else {
               resolve(hash);
@@ -31,7 +31,7 @@ export const isValidPassword = (providedPassword: string, encryptedPassword: str
     if (providedPassword && encryptedPassword) {
       bcrypt.compare(providedPassword, encryptedPassword, (err: Error | undefined, authenticated: boolean) => {
         if (err) {
-          const error = new ApiError('An error occurred while validating password.', HttpStatus.INTERNAL_SERVER_ERROR);
+          const error = new ApiError('An error occurred while validating password.', HttpStatus.SERVER);
           reject(error);
         } else {
           if (authenticated) {

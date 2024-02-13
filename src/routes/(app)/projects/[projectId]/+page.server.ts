@@ -8,9 +8,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
     const projectId = parseInt(params.projectId);
 
-    if (isNaN(projectId)) throw error(HttpStatus.BadRequest, 'Invalid project id.');
+    if (isNaN(projectId)) error(HttpStatus.BAD_REQUEST, { message: 'Invalid project id.' });
 
     const project = await getProjectById(projectId, locals.session.user);
+
+    if (!project) error(HttpStatus.NOT_FOUND, { message: 'Project not found.' });
 
     return { project };
 };

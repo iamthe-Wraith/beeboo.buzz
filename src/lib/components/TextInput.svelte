@@ -54,6 +54,7 @@
         flex-direction: column;
         gap: 0.5rem;
         width: 100%;
+        padding: var(--outline-offset);
     }
 
     label {

@@ -7,7 +7,7 @@ import { getProjects, quickCreateProject } from '$lib/services/project';
 
 export const actions: Actions = {
     quickCreate: async ({ request, locals }) => {
-        if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
         const title = data.get('title')! as string;

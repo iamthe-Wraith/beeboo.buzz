@@ -7,7 +7,7 @@ import { HttpStatus } from '$lib/constants/error';
 
 export const actions: Actions = {
     create: async ({ request, locals }) => {
-        if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
         const title = data.get('title')! as string;
@@ -16,7 +16,7 @@ export const actions: Actions = {
         console.log('creating full task: ', title, notes);
     },
     quickCreate: async ({ request, locals }) => {
-        if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
         const title = data.get('title')! as string;
@@ -32,7 +32,7 @@ export const actions: Actions = {
         }
     },
     update: async ({ request, locals }) => {
-        if (!locals.session.user) return fail(HttpStatus.Unauthorized, { errors: ['Unauthorized'] });
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
         const id = parseInt(data.get('id')! as string);

@@ -43,15 +43,18 @@
 </div>
 
 <style>
-    .textarea-container {
+    :global(:root) {
         --textarea-width: 100%;
         --textarea-height: 6rem;
+    }
 
+    .textarea-container {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
         width: var(--textarea-width);
         height: var(--textarea-height);
+        padding: var(--outline-offset);
     }
 
     label {
@@ -80,6 +83,7 @@
         border-radius: 0.25rem;
         color: var(--color-text-primary);
         background-color: var(--color-bg-secondary);
+        resize: none;
 
         &.error {
             border-color: var(--danger-500);

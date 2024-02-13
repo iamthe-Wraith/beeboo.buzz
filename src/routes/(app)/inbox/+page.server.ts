@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const inbox: Context | null = await getContextByRole(ContextRole.INBOX, locals.session.user)
 
-    if (!inbox) throw error(HttpStatus.NotFound, 'Inbox not found.');
+    if (!inbox) throw error(HttpStatus.NOT_FOUND, 'Inbox not found.');
 
     const tasks = await getTasksByContext(inbox, locals.session.user);
 

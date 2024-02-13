@@ -5,7 +5,9 @@
                       'secondary-transparent' | 
                       'tertiary' | 
                       'tertiary-transparent' | 
-                      'neutral' | 
+                      'neutral' |
+                      'danger' |
+                      'danger-transparent' |
                       'transparent';
 
     export let type: 'button' | 'submit' | 'reset' = 'button';
@@ -124,6 +126,30 @@
             &:focus:not(:disabled) {
                 background-color: var(--dark-400);
                 border: 1px solid var(--dark-600);
+            }
+        }
+
+        &.danger {
+            background-color: var(--danger-100);
+            border: 1px solid var(--danger-500);
+            color: var(--light-500);
+
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
+                background-color: var(--danger-300);
+                border: 1px solid var(--danger-700);
+            }
+        }
+
+        &.danger-transparent {
+            padding: 0.25rem 0.5rem;
+            background-color: transparent;
+            border: none;
+            color: var(--danger-500);
+
+            &:hover:not(:disabled),
+            &:focus:not(:disabled) {
+                color: var(--danger-700);
             }
         }
 

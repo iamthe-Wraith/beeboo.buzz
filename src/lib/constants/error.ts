@@ -1,6 +1,8 @@
 import type { NumericRange } from "@sveltejs/kit";
 
-export const HttpStatus: Record<string, NumericRange<400, 599>> = {
+type HttpStatusNames = "AUTHENTICATION" | "AUTHORIZATION" | "CONFLICT" | "BAD_REQUEST" | "FORBIDDEN" | "INVALID_ARG" | "NOT_ALLOWED" | "NOT_FOUND" | "SERVER" | "SERVICE" | "UNAUTHORIZED" | "UNPROCESSABLE" | "TOO_MANY_REQUESTS";
+
+export const HttpStatus: Record<HttpStatusNames, NumericRange<400, 599>> = {
   AUTHENTICATION: 401,
   AUTHORIZATION: 403,
   CONFLICT: 409,

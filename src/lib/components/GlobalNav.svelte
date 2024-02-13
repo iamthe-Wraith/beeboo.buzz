@@ -161,7 +161,7 @@
         }
 
         & .nav-section {
-            padding: 0.5rem 0;
+            padding: 0.5rem 0.25rem;
 
             &:not(:last-of-type) {
                 border-bottom: 1px solid var(--dark-400);

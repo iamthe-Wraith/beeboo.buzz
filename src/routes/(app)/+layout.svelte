@@ -62,7 +62,7 @@
         </div>
     </header>
     
-    <main data-testid="global-main">
+    <main data-testid="global-main" class="no-scrollbar">
         <slot></slot>  
     </main>
 
@@ -148,7 +148,11 @@
 
     main {
         min-height: calc(100vh - 7rem);
-        padding: 1rem;
+        padding: 0.5rem;
         background-color: var(--dark-300);
+
+        @media (min-width: 1100px) {
+            padding: 1rem;
+        }
     }
 </style>

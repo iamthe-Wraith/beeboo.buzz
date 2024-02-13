@@ -10,11 +10,11 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 
     const contextId = parseInt(params.contextId);
 
-    if (isNaN(contextId)) throw error(HttpStatus.BadRequest, 'Invalid context id.');
+    if (isNaN(contextId)) throw error(HttpStatus.BAD_REQUEST, 'Invalid context id.');
 
     const context: Context | null = await getContextById(contextId, locals.session.user)
 
-    if (!context) throw error(HttpStatus.NotFound, `Context with id: ${contextId} not found.`);
+    if (!context) throw error(HttpStatus.NOT_FOUND, `Context with id: ${contextId} not found.`);
 
     const tasks = await getTasksByContext(context, locals.session.user);
 
