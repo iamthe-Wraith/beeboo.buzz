@@ -5,14 +5,14 @@
     export let projects: ProjectModel[] = [];
 </script>
 
-<div class="project-list-container">
+<div class="projects-list-container">
     {#each projects as project (project.id)}
         <ProjectListItem {project} />
     {/each}
 </div>
 
 <style>
-    .project-list-container {
+    .projects-list-container {
         display: flex;
         flex-direction: column;
         gap: 0.75rem;

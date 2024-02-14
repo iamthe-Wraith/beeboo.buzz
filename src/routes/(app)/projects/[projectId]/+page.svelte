@@ -4,6 +4,8 @@
 	import TextInput from "$lib/components/TextInput.svelte";
 	import Button from "$lib/components/Button.svelte";
 	import Textarea from "$lib/components/Textarea.svelte";
+	import Link from "$lib/components/Link.svelte";
+	import Icon from "$lib/components/Icon.svelte";
 
     type FormField = 'title' | 'description';
 
@@ -78,12 +80,14 @@
 
 <div class="project-container">
     {#if editing}
-        <form>
+        <form data-testid="edit-project-form">
+            <h2>Edit Project</h2>
+
             <TextInput
                 required
                 id="title"
                 label="Title"
-                data-testid="project-title"
+                data-testid="edit-project-title"
                 placeholder="Project Title"
                 error={titleError}
                 bind:value={title}
@@ -93,7 +97,7 @@
             <Textarea
                 id="description"
                 label="Description"
-                data-testid="project-description"
+                data-testid="edit-project-description"
                 placeholder="Project Description"
                 error={descriptionError}
                 bind:value={description}
@@ -101,58 +105,77 @@
             />
 
             <div class="buttons-container">
-                <Button
-                    data-testid="update-project-button"
-                    disabled={disableUpdating}
-                >
-                    Save
-                </Button>
+                <div>
+                    <!-- left empty intentionally -->
+                </div>
 
-                <Button
-                    data-testid="cancel-edit-project-button"
-                    kind="transparent"
-                    on:click={reset}
-                >
-                    Cancel
-                </Button>
+                <div class="row-reverse">
+                    <Button
+                        data-testid="update-project-button"
+                        disabled={disableUpdating}
+                    >
+                        Save
+                    </Button>
+
+                    <Button
+                        data-testid="cancel-edit-project-button"
+                        kind="transparent"
+                        on:click={reset}
+                    >
+                        Cancel
+                    </Button>
+                </div>
             </div>
         </form>
     {:else}
-        <div>
+        <div data-testid="project-info-container">
             <div class="buttons-container">
-                <Button
-                    data-testid="delete-project-button"
-                    kind="danger-transparent"
-                    on:click={() => console.log('Deleting project...')}
-                >
-                    Delete
-                </Button>
+                <div>
+                    <Link
+                        href="/projects"
+                        data-testid="back-to-projects-link"
+                        type="neutral"
+                    >
+                        <Icon name="chevron-back" />
+                        Projects
+                    </Link>
+                </div>
 
-                <Button
-                    data-testid="complete-project-button"
-                    kind="transparent"
-                    on:click={() => console.log('Completing project...')}
-                >
-                    Complete
-                </Button>
+                <div>
+                    <Button
+                        data-testid="edit-project-button"
+                        kind="transparent"
+                        on:click={() => editing = true}
+                    >
+                        Edit
+                    </Button>
 
-                <Button
-                    data-testid="edit-project-button"
-                    kind="transparent"
-                    on:click={() => editing = true}
-                >
-                    Edit
-                </Button>
+                    <Button
+                        data-testid="complete-project-button"
+                        kind="transparent"
+                        on:click={() => console.log('Completing project...')}
+                    >
+                        Complete
+                    </Button>
+
+                    <Button
+                        data-testid="delete-project-button"
+                        kind="danger-transparent"
+                        on:click={() => console.log('Deleting project...')}
+                    >
+                        Delete
+                    </Button>
+                </div>
             </div>
 
-            <h1>{project.title}</h1>
+            <h1 data-testid="title">{project.title}</h1>
 
-            <p>{project.notes}</p>
+            <p data-testid="description">{project.notes}</p>
         </div>
     {/if}
 
-    <div class={editing ? 'hidden' : ''}>
-        <h2>Notes</h2>
+    <div class={editing ? 'hidden' : ''} data-testid="project-notes-container">
+        <h2 data-testid="notes-title">Notes</h2>
     </div>
 </div>
 
@@ -183,10 +206,6 @@
                 padding-left: 0;
                 border-left: 0 solid var(--dark-400);
             }
-
-            & .buttons-container {
-                gap: 0;
-            }
         }
 
         & form {
@@ -195,10 +214,6 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
-
-            & .buttons-container {
-                gap: 0;
-            }
         }
 
         @media (min-width: 1100px) {
@@ -229,11 +244,32 @@
                     gap: 0;
                 }
             }
+
+            & > form {
+                flex: 1;
+                padding-right: 1rem;
+            }
         }
-    }
+    }   
 
     .buttons-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
         padding-top: 0.25rem;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0 var(--outline-offset);
+
+            &.row-reverse {
+                flex-direction: row-reverse;
+            }
+        }
     }
 
     h1,
@@ -248,14 +284,7 @@
     }
 
     h2 {
+        margin-bottom: 0;
         font-size: 1.5rem;
-    }
-
-    .buttons-container {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 1rem;
     }
 </style>

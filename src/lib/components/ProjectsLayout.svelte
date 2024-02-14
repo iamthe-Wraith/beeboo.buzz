@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { Project } from "@prisma/client";
-	import ProjectList from "./ProjectList.svelte";
+	import ProjectList from "./ProjectsList.svelte";
 
     export let projects: Project[] = [];
 </script>
 
-<div class="container" data-testid="project-layout">
+<div class="container" data-testid="projects-layout">
     <div class="header">
         <div>
-            <h1 data-testid="project-title">Projects</h1>
+            <h1 data-testid="projects-title">Projects</h1>
             <span class="projects-count" data-testid="projects-count">
                 {projects.length} projects
             </span>

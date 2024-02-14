@@ -1,6 +1,6 @@
 import type { Locator, Page, ViewportSize } from "@playwright/test";
 
-export class ProjectFixture {
+export class ProjectListItemFixture {
     public completeButton: Locator;
     public completeButtonIcon: Locator;
 

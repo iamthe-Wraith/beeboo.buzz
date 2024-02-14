@@ -3,8 +3,8 @@ import { SignUpFixture } from "../fixtures/signup";
 import { QuickActionsFixture } from "../fixtures/quick-actions";
 import { test, expect } from "../custom-test";
 import { NavFixture } from "../fixtures/nav";
-import { ProjectFixture } from "../fixtures/project";
-import { ProjectPageFixture } from "../fixtures/project-page";
+import { ProjectListItemFixture } from "../fixtures/project-list-item";
+import { ProjectsPageFixture } from "../fixtures/projects-page";
 
 test.describe('projects - read', () => {
     test('should display all a user\'s projects', async ({ page, viewport, database }) => {
@@ -34,7 +34,7 @@ test.describe('projects - read', () => {
         const signup = new SignUpFixture(page);
         const nav = new NavFixture(page, viewport);
         const quickActions = new QuickActionsFixture(page, viewport);
-        const projectPage = new ProjectPageFixture(page, viewport);
+        const projectPage = new ProjectsPageFixture(page, viewport);
 
         await page.goto('/');
 
@@ -73,7 +73,7 @@ test.describe('projects - read', () => {
         const signup = new SignUpFixture(page);
         const nav = new NavFixture(page, viewport);
         const quickActions = new QuickActionsFixture(page, viewport);
-        const projectPage = new ProjectPageFixture(page, viewport);
+        const projectPage = new ProjectsPageFixture(page, viewport);
 
         await page.goto('/');
 
@@ -93,7 +93,7 @@ test.describe('projects - read', () => {
 
         await expect(projectPage.projects).toHaveCount(1);
 
-        const project = new ProjectFixture(projectPage.projects.nth(0), page, viewport);
+        const project = new ProjectListItemFixture(projectPage.projects.nth(0), page, viewport);
 
         await expect(project.completeButton).toBeVisible();
         await expect(project.completeButtonIcon).toHaveCSS('opacity', '0');
