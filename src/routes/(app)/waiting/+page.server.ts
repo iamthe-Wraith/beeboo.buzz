@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     const waitingFor: Context | null = await getContextByRole(ContextRole.WAITING, locals.session.user)
 
-    if (!waitingFor) throw error(HttpStatus.NotFound, 'Waiting context not found.');
+    if (!waitingFor) throw error(HttpStatus.NOT_FOUND, 'Waiting context not found.');
 
     const tasks = await getTasksByContext(waitingFor, locals.session.user);
 

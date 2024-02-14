@@ -24,6 +24,15 @@ const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
 };
 
+export const getProjectById = async (id: number, user: SessionUser) => {
+    return prisma.project.findFirst({
+        where: {
+            id,
+            ownerId: user.id,
+        },
+    });
+};
+
 export const getProjects = async (user: SessionUser, options: IGetOptions = defaultGetOptions) => {
     const query: IGetProjectQuery = {
         ownerId: user.id,
@@ -41,10 +50,10 @@ export const isValidNewProjectRequest = (project: ICreateProjectRequest) => {
 
     if (project.title) {
         if (project.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.Unprocessable, 'title'));
+            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         }
     } else {
-        errors.push(new ApiError('Title is required.', HttpStatus.Unprocessable, 'title'));
+        errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
     }
 
     return errors;

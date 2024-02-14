@@ -88,6 +88,8 @@ body {
 
 	--font-primary: NightmareBeforeChristmas, sans-serif;
 	--font-secondary: Balsamiq, sans-serif;
+
+	--outline-offset: 3px;
 }
 
 h1,
@@ -144,7 +146,7 @@ select {
 
 	&:focus-visible {
 		outline: 1px dashed var(--light-500);
-		outline-offset: 2px;
+		outline-offset: calc(var(--outline-offset) - 1px);
 	}
 }
 
