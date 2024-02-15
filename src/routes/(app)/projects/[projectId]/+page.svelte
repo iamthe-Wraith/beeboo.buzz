@@ -6,6 +6,7 @@
 	import Textarea from "$lib/components/Textarea.svelte";
 	import Link from "$lib/components/Link.svelte";
 	import Icon from "$lib/components/Icon.svelte";
+	import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
 
     type FormField = 'title' | 'description';
 
@@ -158,13 +159,7 @@
                         Complete
                     </Button>
 
-                    <Button
-                        data-testid="delete-project-button"
-                        kind="danger-transparent"
-                        on:click={() => console.log('Deleting project...')}
-                    >
-                        Delete
-                    </Button>
+                    <DeleteProject projectId={project.id} />
                 </div>
             </div>
 

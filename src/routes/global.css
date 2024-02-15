@@ -246,6 +246,10 @@ h6 *,
 	line-height: 1.4rem;
 }
 
+p {
+	line-height: 1.3rem;
+}
+
 /* helper classes */
 .error {
 	color: var(--danger-500);
