@@ -23,8 +23,6 @@ export const actions: Actions = {
         }
     },
     delete: async ({ request, locals }) => {
-        console.log('deleting project...');
-
         if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         try {
@@ -36,12 +34,12 @@ export const actions: Actions = {
             if (isNaN(projectId)) throw new ApiError('Project id must be a number.', HttpStatus.BAD_REQUEST, 'projectId');
 
             await deleteProject(projectId, locals.session.user);
-
-            return { status: 'ok' };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });
         }
+
+        redirect(303, '/projects');
     },
 };
 

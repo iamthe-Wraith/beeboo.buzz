@@ -11,7 +11,6 @@ export class ProjectPageFixture {
         backToProjectsLink: Locator;
         editButton: Locator;
         completeButton: Locator;
-        deleteButton: Locator;
     }
 
     public edit: {
@@ -26,6 +25,15 @@ export class ProjectPageFixture {
         notes: Locator;
     };
 
+    public delete: {
+        trigger: Locator;
+        modal: Locator;
+        header: Locator;
+        text: Locator;
+        confirmButton: Locator;
+        cancelButton: Locator;
+    }
+
     constructor(public readonly page: Page, public readonly viewport?: ViewportSize | null) {
         this.projectInfoContainer = this.page.getByTestId('project-info-container');
         this.editProjectForm = this.page.getByTestId('edit-project-form');
@@ -37,7 +45,6 @@ export class ProjectPageFixture {
             backToProjectsLink: this.projectInfoContainer.getByTestId('back-to-projects-link'),
             editButton: this.projectInfoContainer.getByTestId('edit-project-button'),
             completeButton: this.projectInfoContainer.getByTestId('complete-project-button'),
-            deleteButton: this.projectInfoContainer.getByTestId('delete-project-button'),
         }
 
         this.edit = {
@@ -50,6 +57,18 @@ export class ProjectPageFixture {
         this.notes = {
             title: this.projectNotesContainer.getByTestId('notes-title'),
             notes: this.projectNotesContainer.locator('.note'),
+        }
+
+        const deleteModalId = 'delete-project-modal';
+        const deleteModal = this.projectInfoContainer.getByTestId(deleteModalId);
+
+        this.delete = {
+            trigger: this.projectInfoContainer.getByTestId(`${deleteModalId}-trigger-button`),
+            modal: deleteModal,
+            header: deleteModal.getByTestId(`${deleteModalId}-content-header`),
+            text: deleteModal.getByTestId(`${deleteModalId}-text`),
+            confirmButton: deleteModal.getByTestId('delete-project-button'),
+            cancelButton: deleteModal.getByTestId('cancel-delete-project-button'),
         }
     }
 }

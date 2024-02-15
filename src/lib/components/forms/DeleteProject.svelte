@@ -1,4 +1,7 @@
 <script lang="ts">
+	import type { ActionResult } from "@sveltejs/kit";
+    import { enhance } from "$app/forms";
+	import { goto } from "$app/navigation";
 	import Button from "../Button.svelte";
 	import Icon from "../Icon.svelte";
 	import Modal from "../modals/Modal.svelte";
@@ -7,9 +10,28 @@
 
     const id = 'delete-project-modal';
     let open = false;
+    let processing = false;
 
     function onCancelClick() {
         open = false;
+    }
+
+    function onDelete() {
+        processing = true;
+
+        return ({ result }: { result: ActionResult<{ message: string }> }) => {
+            if (result.type === 'failure') {
+                // TODO: Show toast message that deletion failed
+                console.log('Error deleting project', result);
+            }
+
+            if (result.type === 'redirect') {
+                // TODO: Show toast message that project was deleted
+                goto(result.location);
+            }
+
+            processing = false;
+        }
     }
 
     function onModalChange(e: CustomEvent<{ id: string, open: boolean }>) {
@@ -22,12 +44,11 @@
         open = true;
     }
 
-    // TODO: ask user to confirm deletion (make a note that any tasks linked to this project will be unlinked)
     // TODO: remove project from all tasks that are linked to it.
 </script>
 
 <Button
-    data-testid="delete-project-trigger-button"
+    data-testid={`${id}-trigger-button`}
     kind="danger-transparent"
     on:click={onTriggerDelete}
 >
@@ -40,9 +61,9 @@
     on:modal-change={onModalChange}
     style="--modal-max-width: 25rem;"
 >
-    <div class="content-container">
-        <div class="content-header">
-            <div class="icon-container">
+    <div class="content-container" data-testid={`${id}-content-container`}>
+        <div class="content-header" data-testid={`${id}-content-header`}>
+            <div class="icon-container" data-testid={`${id}-icon-container`}>
                 <Icon name="warning" />
             </div>
 
@@ -51,7 +72,7 @@
             </div>
         </div>
 
-        <p>
+        <p data-testid={`${id}-text`}>
             Are you sure you want to delete this project? Any tasks linked to this project will be unlinked. <span>This cannot be undone.</span>
         </p>
     </div>
@@ -60,6 +81,7 @@
         <Button
             data-testid="cancel-delete-project-button"
             kind="transparent"
+            disabled={processing}
             on:click={onCancelClick}
         >
             Cancel
@@ -68,10 +90,12 @@
         <form
             method="POST"
             action="/projects?/delete"
+            use:enhance={onDelete}
         >
             <input type="hidden" name="projectId" value={projectId} />
 
             <Button
+                {processing}
                 data-testid="delete-project-button"
                 kind="danger"
                 type="submit"
