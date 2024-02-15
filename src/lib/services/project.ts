@@ -24,6 +24,15 @@ const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
 };
 
+export const deleteProject = async (projectId: number, user: SessionUser) => {
+    return prisma.project.delete({
+        where: {
+            id: projectId,
+            ownerId: user.id,
+        },
+    });
+};
+
 export const getProjectById = async (id: number, user: SessionUser) => {
     return prisma.project.findFirst({
         where: {

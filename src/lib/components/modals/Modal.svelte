@@ -55,6 +55,7 @@
     bind:this={modal}
     use:clickOutside
     on:click-outside={closeModal}
+    {...$$restProps}
 >
     <div class="modal-header">
         <button
@@ -77,6 +78,8 @@
         position: fixed;
         top: 50%;
         left: 50%;
+        width: 90vw;
+        max-width: var(--modal-max-width, 40rem);
         background-color: var(--dark-200);
         border: 1px solid var(--dark-600);
         border-radius: 0.5rem;

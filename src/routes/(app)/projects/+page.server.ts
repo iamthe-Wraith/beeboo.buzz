@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
 import { HttpStatus } from '$lib/constants/error';
-import { getProjects, quickCreateProject } from '$lib/services/project';
+import { deleteProject, getProjects, quickCreateProject } from '$lib/services/project';
 
 export const actions: Actions = {
     quickCreate: async ({ request, locals }) => {
@@ -17,6 +17,27 @@ export const actions: Actions = {
             const project = await quickCreateProject({ title, notes }, locals.session.user);
 
             return { project };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
+    delete: async ({ request, locals }) => {
+        console.log('deleting project...');
+
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        try {
+            const data = await request.formData();
+            if (!data.get('projectId')) throw new ApiError('Project id is required.', HttpStatus.BAD_REQUEST, 'projectId');
+
+            const projectId = parseInt(data.get('projectId')! as string);
+
+            if (isNaN(projectId)) throw new ApiError('Project id must be a number.', HttpStatus.BAD_REQUEST, 'projectId');
+
+            await deleteProject(projectId, locals.session.user);
+
+            return { status: 'ok' };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });
