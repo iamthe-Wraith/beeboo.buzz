@@ -25,6 +25,7 @@
     bind:open
     title={method === 'signin' ? 'Sign In' : 'Sign Up'}
     on:modal-change
+    style="--modal-max-width: 30rem"
 >
     {#if method === 'signin'}
         <Signin bind:reset={reset}>

@@ -218,10 +218,12 @@
     form {
         display: flex;
         flex-direction: column;
-        gap: 1.1rem;
-        width: 80vw;
-        max-width: 30rem;
+        gap: 0.7rem;
         height: auto;
+
+        @media (min-width: 500px) {
+            gap: 1.1rem;
+        }
     }
 
     .signout-footer {
@@ -233,11 +235,15 @@
 
     .buttons-container {
         display: flex;
-        flex-direction: row-reverse;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-end;
         flex-grow: 1;
         gap: 0.5rem;
+
+        @media (min-width: 500px) {
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
     }
 
     p.error {
