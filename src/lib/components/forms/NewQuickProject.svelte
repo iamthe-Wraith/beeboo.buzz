@@ -153,9 +153,11 @@
     form {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        width: 80vw;
-        max-width: 30rem;
+        gap: 0.7rem;
+
+        @media (min-width: 500px) {
+            gap: 1rem;
+        }
     }
 
     .error {
@@ -168,5 +170,6 @@
         justify-content: flex-start;
         align-items: center;
         gap: 1rem;
+        padding: 0 var(--outline-offset);
     }
 </style>

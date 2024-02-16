@@ -24,6 +24,7 @@
     bind:open
     title="New Project"
     on:modal-change={onModalChange}
+    style="--modal-max-width: 30rem"
 >
     <NewQuickProject {onCancel} />
 </Modal>
