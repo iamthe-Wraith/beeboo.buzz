@@ -99,7 +99,7 @@
 
                 <a
                     href="/projects"
-                    class={$page.url.pathname === `/projects}` ? 'active' : ''}
+                    class={$page.url.pathname === '/projects' ? 'active' : ''}
                 >
                     Projects
                 </a>
