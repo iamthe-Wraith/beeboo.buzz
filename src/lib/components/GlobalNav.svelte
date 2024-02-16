@@ -216,8 +216,8 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        width: 100%;
-        margin-bottom: 0.5rem;
+        width: calc(100% - (var(--outline-offset) * 2));
+        margin: 0 var(--outline-offset) 0.5rem;
         padding: 0.5rem;
         text-decoration: none;
 
