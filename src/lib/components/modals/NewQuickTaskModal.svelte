@@ -24,6 +24,7 @@
     bind:open
     title="New Task"
     on:modal-change={onModalChange}
+    style="--modal-max-width: 30rem"
 >
     <NewQuickTask {onCancel} />
 </Modal>

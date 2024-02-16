@@ -153,9 +153,11 @@
     form {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        width: 80vw;
-        max-width: 30rem;
+        gap: 0.7rem;
+
+        @media (min-width: 500px) {
+            gap: 1rem;
+        }
     }
 
     .error {
