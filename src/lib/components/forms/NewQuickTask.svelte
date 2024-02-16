@@ -170,5 +170,6 @@
         justify-content: flex-start;
         align-items: center;
         gap: 1rem;
+        padding: 0 var(--outline-offset);
     }
 </style>
