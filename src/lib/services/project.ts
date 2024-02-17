@@ -8,6 +8,13 @@ interface ICreateProjectRequest {
     notes: string;
 }
 
+interface IUpdateProjectRequest {
+    id: number;
+    title?: string;
+    description?: string;
+    completed?: boolean;
+}
+
 interface IGetOptions {
     includeCompleted: boolean;
 }
@@ -68,6 +75,33 @@ export const isValidNewProjectRequest = (project: ICreateProjectRequest) => {
     return errors;
 };
 
+export const isValidUpdateTaskRequest = (project: IUpdateProjectRequest) => {
+    const errors: ApiError[] = [];
+
+    if (
+        !project.title && 
+        !project.description && 
+        project.completed === undefined
+    ) {
+        errors.push(new ApiError('No updatable data received.', HttpStatus.UNPROCESSABLE));
+    }
+
+    if (project.title) {
+        if (project.title.length > MAX_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        } 
+    }
+
+    // TODO: Add validation for description
+    // descriptions should have a max length to ensure the database can handle it.
+
+    if (project.completed !== undefined && typeof project.completed !== 'boolean') {
+        errors.push(new ApiError('Invalid completed value received.', HttpStatus.UNPROCESSABLE, 'completed'));
+    }
+
+    return errors;
+};
+
 export const quickCreateProject = async (request: ICreateProjectRequest, user: SessionUser) => {
     const validationErrors = isValidNewProjectRequest(request);
 
@@ -86,4 +120,28 @@ export const quickCreateProject = async (request: ICreateProjectRequest, user: S
 
         return project;
     });
+};
+
+export const updateProject = async (request: IUpdateProjectRequest, user: SessionUser) => {
+    const validationErrors = isValidUpdateTaskRequest(request);
+
+    if (validationErrors.length) throw validationErrors;
+
+    const { id, title, description, completed } = request;
+
+    const project = prisma.project.update({
+        where: {
+            id,
+            ownerId: user.id,
+        },
+        data: {
+            title,
+            completed,
+            notes: description,
+        },
+    });
+
+    if (!project) throw new ApiError(`Project not found.`, HttpStatus.NOT_FOUND, 'project', { project: id });
+
+    return project;
 };
