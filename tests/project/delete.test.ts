@@ -121,7 +121,7 @@ test.describe('project - delete', () => {
         await signup.cleanup(email, database);
     });
 
-    test.only('clicking the delete button within the confirmation modal should delete the project', async ({ page, viewport, database }) => {
+    test('clicking the delete button within the confirmation modal should delete the project', async ({ page, viewport, database }) => {
         const email = getEmail();
         const password = 'Password123!';
         const projects = [

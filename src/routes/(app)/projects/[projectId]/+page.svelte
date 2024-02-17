@@ -1,133 +1,36 @@
 <script lang="ts">
 	import type { Project } from "@prisma/client";
 	import type { PageData } from "./$types";
-	import TextInput from "$lib/components/TextInput.svelte";
 	import Button from "$lib/components/Button.svelte";
-	import Textarea from "$lib/components/Textarea.svelte";
+    import EditProject from "$lib/components/forms/EditProject.svelte";
 	import Link from "$lib/components/Link.svelte";
 	import Icon from "$lib/components/Icon.svelte";
 	import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
 
-    type FormField = 'title' | 'description';
-
     export let data: PageData;
     let project: Project;
-    
-    let title: string;
-    let description: string;
 
-    let titleError: string;
-    let descriptionError: string;
-    let disableUpdating = true;
 
     let editing = false;
 
-    $: if (data?.project) {
-        project = data.project;
-        if (!title) title = project.title;
-        if (!description) description = project.notes || '';
+    $: if (data?.project) project = data.project;
+
+    function onCancelEdit() {
+        editing = false;
     }
 
-    /**
-     * Checks for changes in the project data.
-     * 
-     * @returns {boolean} - Whether or not the project data has changed.
-     */
-    function detectChanges() {
-        let changesDetected = false;
-
-        if (
-            project &&
-            (
-                project.title !== title ||
-                (project.notes || '') !== description
-            )
-        ) {
-            changesDetected = true;
-        }
-
-        disableUpdating = !changesDetected;
-    }
-
-    function onBlur(field: FormField) {
-        return function() {
-            switch (field) {
-                case 'title':
-                    title = title.trim();
-                    if (!title) {
-                        titleError = 'Title is required.';
-                    } else {
-                        titleError = '';
-                    }
-                    break;
-                case 'description':
-                    description = description.trim();
-                    break;
-            }
-
-            detectChanges();
-        }
-    }
-
-    function reset() {
-        title = project.title;
-        description = project.notes || '';
-        titleError = '';
-        descriptionError = '';
-        disableUpdating = true;
+    function onSave() {
         editing = false;
     }
 </script>
 
 <div class="project-container">
     {#if editing}
-        <form data-testid="edit-project-form">
-            <h2>Edit Project</h2>
-
-            <TextInput
-                required
-                id="title"
-                label="Title"
-                data-testid="edit-project-title"
-                placeholder="Project Title"
-                error={titleError}
-                bind:value={title}
-                on:blur={onBlur('title')}
-            />
-
-            <Textarea
-                id="description"
-                label="Description"
-                data-testid="edit-project-description"
-                placeholder="Project Description"
-                error={descriptionError}
-                bind:value={description}
-                on:blur={onBlur('description')}
-            />
-
-            <div class="buttons-container">
-                <div>
-                    <!-- left empty intentionally -->
-                </div>
-
-                <div class="row-reverse">
-                    <Button
-                        data-testid="update-project-button"
-                        disabled={disableUpdating}
-                    >
-                        Save
-                    </Button>
-
-                    <Button
-                        data-testid="cancel-edit-project-button"
-                        kind="transparent"
-                        on:click={reset}
-                    >
-                        Cancel
-                    </Button>
-                </div>
-            </div>
-        </form>
+        <EditProject
+            {project}
+            onCancel={onCancelEdit}
+            onSave={onSave}
+        />
     {:else}
         <div data-testid="project-info-container">
             <div class="buttons-container">
@@ -203,14 +106,6 @@
             }
         }
 
-        & form {
-            --textarea-height: 10rem;
-
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
         @media (min-width: 1100px) {
             flex-direction: row;
             justify-content: space-between;
@@ -238,11 +133,6 @@
                 & .buttons-container {
                     gap: 0;
                 }
-            }
-
-            & > form {
-                flex: 1;
-                padding-right: 1rem;
             }
         }
     }   

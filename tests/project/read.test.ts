@@ -59,7 +59,7 @@ test.describe('project - read', () => {
         await expect(projectPage.projectInfo.backToProjectsLink).toBeVisible();
         await expect(projectPage.projectInfo.editButton).toBeVisible();
         await expect(projectPage.projectInfo.completeButton).toBeVisible();
-        await expect(projectPage.projectInfo.deleteButton).toBeVisible();
+        await expect(projectPage.delete.trigger).toBeVisible();
 
         await expect(projectPage.projectInfo.title).toHaveText(projects[0].title);
         await expect(projectPage.projectInfo.description).toHaveText(projects[0].notes);
