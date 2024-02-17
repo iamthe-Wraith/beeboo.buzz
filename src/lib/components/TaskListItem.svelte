@@ -43,22 +43,24 @@
                     <div class="task-tags"></div>
                 {/if}
             </div>
-            <div class="task-icons">
-                {#if daysUntilDue < 0}
-                    <IconWithTooltip
-                        icon="ion:alert-circle-outline" 
-                        text="Past Due"
-                        testid="past-due-icon"
-                    />
-                {/if}
-    
-                {#if task.notes}
-                    <IconWithTooltip
-                        icon="ion:document-text-outline" 
-                        text="Has Notes"
-                        testid="notes-icon"
-                    />
-                {/if}
+            <div class="task-icons-container">
+                <div class="task-icons">
+                    {#if daysUntilDue < 0}
+                        <IconWithTooltip
+                            icon="alert-circle" 
+                            text="Past Due"
+                            testid="past-due-icon"
+                        />
+                    {/if}
+        
+                    {#if task.notes}
+                        <IconWithTooltip
+                            icon="note" 
+                            text="Has Notes"
+                            testid="notes-icon"
+                        />
+                    {/if}
+                </div>
             </div>
         </button>
     </div>
@@ -66,6 +68,7 @@
 
 <style>
     .task-container {
+        container-type: inline-size;
         display: flex;
         justify-content: space-between;
         align-items: stretch;
@@ -173,6 +176,7 @@
         & .title {
             font-size: 1.1rem;
             font-weight: bold;
+            text-align: left;
         }
 
         & .due-date {
@@ -191,6 +195,15 @@
         }
     }
 
+    .task-icons-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        flex-grow: 0;
+        flex-shrink: 0;
+        gap: 0.5rem;
+    }
+
     .task-icons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -198,5 +211,23 @@
         direction: rtl;
         gap: 0.5rem;
         width: 4rem;
+    }
+
+    @container (width < 475px) {
+        .task {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .task-icons {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            width: 100%;
+            direction: unset;
+        }
     }
 </style>
