@@ -4,7 +4,7 @@ import { QuickActionsFixture } from "../fixtures/quick-actions";
 import { test, expect } from "../custom-test";
 import { NavFixture } from "../fixtures/nav";
 import { ProjectsPageFixture } from "../fixtures/projects-page";
-import { ProjectPageFixture } from "../fixtures/project-page.test";
+import { ProjectPageFixture } from "../fixtures/project-page";
 
 test.describe('project - read', () => {
     test('should display the project info', async ({ page, viewport, database }) => {

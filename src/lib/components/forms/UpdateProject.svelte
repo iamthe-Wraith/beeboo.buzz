@@ -7,6 +7,7 @@
     import Textarea from "$lib/components/Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
 	import { onMount } from "svelte";
+	import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 
     type FormField = 'title' | 'description';
 
@@ -54,6 +55,8 @@
                     title = title.trim();
                     if (!title) {
                         titleError = 'Title is required.';
+                    } else if (title.length > MAX_PROJECT_TITLE_LENGTH) {
+                        titleError = `Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`;
                     } else {
                         titleError = '';
                     }

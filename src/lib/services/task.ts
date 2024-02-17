@@ -5,6 +5,7 @@ import type { SessionUser } from "./session";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import dayjs from "dayjs";
+import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 
 interface IGetOptions {
     includeCompleted: boolean;
@@ -34,8 +35,6 @@ interface IGetTaskQuery {
     contextId?: number;
     isActive?: boolean;
 }
-
-const MAX_TITLE_LENGTH = 100;
 
 const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
@@ -74,8 +73,8 @@ export const isValidNewTaskRequest = (task: ICreateTaskRequest) => {
     const errors: ApiError[] = [];
 
     if (task.title) {
-        if (task.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        if (task.title.length > MAX_TASK_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_TASK_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         }
     } else {
         errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
@@ -108,8 +107,8 @@ export const isValidUpdateTaskRequest = (task: IUpdateTaskRequest) => {
     }
 
     if (task.title) {
-        if (task.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        if (task.title.length > MAX_TASK_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_TASK_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         } 
     }
 
