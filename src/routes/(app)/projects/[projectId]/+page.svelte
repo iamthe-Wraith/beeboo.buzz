@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Project } from "@prisma/client";
-	import type { PageData } from "./$types";
-	import Button from "$lib/components/Button.svelte";
+    import type { Project } from "@prisma/client";
+    import type { PageData } from "./$types";
+    import Button from "$lib/components/Button.svelte";
     import EditProject from "$lib/components/forms/EditProject.svelte";
-	import Link from "$lib/components/Link.svelte";
-	import Icon from "$lib/components/Icon.svelte";
-	import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
+    import Link from "$lib/components/Link.svelte";
+    import Icon from "$lib/components/Icon.svelte";
+    import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
 
     export let data: PageData;
     let project: Project;

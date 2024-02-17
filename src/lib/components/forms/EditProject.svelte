@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { ActionResult } from "@sveltejs/kit";
-	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
-	import type { Project } from "@prisma/client";
+    import type { ActionResult } from "@sveltejs/kit";
+    import { enhance } from "$app/forms";
+    import { goto } from "$app/navigation";
+    import type { Project } from "@prisma/client";
     import TextInput from "$lib/components/TextInput.svelte";
     import Button from "$lib/components/Button.svelte";
     import Textarea from "$lib/components/Textarea.svelte";
-	import type { IApiError } from "$lib/utils/api-error";
+    import type { IApiError } from "$lib/utils/api-error";
 
     type FormField = 'title' | 'description';
 
@@ -65,7 +65,6 @@
     }
 
     function onCancelClick() {
-        console.log('cancel click...');
         reset();
         onCancel();
     }
