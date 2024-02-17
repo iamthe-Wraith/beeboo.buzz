@@ -16,6 +16,9 @@ export class ProjectPageFixture {
     public edit: {
         title: Locator;
         description: Locator;
+        titleError: Locator;
+        descriptionError: Locator;
+        genError: Locator;
         submitButton: Locator;
         cancelButton: Locator;
     }
@@ -50,6 +53,9 @@ export class ProjectPageFixture {
         this.edit = {
             title: this.editProjectForm.getByTestId('edit-project-title'),
             description: this.editProjectForm.getByTestId('edit-project-description'),
+            titleError: this.editProjectForm.getByTestId('title-error'),
+            descriptionError: this.editProjectForm.getByTestId('description-error'),
+            genError: this.editProjectForm.getByTestId('edit-project-gen-error'),
             submitButton: this.editProjectForm.getByTestId('update-project-button'),
             cancelButton: this.editProjectForm.getByTestId('cancel-edit-project-button'),
         }

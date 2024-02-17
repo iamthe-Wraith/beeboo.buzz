@@ -2,7 +2,7 @@
     import type { Project } from "@prisma/client";
     import type { PageData } from "./$types";
     import Button from "$lib/components/Button.svelte";
-    import EditProject from "$lib/components/forms/EditProject.svelte";
+    import UpdateProject from "$lib/components/forms/UpdateProject.svelte";
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
@@ -26,7 +26,7 @@
 
 <div class="project-container">
     {#if editing}
-        <EditProject
+        <UpdateProject
             {project}
             onCancel={onCancelEdit}
             onSave={onSave}

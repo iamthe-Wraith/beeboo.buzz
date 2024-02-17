@@ -4,7 +4,7 @@ import { QuickActionsFixture } from "../fixtures/quick-actions";
 import { test, expect } from "../custom-test";
 import { NavFixture } from "../fixtures/nav";
 import { ProjectsPageFixture } from "../fixtures/projects-page";
-import { ProjectPageFixture } from "../fixtures/project-page.test";
+import { ProjectPageFixture } from "../fixtures/project-page";
 
 test.describe('project - delete', () => {
     test('clicking the delete button should display a confirmation modal', async ({ page, viewport, database }) => {

@@ -2,10 +2,18 @@ import { prisma } from "$lib/storage/db";
 import type { SessionUser } from "./session";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 
-interface ICreateProjectRequest {
+export interface ICreateProjectRequest {
     title: string;
     notes: string;
+}
+
+export interface IUpdateProjectRequest {
+    id: number;
+    title?: string;
+    description?: string;
+    completed?: boolean;
 }
 
 interface IGetOptions {
@@ -17,8 +25,6 @@ interface IGetProjectQuery {
     ownerId: number;
     completed?: boolean;
 }
-
-const MAX_TITLE_LENGTH = 100;
 
 const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
@@ -58,11 +64,46 @@ export const isValidNewProjectRequest = (project: ICreateProjectRequest) => {
     const errors: ApiError[] = [];
 
     if (project.title) {
-        if (project.title.length > MAX_TITLE_LENGTH) {
-            errors.push(new ApiError(`Title must be less than ${MAX_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        if (project.title.length > MAX_PROJECT_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
         }
     } else {
         errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
+    }
+
+    return errors;
+};
+
+export const isValidUpdateProjectRequest = (project: IUpdateProjectRequest) => {
+    const errors: ApiError[] = [];
+
+    if (
+        !project.title && 
+        !project.description && 
+        project.completed === undefined
+    ) {
+        return [new ApiError('No updatable data received.', HttpStatus.UNPROCESSABLE)];
+    }
+
+    if (!project.id) {
+        return [new ApiError('Project id is required.', HttpStatus.UNPROCESSABLE, 'id')];
+    }
+
+    if (project.title) {
+        if (project.title.length > MAX_PROJECT_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        } 
+    } else {
+        errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
+    }
+
+    // TODO: Add validation for description
+    // descriptions should have a max length to ensure the database can handle it.
+
+    if (project.completed === undefined) {
+        errors.push(new ApiError('Completed status is required.', HttpStatus.UNPROCESSABLE, 'completed'));
+    } else if(typeof project.completed !== 'boolean') {
+        errors.push(new ApiError('Invalid completed value received.', HttpStatus.UNPROCESSABLE, 'completed'));
     }
 
     return errors;
@@ -86,4 +127,28 @@ export const quickCreateProject = async (request: ICreateProjectRequest, user: S
 
         return project;
     });
+};
+
+export const updateProject = async (request: IUpdateProjectRequest, user: SessionUser) => {
+    const validationErrors = isValidUpdateProjectRequest(request);
+
+    if (validationErrors.length) throw validationErrors;
+
+    const { id, title, description, completed } = request;
+
+    const project = prisma.project.update({
+        where: {
+            id,
+            ownerId: user.id,
+        },
+        data: {
+            title,
+            completed,
+            notes: description,
+        },
+    });
+
+    if (!project) throw new ApiError(`Project not found.`, HttpStatus.NOT_FOUND, 'project', { project: id });
+
+    return project;
 };

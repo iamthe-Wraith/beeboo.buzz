@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
 import { HttpStatus } from '$lib/constants/error';
-import { deleteProject, getProjects, quickCreateProject } from '$lib/services/project';
+import { deleteProject, getProjects, quickCreateProject, updateProject } from '$lib/services/project';
 
 export const actions: Actions = {
     quickCreate: async ({ request, locals }) => {
@@ -41,10 +41,30 @@ export const actions: Actions = {
 
         redirect(303, '/projects');
     },
-    update: async ({ locals }) => {
+    update: async ({ request, locals }) => {
         if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
-        console.log('updating project');
+        const data = await request.formData();
+        const projectId = parseInt(data.get('projectId')! as string);
+        const title = data.get('title')! as string;
+        const description = data.get('description')! as string;
+        const completed = data.get('completed') === 'true';
+
+        const updateData = {
+            id: projectId, 
+            title, 
+            description, 
+            completed
+        };
+
+        try {
+            const project = await updateProject(updateData, locals.session.user);
+
+            return { project };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
     },
 };
 

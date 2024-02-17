@@ -1,12 +1,13 @@
 <script lang="ts">
     import type { ActionResult } from "@sveltejs/kit";
     import { enhance } from "$app/forms";
-    import { goto } from "$app/navigation";
     import type { Project } from "@prisma/client";
     import TextInput from "$lib/components/TextInput.svelte";
     import Button from "$lib/components/Button.svelte";
     import Textarea from "$lib/components/Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
+	import { onMount } from "svelte";
+	import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 
     type FormField = 'title' | 'description';
 
@@ -22,14 +23,19 @@
     let descriptionError: string;
     let genError: string;
     let disableUpdating = true;
+    let changesDetected = false;
 
-    $: if (project) {
-        if (!title) title = project.title;
-        if (!description) description = project.notes || '';
-    }
+    $: disableUpdating = !!titleError || !!descriptionError || !!genError || !changesDetected || processing;
+
+    onMount(() => {
+        if (project) {
+            if (!title) title = project.title;
+            if (!description) description = project.notes || '';
+        }
+    })
 
     function detectChanges() {
-        let changesDetected = false;
+        changesDetected = false;
 
         if (
             project &&
@@ -40,8 +46,6 @@
         ) {
             changesDetected = true;
         }
-
-        disableUpdating = !changesDetected;
     }
 
     function onBlur(field: FormField) {
@@ -51,6 +55,8 @@
                     title = title.trim();
                     if (!title) {
                         titleError = 'Title is required.';
+                    } else if (title.length > MAX_PROJECT_TITLE_LENGTH) {
+                        titleError = `Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`;
                     } else {
                         titleError = '';
                     }
@@ -73,10 +79,6 @@
         processing = true;
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
-            if (result.type === 'redirect') {
-                goto(result.location);
-            }
-            
             if (result.type === 'failure') {
                 if (result.data?.errors) {
                     result.data.errors.map((e: IApiError) => {
@@ -159,6 +161,7 @@
         <div class="row-reverse">
             <Button
                 {processing}
+                type="submit"
                 data-testid="update-project-button"
                 disabled={disableUpdating}
             >
