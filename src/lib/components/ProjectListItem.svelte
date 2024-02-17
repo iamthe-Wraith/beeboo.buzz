@@ -41,20 +41,23 @@
                 <div class="project-tags"></div>
             {/if}
         </div>
-        <div class="project-icons">
-            {#if daysUntilDue < 0}
-                <IconWithTooltip
-                    icon="alert-circle" 
-                    text="Past Due"
-                    testid="past-due-icon"
-                />
-            {/if}
+        <div class="project-icons-container">
+            <div class="project-icons">
+                {#if daysUntilDue < 0}
+                    <IconWithTooltip
+                        icon="alert-circle" 
+                        text="Past Due"
+                        testid="past-due-icon"
+                    />
+                {/if}
+            </div>
         </div>
     </a>
 </div>
 
 <style>
     .project-container {
+        container-type: inline-size;
         display: flex;
         justify-content: space-between;
         align-items: stretch;
@@ -163,6 +166,7 @@
         & .title {
             font-size: 1.1rem;
             font-weight: bold;
+            text-align: left;
         }
 
         & .due-date {
@@ -181,6 +185,15 @@
         }
     }
 
+    .project-icons-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        flex-grow: 0;
+        flex-shrink: 0;
+        gap: 0.5rem;
+    }
+
     .project-icons {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -188,5 +201,23 @@
         direction: rtl;
         gap: 0.5rem;
         width: 4rem;
+    }
+
+    @container (width < 475px) {
+        .project {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.5rem;
+        }
+
+        .project-icons {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
+            width: 100%;
+            direction: unset;
+        }
     }
 </style>
