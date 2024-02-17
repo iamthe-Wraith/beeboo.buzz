@@ -41,6 +41,11 @@ export const actions: Actions = {
 
         redirect(303, '/projects');
     },
+    update: async ({ locals }) => {
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        console.log('updating project');
+    },
 };
 
 export const load: PageServerLoad = async ({ locals }) => {
