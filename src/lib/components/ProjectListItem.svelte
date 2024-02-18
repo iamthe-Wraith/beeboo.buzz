@@ -3,6 +3,7 @@
 	import IconWithTooltip from "./IconWithTooltip.svelte";
 	import dayjs from "dayjs";
 	import CompleteProject from "./forms/CompleteProject.svelte";
+	import Icon from "./Icon.svelte";
 
     export let project: Project;
 
@@ -10,9 +11,13 @@
     const hasTags = false;
 </script>
 
-<div class="project-container {daysUntilDue < 0 ? 'past-due' : ''}">
+<div class="project-container {(daysUntilDue < 0 && !project.completed) ? 'past-due' : ''} {project.completed ? 'completed' : ''}">
     <div class="complete-project-container {daysUntilDue < 0 ? 'past-due' : ''}">
-        <CompleteProject {project} />
+        <CompleteProject {project}>
+            <button type="submit" class={project.completed ? 'completed' : ''}>
+                <Icon name="checkmark" data-testid="project-complete-button-icon"/>
+            </button>
+        </CompleteProject>
     </div>
     <a
         class="project {daysUntilDue < 0 ? 'past-due' : ''}"
@@ -20,10 +25,10 @@
     >
         <div class="project-main">
             <div>
-                <p class="title">{project.title}</p>
+                <p class={`title ${project.completed ? 'completed' : ''}`}>{project.title}</p>
             </div>
 
-            {#if project.dueDate}
+            {#if project.dueDate && !project.completed}
                 <div class="due-date">
                     {#if daysUntilDue < 0}
                         <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
@@ -63,6 +68,10 @@
         align-items: stretch;
         border-radius: 0.25rem;
         transition: 0.25s ease-in-out transform, 0.25s ease-in-out border;
+
+        &.completed {
+            opacity: 0.5;
+        }
 
         &:has(.project:hover),
         &:has(.project:focus-visible) {
@@ -116,7 +125,8 @@
                 opacity: 0;
             }
 
-            &:hover {
+            &:hover,
+            &.completed {
                 cursor: pointer;
 
                 & svg {
@@ -167,6 +177,10 @@
             font-size: 1.1rem;
             font-weight: bold;
             text-align: left;
+        }
+
+        & .completed {
+            text-decoration: line-through;
         }
 
         & .due-date {

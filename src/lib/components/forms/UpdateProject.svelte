@@ -126,7 +126,7 @@
 >
     <h2>Edit Project</h2>
 
-    <input type="hidden" name="projectId" value={project.id} />
+    <input type="hidden" name="id" value={project.id} />
 
     <TextInput
         required
