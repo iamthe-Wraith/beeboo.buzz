@@ -1,6 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getTasksByContext } from "$lib/services/task";
+import { TaskService } from "$lib/services/task";
 import { ContextService } from "$lib/services/context";
 import { ContextRole, type Context } from "@prisma/client";
 import { HttpStatus } from "$lib/constants/error";
@@ -13,7 +13,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     if (!inbox) throw error(HttpStatus.NOT_FOUND, 'Inbox not found.');
 
-    const tasks = await getTasksByContext(inbox, locals.session.user);
+    const taskService = new TaskService({ user: locals.session.user });
+    const tasks = await taskService.getTasksByContext(inbox);
 
     return { context: inbox, tasks };
 };

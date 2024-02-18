@@ -27,7 +27,7 @@ export class Session {
         if (token) this._token = token;
     }
 
-    /* GETTERS */
+    //#region Getters
     public get metadata(): ISessionMetadata | null {
         return this._metadata;
     }
@@ -43,8 +43,9 @@ export class Session {
     public get user(): SessionUser | null {
         return this._user;
     }
+    //#endregion
 
-    /* PUBLIC METHODS */
+    //#region Public Methods
     public delete = async (cookies: Cookies): Promise<void> => {
         cookies.delete('session', { path: '/' });
 
@@ -110,8 +111,9 @@ export class Session {
             }
         );
     }
+    //#endregion
 
-    /* PRIVATE METHODS */
+    //#region Private Methods
     private cacheUser = async (): Promise<void> => {
         try {
             if (!this.user) return;
@@ -135,4 +137,5 @@ export class Session {
             Logger.error('Failed to cache user', err);
         }
     }
+    //#endregion
 }

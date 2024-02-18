@@ -87,21 +87,21 @@ export class ProjectService extends BaseService {
 
     //#region Public Methods
     public deleteProject = async (projectId: number) => {
-        return this.db.project.delete({
+        return this.transaction(async (tx) => tx.project.delete({
             where: {
                 id: projectId,
                 ownerId: this.user.id,
             },
-        });
+        }));
     }
 
     public getProjectById = async (id: number) => {
-        return this.db.project.findFirst({
+        return this.transaction(async (tx) => tx.project.findFirst({
             where: {
                 id,
                 ownerId: this.user.id,
             },
-        });
+        }));
     }
 
     public getProjects = async (options: IGetOptions = defaultGetOptions) => {
@@ -111,9 +111,9 @@ export class ProjectService extends BaseService {
 
         if (!options.includeCompleted) query.completed = false;
 
-        return this.db.project.findMany({
+        return this.transaction(async (tx) => tx.project.findMany({
             where: { ...query },
-        });
+        }));
     }
 
     public quickCreateProject = async (request: ICreateProjectRequest) => {
@@ -123,13 +123,13 @@ export class ProjectService extends BaseService {
     
         const { title, notes } = request;
 
-        return this.db.project.create({
+        return this.transaction(async (tx) => tx.project.create({
             data: {
                 title,
                 notes,
                 ownerId: this.user.id,
             },
-        });
+        }))
     };
 
     public updateProject = async (request: IUpdateProjectRequest) => {
@@ -139,7 +139,7 @@ export class ProjectService extends BaseService {
     
         const { id, title, description, completed } = request;
     
-        const project = this.db.project.update({
+        const project = await this.transaction(async (tx) => tx.project.update({
             where: {
                 id,
                 ownerId: this.user.id,
@@ -149,7 +149,7 @@ export class ProjectService extends BaseService {
                 completed,
                 notes: description,
             },
-        });
+        }))
     
         if (!project) throw new ApiError(`Project not found.`, HttpStatus.NOT_FOUND, 'project', { project: id });
     

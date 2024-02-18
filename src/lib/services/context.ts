@@ -74,28 +74,28 @@ export class ContextService extends BaseService {
     }
 
     public getContextById = async (id: number) => {
-        return await this.db.context.findFirst({
+        return this.transaction(async (tx) => tx.context.findFirst({
             where: {
                 ownerId: this.user.id,
                 id,
             },
-        });
+        }));
     }
 
     public getContextByRole = async (role: ContextRole) => {
-        return await this.db.context.findFirst({
+        return this.transaction(async (tx) => tx.context.findFirst({
             where: {
                 ownerId: this.user.id,
                 role,
             },
-        });
+        }));
     };
 
     public getContexts = async () => {
-        return await this.db.context.findMany({
+        return this.transaction(async (tx) => tx.context.findMany({
             where: { ownerId: this.user.id },
             orderBy: { order: 'asc' },
-        });
+        }));
     };
     //#endregion
 
@@ -111,24 +111,26 @@ export class ContextService extends BaseService {
     
         if (errors.length) throw errors;
     
-        const currentContexts = await this.db.context.findMany({
-            where: { 
-                ownerId: this.user.id 
-            } 
-        });
+        return this.transaction(async (tx) => {
+            const currentContexts = await tx.context.findMany({
+                where: { 
+                    ownerId: this.user.id 
+                } 
+            });
+
+            let order = currentContexts.length ? Math.max(...currentContexts.map(c => c.order)) : 1.0;
     
-        let order = currentContexts.length ? Math.max(...currentContexts.map(c => c.order)) : 1.0;
-    
-        return this.db.context.createMany({
-            data: contexts.map(c => {
-                order += 100.0;
-    
-                return {
-                    ...c, 
-                    order,
-                    ownerId: this.user.id
-                }
-            }),
+            return tx.context.createMany({
+                data: contexts.map(c => {
+                    order += 100.0;
+        
+                    return {
+                        ...c, 
+                        order,
+                        ownerId: this.user.id
+                    }
+                }),
+            });
         });
     }
     //#endregion

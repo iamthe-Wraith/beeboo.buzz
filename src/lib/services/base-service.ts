@@ -16,7 +16,8 @@ export class BaseService {
         this.tx = tx;
     }
 
-    protected get db() {
-        return this.tx ?? prisma;
+    protected transaction<T>(cb: (tx: PrismaTransaction) => Promise<T>) {
+        if (this.tx) return cb(this.tx);
+        return prisma.$transaction(cb);
     }
 }

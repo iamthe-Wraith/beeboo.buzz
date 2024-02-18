@@ -1,6 +1,6 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { getTasksByContext } from "$lib/services/task";
+import { TaskService } from "$lib/services/task";
 import { ContextService } from "$lib/services/context";
 import { ContextRole, type Context } from "@prisma/client";
 import { HttpStatus } from "$lib/constants/error";
@@ -13,7 +13,8 @@ export const load: PageServerLoad = async ({ locals }) => {
 
     if (!waitingFor) throw error(HttpStatus.NOT_FOUND, 'Waiting context not found.');
 
-    const tasks = await getTasksByContext(waitingFor, locals.session.user);
+    const taskService = new TaskService({ user: locals.session.user });
+    const tasks = await taskService.getTasksByContext(waitingFor);
 
     return { context: waitingFor, tasks };
 };
