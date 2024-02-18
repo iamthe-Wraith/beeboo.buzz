@@ -19,7 +19,7 @@ export class TaskFixture {
 
     public editable: {
         title: Locator;
-        notes: Locator;
+        description: Locator;
         context: Locator;
         contextTrigger: Locator;
         contextValue: Locator;
@@ -54,7 +54,7 @@ export class TaskFixture {
 
         this.editable = {
             title: this.form.getByTestId('task-title'),
-            notes: this.form.getByTestId('task-notes'),
+            description: this.form.getByTestId('task-description'),
             context: contextContainer,
             contextTrigger: contextContainer.locator('#context'),
             contextValue: contextContainer.locator('[name="contextId"]'),

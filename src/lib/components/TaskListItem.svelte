@@ -52,14 +52,6 @@
                             testid="past-due-icon"
                         />
                     {/if}
-        
-                    {#if task.notes}
-                        <IconWithTooltip
-                            icon="note" 
-                            text="Has Notes"
-                            testid="notes-icon"
-                        />
-                    {/if}
                 </div>
             </div>
         </button>

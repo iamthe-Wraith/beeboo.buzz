@@ -13,7 +13,7 @@ interface IGetOptions {
 
 interface ICreateTaskRequest {
     title: string;
-    notes: string;
+    description?: string;
     contextId?: number;
     isActive?: boolean;
 }
@@ -21,7 +21,7 @@ interface ICreateTaskRequest {
 interface IUpdateTaskRequest {
     id: number;
     title?: string;
-    notes?: string;
+    description?: string;
     completed?: boolean;
     contextId?: number;
     isActive?: boolean;
@@ -76,7 +76,7 @@ export class TaskService extends Service {
     
         if (
             !task.title && 
-            !task.notes && 
+            !task.description && 
             !task.contextId && 
             task.completed === undefined
         ) {
@@ -142,7 +142,7 @@ export class TaskService extends Service {
     
         if (validationErrors.length) throw validationErrors;
     
-        const { title, notes, contextId } = request;
+        const { title, description, contextId } = request;
 
         return this.transaction(async (tx) => {
             const contextService = new ContextService({ user: this.user, tx });
@@ -160,7 +160,7 @@ export class TaskService extends Service {
             const task = await tx.task.create({
                 data: {
                     title,
-                    notes,
+                    description,
                     ownerId: this.user.id,
                     contextId: context.id,
                 },
@@ -175,7 +175,7 @@ export class TaskService extends Service {
     
         if (validationErrors.length) throw validationErrors;
     
-        const { id, title, notes, contextId, completed, isActive } = request;
+        const { id, title, description, contextId, completed, isActive } = request;
     
         return this.transaction(async (tx) => {
             let context: Context | null = null;
@@ -188,14 +188,14 @@ export class TaskService extends Service {
     
             const data: {
                 title?: string;
-                notes?: string;
+                description?: string;
                 contextId?: number;
                 completed?: boolean;
                 isActive?: boolean;
             } = {};
     
             if (title) data.title = title;
-            if (notes) data.notes = notes;
+            if (description) data.description = description;
             if (context) data.contextId = context.id;
             if (completed !== undefined) data.completed = !!completed;
             if (isActive !== undefined) data.isActive = !!isActive;

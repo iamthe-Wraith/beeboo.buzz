@@ -82,7 +82,7 @@ test.describe('tasks - update', () => {
         await expect(task.form).toBeVisible();
 
         await expect(task.editable.title).toHaveValue(taskData.title);
-        await expect(task.editable.notes).toHaveValue('');
+        await expect(task.editable.description).toHaveValue('');
 
         await expect(JSON.parse(await task.editable.contextValue.inputValue()).label).toEqual('Inbox');
 
@@ -138,12 +138,12 @@ test.describe('tasks - update', () => {
         await signup.cleanup(email, database);
     });
 
-    test('should be able to edit the notes', async ({ page, viewport, database }) => {
+    test('should be able to edit the description', async ({ page, viewport, database }) => {
         const email = getEmail();
         const password = 'Password123!';
 
         const taskData = { title: 'Test Task 1' };
-        const updatedTaskData = { title: 'Updated Task 1', notes: 'These are some updated notes.' };
+        const updatedTaskData = { title: 'Updated Task 1', description: 'This is an updated description.' };
 
         const signup = new SignUpFixture(page);
         const nav = new NavFixture(page, viewport);
@@ -175,8 +175,8 @@ test.describe('tasks - update', () => {
         await expect(task.modal).toBeVisible();
         await expect(task.form).toBeVisible();
 
-        await task.editable.notes.clear();
-        await task.editable.notes.fill(updatedTaskData.notes);
+        await task.editable.description.clear();
+        await task.editable.description.fill(updatedTaskData.description);
 
         await task.updateButton.click();
 
@@ -187,7 +187,7 @@ test.describe('tasks - update', () => {
 
         await expect(task.modal).toBeVisible();
         await expect(task.form).toBeVisible();
-        await expect(task.editable.notes).toHaveValue(updatedTaskData.notes);
+        await expect(task.editable.description).toHaveValue(updatedTaskData.description);
 
         await signup.cleanup(email, database);
     });
