@@ -77,7 +77,7 @@
                         <Button
                             type="submit" 
                             kind="transparent"
-                            data-testid="project-complete-button"
+                            data-testid="complete-project-button"
                         >
                             {project.completed ? 'Reopen' : 'Complete'}
                         </Button>
@@ -88,7 +88,7 @@
             </div>
 
             <div class="meta-container">
-                <Status status={getStatus()} />
+                <Status status={getStatus()} data-testid="project-status" />
             </div>
 
             <h1 data-testid="title">{project.title}</h1>

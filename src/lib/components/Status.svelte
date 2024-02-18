@@ -15,12 +15,15 @@
         case 'completed':
             text = 'Completed';
             break;
+        case 'past-due':
+            text = 'Past Due';
+            break;
     }
 </script>
 
-<div class="status {status}">
+<div class="status {status}" {...$$restProps}>
     <div class="indicator" />
-    <p>{status}</p>
+    <p>{text}</p>
 </div>
 
 <style>

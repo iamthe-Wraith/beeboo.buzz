@@ -14,7 +14,7 @@
 <div class="project-container {(daysUntilDue < 0 && !project.completed) ? 'past-due' : ''} {project.completed ? 'completed' : ''}">
     <div class="complete-project-container {daysUntilDue < 0 ? 'past-due' : ''}">
         <CompleteProject {project}>
-            <button type="submit" class={project.completed ? 'completed' : ''}>
+            <button type="submit" class={project.completed ? 'completed' : ''} data-testid="project-complete-button">
                 <Icon name="checkmark" data-testid="project-complete-button-icon"/>
             </button>
         </CompleteProject>
