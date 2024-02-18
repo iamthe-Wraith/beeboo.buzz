@@ -2,7 +2,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
-import { quickCreateTask, updateTask } from '$lib/services/task';
+import { TaskService } from '$lib/services/task';
 import { HttpStatus } from '$lib/constants/error';
 
 export const actions: Actions = {
@@ -23,7 +23,8 @@ export const actions: Actions = {
         const notes = data.get('notes')! as string;
 
         try {
-            const task = await quickCreateTask({ title, notes }, locals.session.user);
+            const taskService = new TaskService({ user: locals.session.user });
+            const task = await taskService.quickCreateTask({ title, notes });
 
             return { task };
         } catch (err) {
@@ -47,13 +48,14 @@ export const actions: Actions = {
         }
 
         try {
-            const task = await updateTask({
+            const taskService = new TaskService({ user: locals.session.user });
+            const task = await taskService.updateTask({
                 id, 
                 title, 
                 notes, 
                 completed,
                 contextId
-            }, locals.session.user);
+            });
             return { task };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });

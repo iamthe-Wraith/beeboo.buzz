@@ -1,9 +1,7 @@
-import { prisma } from "$lib/storage/db";
-import { ContextRole, type User } from "@prisma/client";
-import type { PrismaTransaction } from "../../types/prisma";
+import { ContextRole } from "@prisma/client";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
-import type { SessionUser } from "./session";
+import { Service, type IServiceProps } from "./service";
 
 export interface IContextRequest {
     name: string;
@@ -11,8 +9,8 @@ export interface IContextRequest {
     role: ContextRole;
 }
 
-export const createDefaultUserContexts = async (user: User, ptx?: PrismaTransaction) => {
-    const defaultContexts: IContextRequest[] = [
+export class ContextService extends Service {
+    private defaultContexts: IContextRequest[] = [
         {
             name: 'Inbox',
             description: 'Everything you capture goes here.',
@@ -52,78 +50,88 @@ export const createDefaultUserContexts = async (user: User, ptx?: PrismaTransact
         },
     ];
 
-    if (ptx) return await createManyContexts(defaultContexts, user, ptx);
-
-    return await (ptx || prisma.$transaction)(async (tx) => {
-        return await createManyContexts(defaultContexts, user, tx);
-    });
-};
-
-export const createManyContexts = async (contexts: IContextRequest[], user: User, ptx: PrismaTransaction) => {
-    const errors: ApiError[] = [];
-
-    contexts.forEach((c) => {
-        if (!isValidContextRequest(c)) {
-            errors.push(new ApiError('Invalid context.', HttpStatus.UNPROCESSABLE, undefined, { context: c }));
-        }
-    });
-
-    if (errors.length) throw errors;
-
-    const currentContexts = await ptx.context.findMany({
-        where: { 
-            ownerId: user.id 
-        } 
-    });
-
-    let order = currentContexts.length ? Math.max(...currentContexts.map(c => c.order)) : 1.0;
-
-    return ptx.context.createMany({
-        data: contexts.map(c => {
-            order += 100.0;
-
-            return {
-                ...c, 
-                order,
-                ownerId: user.id
-            }
-        }),
-    });
-};
-
-export const getContextById = async (id: number, user: SessionUser, tx?: PrismaTransaction) => {
-    return await (tx || prisma).context.findFirst({
-        where: {
-            ownerId: user.id,
-            id,
-        },
-    });
-};
-
-export const getContextByRole = async (role: ContextRole, user: SessionUser, tx?: PrismaTransaction) => {
-    return await (tx || prisma).context.findFirst({
-        where: {
-            ownerId: user.id,
-            role,
-        },
-    });
-};
-
-export const getContexts = async (user: SessionUser, tx?: PrismaTransaction) => {
-    return await (tx || prisma).context.findMany({
-        where: { ownerId: user.id },
-        orderBy: { order: 'asc' },
-    });
-};
-
-export const isValidContextRequest = (context: IContextRequest) => {
-    if (!context.name) return false;
-    
-    if (context.role) {
-        if (!Object.values(ContextRole).includes(context.role)) return false;
-    } else {
-        return false;
+    constructor(props: IServiceProps) {
+        super(props);
     }
 
-    return true;
-};
+    //#region Static Methods
+    public static isValidContextRequest = (context: IContextRequest) => {
+        if (!context.name) return false;
+        
+        if (context.role) {
+            if (!Object.values(ContextRole).includes(context.role)) return false;
+        } else {
+            return false;
+        }
+    
+        return true;
+    };
+    //#endregion
+
+    //#region Public Methods
+    public createDefaultUserContexts = async () => {
+        return await this.createManyContexts(this.defaultContexts);
+    }
+
+    public getContextById = async (id: number) => {
+        return this.transaction(async (tx) => tx.context.findFirst({
+            where: {
+                ownerId: this.user.id,
+                id,
+            },
+        }));
+    }
+
+    public getContextByRole = async (role: ContextRole) => {
+        return this.transaction(async (tx) => tx.context.findFirst({
+            where: {
+                ownerId: this.user.id,
+                role,
+            },
+        }));
+    };
+
+    public getContexts = async () => {
+        return this.transaction(async (tx) => tx.context.findMany({
+            where: { ownerId: this.user.id },
+            orderBy: { order: 'asc' },
+        }));
+    };
+    //#endregion
+
+    //#region Private Methods
+    private createManyContexts = async (contexts: IContextRequest[]) => {
+        const errors: ApiError[] = [];
+
+        contexts.forEach((c) => {
+            if (!ContextService.isValidContextRequest(c)) {
+                errors.push(new ApiError('Invalid context.', HttpStatus.UNPROCESSABLE, undefined, { context: c }));
+            }
+        });
+    
+        if (errors.length) throw errors;
+    
+        return this.transaction(async (tx) => {
+            const currentContexts = await tx.context.findMany({
+                where: { 
+                    ownerId: this.user.id 
+                } 
+            });
+
+            let order = currentContexts.length ? Math.max(...currentContexts.map(c => c.order)) : 1.0;
+    
+            return tx.context.createMany({
+                data: contexts.map(c => {
+                    order += 100.0;
+        
+                    return {
+                        ...c, 
+                        order,
+                        ownerId: this.user.id
+                    }
+                }),
+            });
+        });
+    }
+    //#endregion
+}
