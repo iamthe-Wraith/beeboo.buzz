@@ -1,14 +1,15 @@
 import { error, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { getTasksByContext } from "$lib/services/task";
-import { getContextByRole } from "$lib/services/context";
+import { ContextService } from "$lib/services/context";
 import { ContextRole, type Context } from "@prisma/client";
 import { HttpStatus } from "$lib/constants/error";
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.session.user) redirect(303, '/?signin=true');
 
-    const inbox: Context | null = await getContextByRole(ContextRole.INBOX, locals.session.user)
+    const contextService = new ContextService({ user: locals.session.user });
+    const inbox: Context | null = await contextService.getContextByRole(ContextRole.INBOX);
 
     if (!inbox) throw error(HttpStatus.NOT_FOUND, 'Inbox not found.');
 

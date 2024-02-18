@@ -5,10 +5,10 @@ import { generatePasswordHash, isValidPassword } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
-import { createDefaultUserContexts } from "./context";
 import { Logger } from "./logger";
 import type { Cookies } from "@sveltejs/kit";
 import { Session } from "./session";
+import { ContextService } from "./context";
 
 export interface ISigninRequest {
     emailOrUsername: string;
@@ -124,8 +124,10 @@ export class AuthService {
                         accountType: $Enums.AccountType.FREE,
                     },
                 });
+
+                const contextService = new ContextService({ user: this.user, tx });
     
-                await createDefaultUserContexts(this.user, tx);
+                await contextService.createDefaultUserContexts();
                 // TODO: create user settings
                 // TODO: send email verification
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { isValidContextRequest, type IContextRequest } from './context';
+import { ContextService, type IContextRequest } from './context';
 import { ContextRole } from '@prisma/client';
 
 describe('services - context', () => {
@@ -11,7 +11,7 @@ describe('services - context', () => {
                 role: ContextRole.NONE,
             };
 
-            expect(isValidContextRequest(context)).toBe(true);
+            expect(ContextService.isValidContextRequest(context)).toBe(true);
         });
 
         test('should return false if no name is provided', () => {
@@ -20,7 +20,7 @@ describe('services - context', () => {
                 role: ContextRole.NONE,
             } as unknown as IContextRequest;
 
-            expect(isValidContextRequest(context)).toBe(false);
+            expect(ContextService.isValidContextRequest(context)).toBe(false);
         });
 
         test('should return false if an no role is provided', () => {
@@ -29,7 +29,7 @@ describe('services - context', () => {
                 description: 'This is a test context.',
             } as unknown as IContextRequest;
 
-            expect(isValidContextRequest(context)).toBe(false);
+            expect(ContextService.isValidContextRequest(context)).toBe(false);
         });
 
         test('should return false if an invalid role is provided', () => {
@@ -39,7 +39,7 @@ describe('services - context', () => {
                 role: 'INVALID',
             } as unknown as IContextRequest;
 
-            expect(isValidContextRequest(context)).toBe(false);
+            expect(ContextService.isValidContextRequest(context)).toBe(false);
         });
     });
 });

@@ -1,6 +1,6 @@
 import { prisma } from "$lib/storage/db";
 import { ContextRole, type Context } from "@prisma/client";
-import { getContextById, getContexts } from "./context";
+import { ContextService } from "./context";
 import type { SessionUser } from "./session";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
@@ -138,7 +138,8 @@ export const quickCreateTask = async (request: ICreateTaskRequest, user: Session
     const { title, notes, contextId } = request;
 
     return prisma.$transaction(async (tx) => {
-        const userContexts = await getContexts(user, tx);
+        const contextService = new ContextService({ user, tx });
+        const userContexts = await contextService.getContexts();
         let context: Context | undefined;
 
         if (contextId) {
@@ -173,7 +174,8 @@ export const updateTask = async (request: IUpdateTaskRequest, user: SessionUser)
         let context: Context | null = null;
 
         if (contextId) {
-            context = await getContextById(contextId, user, tx);
+            const contextService = new ContextService({ user, tx });
+            context = await contextService.getContextById(contextId);
             if (!context) throw new ApiError(`Context not found.`, HttpStatus.NOT_FOUND, 'context', { context: contextId });
         }
 
