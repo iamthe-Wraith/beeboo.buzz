@@ -45,13 +45,13 @@ export const actions: Actions = {
         if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 
         const data = await request.formData();
-        const projectId = parseInt(data.get('projectId')! as string);
+        const id = parseInt(data.get('id')! as string);
         const title = data.get('title')! as string;
         const description = data.get('description')! as string;
         const completed = data.get('completed') === 'true';
 
         const updateData = {
-            id: projectId, 
+            id, 
             title, 
             description, 
             completed

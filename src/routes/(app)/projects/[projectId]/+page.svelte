@@ -6,14 +6,32 @@
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
+    import CompleteProject from "$lib/components/forms/CompleteProject.svelte";
+    import Status from "$lib/components/Status.svelte";
+    import dayjs from "dayjs";
 
     export let data: PageData;
+    
     let project: Project;
-
-
     let editing = false;
 
     $: if (data?.project) project = data.project;
+
+    function getStatus() {
+        if (project.completed) {
+            return 'completed';
+        }
+
+        if (project.dueDate) {
+            const daysUntilDue = dayjs(project.dueDate).diff(dayjs(), "day");
+
+            if (daysUntilDue < 0) {
+                return 'past-due';
+            }
+        }
+
+        return 'in-progress';
+    }
 
     function onCancelEdit() {
         editing = false;
@@ -54,16 +72,22 @@
                         Edit
                     </Button>
 
-                    <Button
-                        data-testid="complete-project-button"
-                        kind="transparent"
-                        on:click={() => console.log('Completing project...')}
-                    >
-                        Complete
-                    </Button>
+                    <CompleteProject {project}>
+                        <Button
+                            type="submit" 
+                            kind="transparent"
+                            data-testid="complete-project-button"
+                        >
+                            {project.completed ? 'Reopen' : 'Complete'}
+                        </Button>
+                    </CompleteProject>
 
                     <DeleteProject projectId={project.id} />
                 </div>
+            </div>
+
+            <div class="meta-container">
+                <Status status={getStatus()} data-testid="project-status" />
             </div>
 
             <h1 data-testid="title">{project.title}</h1>
@@ -143,6 +167,7 @@
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
+        margin-bottom: 1rem;
         padding-top: 0.25rem;
 
         & > div {
@@ -155,6 +180,17 @@
                 flex-direction: row-reverse;
             }
         }
+    }
+
+    .meta-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding: 1rem 0.5rem;
+        border-top: 1px solid var(--dark-400);
+        border-bottom: 1px solid var(--dark-400);
     }
 
     h1,

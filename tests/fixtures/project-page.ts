@@ -6,11 +6,12 @@ export class ProjectPageFixture {
     public projectNotesContainer: Locator;
 
     public projectInfo: {
-        title: Locator;
-        description: Locator;
         backToProjectsLink: Locator;
         editButton: Locator;
         completeButton: Locator;
+        status: Locator;
+        title: Locator;
+        description: Locator;
     }
 
     public edit: {
@@ -43,11 +44,12 @@ export class ProjectPageFixture {
         this.projectNotesContainer = this.page.getByTestId('project-notes-container');
 
         this.projectInfo = {
-            title: this.projectInfoContainer.getByTestId('title'),
-            description: this.projectInfoContainer.getByTestId('description'),
             backToProjectsLink: this.projectInfoContainer.getByTestId('back-to-projects-link'),
             editButton: this.projectInfoContainer.getByTestId('edit-project-button'),
             completeButton: this.projectInfoContainer.getByTestId('complete-project-button'),
+            status: this.projectInfoContainer.getByTestId('project-status'),
+            title: this.projectInfoContainer.getByTestId('title'),
+            description: this.projectInfoContainer.getByTestId('description'),
         }
 
         this.edit = {
