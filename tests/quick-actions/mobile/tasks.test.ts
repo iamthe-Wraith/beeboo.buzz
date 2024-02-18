@@ -26,7 +26,7 @@ test.describe('mobile quick actions - new task', () => {
         await expect(quickActions.task.form).toBeVisible();
 
         await expect(quickActions.task.title).toBeVisible();
-        await expect(quickActions.task.notes).toBeVisible();
+        await expect(quickActions.task.description).toBeVisible();
         await expect(quickActions.task.cancelButton).toBeVisible();
         await expect(quickActions.task.createButton).toBeVisible();
         await expect(quickActions.task.createButton).toBeDisabled();
@@ -113,7 +113,7 @@ test.describe('mobile quick actions - new task', () => {
             await signup.cleanup(email, database);
         });
 
-        test('should create new task when title and notes are provided', async ({ page, viewport, database }) => {
+        test('should create new task when title and description are provided', async ({ page, viewport, database }) => {
             if (viewport && viewport.width >= 768) test.skip();
     
             const email = getEmail();
@@ -132,7 +132,7 @@ test.describe('mobile quick actions - new task', () => {
             await expect(quickActions.task.modal).toBeVisible();
 
             await quickActions.task.title.fill('Test Task');
-            await quickActions.task.notes.fill('Test notes');
+            await quickActions.task.description.fill('Test description');
 
             await quickActions.task.createButton.click();
 

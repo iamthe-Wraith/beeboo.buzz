@@ -13,7 +13,7 @@
 	import Dropdown from "../Dropdown.svelte";
 	import { ContextRole } from "../../../types/contexts";
 	
-    type FormField = 'title' | 'notes' | 'dueDate';
+    type FormField = 'title' | 'description' | 'dueDate';
 
     export let onCancel: () => void = () => {};
     export let task: Task | null = null;
@@ -22,17 +22,17 @@
 
     let processing = false;
     let title = task?.title || '';
-    let notes = task?.notes || '';
+    let description = task?.description || '';
     let contextValue = context ? { label: context.name, value: context.id } : null;
     let contextItems = $contexts ? $contexts.map(c => ({ label: c.name, value: c.id })) : [];
     let disabled = true;
 
     let titleError = '';
-    let notesError = '';
+    let descriptionError = '';
     let contextError = '';
     let genError = '';
 
-    $: disabled = title === '' || !!titleError || !!notesError || !!contextError || !!processing;
+    $: disabled = title === '' || !!titleError || !!descriptionError || !!contextError || !!processing;
     
     onMount(() => {
         return reset;
@@ -68,8 +68,8 @@
                             case 'title':
                                 titleError = e.message;
                                 break;
-                            case 'notes':
-                                notesError = e.message;
+                            case 'description':
+                                descriptionError = e.message;
                                 break;
                             case 'contextId':
                                 contextError = e.message;
@@ -104,8 +104,8 @@
                         titleError = '';
                     }
                     break;
-                case 'notes':
-                    notes = notes.trim();
+                case 'description':
+                    description = description.trim();
                     break;
             }
         }
@@ -113,7 +113,7 @@
 
     function reset() {
         title = task?.title || '';
-        notes = task?.notes || '';
+        description = task?.description || '';
     }
 </script>
 
@@ -142,13 +142,13 @@
 
     <div class="row">
         <Textarea
-            id="notes"
-            data-testid="task-notes"
-            label="Notes"
-            placeholder="Task Notes"
-            error={notesError}
-            bind:value={notes}
-            on:blur={onBlur('notes')}
+            id="description"
+            data-testid="task-description"
+            label="Description"
+            placeholder="Task Description"
+            error={descriptionError}
+            bind:value={description}
+            on:blur={onBlur('description')}
         />
     </div>
 

@@ -7,7 +7,7 @@ interface IQuickActions {
     newTask: Locator;
 }
 
-interface IQuickActionElements {
+interface ILegacyQuickActionElements {
     modal: Locator;
     modalClose: Locator;
     form: Locator;
@@ -15,6 +15,19 @@ interface IQuickActionElements {
     notes: Locator;
     titleError: Locator;
     notesError: Locator;
+    genError: Locator;
+    cancelButton: Locator;
+    createButton: Locator;
+}
+
+interface IQuickActionElements {
+    modal: Locator;
+    modalClose: Locator;
+    form: Locator;
+    title: Locator;
+    description: Locator;
+    titleError: Locator;
+    descriptionError: Locator;
     genError: Locator;
     cancelButton: Locator;
     createButton: Locator;
@@ -29,7 +42,7 @@ export class QuickActionsFixture {
     public mobileQuickActions: IQuickActions;
 
     public task: IQuickActionElements;
-    public project: IQuickActionElements;
+    public project: ILegacyQuickActionElements;
 
     constructor(public readonly page: Page, public readonly viewport?: ViewportSize | null) {
         this.isMobile = !!viewport && viewport.width < 768;
@@ -45,7 +58,7 @@ export class QuickActionsFixture {
         };
 
         this.task = {} as IQuickActionElements;
-        this.project = {} as IQuickActionElements;
+        this.project = {} as ILegacyQuickActionElements;
 
         if (this.isMobile) {
             this.task.modal = this.mobileQuickActions.container.getByTestId('new-quick-task-modal');
@@ -62,12 +75,12 @@ export class QuickActionsFixture {
         this.project.form = this.project.modal.getByTestId('new-quick-project-form');
 
         this.task.title = this.task.form.getByTestId('new-quick-task-title');
-        this.task.notes = this.task.form.getByTestId('new-quick-task-notes');
+        this.task.description = this.task.form.getByTestId('new-quick-task-description');
         this.project.title = this.project.form.getByTestId('new-quick-project-title');
         this.project.notes = this.project.form.getByTestId('new-quick-project-notes');
 
         this.task.titleError = this.task.form.getByTestId('title-error');
-        this.task.notesError = this.task.form.getByTestId('notes-error');
+        this.task.descriptionError = this.task.form.getByTestId('description-error');
         this.task.genError = this.task.form.getByTestId('new-quick-task-gen-error');
         this.project.titleError = this.project.form.getByTestId('title-error');
         this.project.notesError = this.project.form.getByTestId('notes-error');

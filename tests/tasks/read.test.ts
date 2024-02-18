@@ -13,11 +13,11 @@ test.describe('tasks - read', () => {
         const tasks = [
             {
                 title: 'Test Task 1',
-                notes: 'Test Notes 1',
+                description: 'Test Description 1',
             },
             {
                 title: 'Test Task 2',
-                notes: 'Test Notes 2',
+                description: 'Test Description 2',
             },
             {
                 title: 'Test Task 3',
@@ -27,7 +27,7 @@ test.describe('tasks - read', () => {
             },
             {
                 title: 'Test Task 5',
-                notes: 'Test Notes 5',
+                description: 'Test Description 5',
             },
         ];
 
@@ -46,7 +46,7 @@ test.describe('tasks - read', () => {
             const task = tasks[i];
             await quickActions.openTaskModal();
             await quickActions.task.title.fill(task.title);
-            if (task.notes) await quickActions.task.notes.fill(task.notes);
+            if (task.description) await quickActions.task.description.fill(task.description);
             await quickActions.task.createButton.click();
             await expect(quickActions.task.modal).not.toBeVisible();
         }
