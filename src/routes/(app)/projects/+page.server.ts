@@ -3,7 +3,7 @@ import type { Actions, PageServerLoad } from './$types';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
 import { HttpStatus } from '$lib/constants/error';
-import { deleteProject, getProjects, quickCreateProject, updateProject } from '$lib/services/project';
+import { ProjectService } from '$lib/services/project';
 
 export const actions: Actions = {
     quickCreate: async ({ request, locals }) => {
@@ -14,7 +14,8 @@ export const actions: Actions = {
         const notes = data.get('notes')! as string;
 
         try {
-            const project = await quickCreateProject({ title, notes }, locals.session.user);
+            const projectService = new ProjectService({ user: locals.session.user });
+            const project = await projectService.quickCreateProject({ title, notes });
 
             return { project };
         } catch (err) {
@@ -33,7 +34,8 @@ export const actions: Actions = {
 
             if (isNaN(projectId)) throw new ApiError('Project id must be a number.', HttpStatus.BAD_REQUEST, 'projectId');
 
-            await deleteProject(projectId, locals.session.user);
+            const projectService = new ProjectService({ user: locals.session.user });
+            await projectService.deleteProject(projectId);
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });
@@ -58,7 +60,8 @@ export const actions: Actions = {
         };
 
         try {
-            const project = await updateProject(updateData, locals.session.user);
+            const projectService = new ProjectService({ user: locals.session.user });
+            const project = await projectService.updateProject(updateData);
 
             return { project };
         } catch (err) {
@@ -71,7 +74,8 @@ export const actions: Actions = {
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.session.user) redirect(303, '/?signin=true');
 
-    const projects = await getProjects(locals.session.user);
+    const projectService = new ProjectService({ user: locals.session.user });
+    const projects = await projectService.getProjects();
 
     return { projects };
 };

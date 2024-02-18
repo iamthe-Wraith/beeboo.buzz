@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { isValidNewProjectRequest, type ICreateProjectRequest, isValidUpdateProjectRequest, type IUpdateProjectRequest } from './project';
+import { ProjectService, type ICreateProjectRequest, type IUpdateProjectRequest } from './project';
 import { HttpStatus } from '$lib/constants/error';
 import { MAX_PROJECT_TITLE_LENGTH } from '$lib/constants/project';
 
@@ -11,7 +11,7 @@ describe('services - project', () => {
                 notes: 'This is a test project.',
             };
 
-            const errors = isValidNewProjectRequest(project);
+            const errors = ProjectService.isValidNewProjectRequest(project);
 
             expect(errors.length).toBe(0);
         });
@@ -21,7 +21,7 @@ describe('services - project', () => {
                 notes: 'This is a test project.',
             } as unknown as ICreateProjectRequest;
 
-            const errors = isValidNewProjectRequest(project);
+            const errors = ProjectService.isValidNewProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
@@ -35,7 +35,7 @@ describe('services - project', () => {
                 notes: 'This is a test project.',
             } as unknown as ICreateProjectRequest;
 
-            const errors = isValidNewProjectRequest(project);
+            const errors = ProjectService.isValidNewProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
@@ -53,7 +53,7 @@ describe('services - project', () => {
                 completed: false,
             };
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(0);
         });
@@ -63,7 +63,7 @@ describe('services - project', () => {
                 id: 123,
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBeUndefined();
@@ -78,7 +78,7 @@ describe('services - project', () => {
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('id');
@@ -93,7 +93,7 @@ describe('services - project', () => {
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
@@ -109,7 +109,7 @@ describe('services - project', () => {
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
@@ -124,7 +124,7 @@ describe('services - project', () => {
                 notes: 'This is a test project.',
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('completed');
@@ -140,7 +140,7 @@ describe('services - project', () => {
                 completed: 'invalid',
             } as unknown as IUpdateProjectRequest;
 
-            const errors = isValidUpdateProjectRequest(project);
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
 
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('completed');
