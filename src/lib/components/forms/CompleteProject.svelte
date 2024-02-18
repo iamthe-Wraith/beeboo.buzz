@@ -2,8 +2,7 @@
     import { goto } from "$app/navigation";
     import { enhance } from "$app/forms";
     import type { Project } from "@prisma/client";
-	import type { ActionResult } from "@sveltejs/kit";
-	import Button from "../Button.svelte";
+    import type { ActionResult } from "@sveltejs/kit";
 
     export let project: Project;
 

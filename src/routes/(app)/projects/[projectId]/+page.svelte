@@ -6,14 +6,13 @@
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import DeleteProject from "$lib/components/forms/DeleteProject.svelte";
-	import CompleteProject from "$lib/components/forms/CompleteProject.svelte";
-	import Status from "$lib/components/Status.svelte";
-	import dayjs from "dayjs";
+    import CompleteProject from "$lib/components/forms/CompleteProject.svelte";
+    import Status from "$lib/components/Status.svelte";
+    import dayjs from "dayjs";
 
     export let data: PageData;
+    
     let project: Project;
-
-
     let editing = false;
 
     $: if (data?.project) project = data.project;

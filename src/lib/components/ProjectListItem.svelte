@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Project } from "@prisma/client";
-	import IconWithTooltip from "./IconWithTooltip.svelte";
-	import dayjs from "dayjs";
-	import CompleteProject from "./forms/CompleteProject.svelte";
-	import Icon from "./Icon.svelte";
+    import IconWithTooltip from "./IconWithTooltip.svelte";
+    import dayjs from "dayjs";
+    import CompleteProject from "./forms/CompleteProject.svelte";
+    import Icon from "./Icon.svelte";
 
     export let project: Project;
 

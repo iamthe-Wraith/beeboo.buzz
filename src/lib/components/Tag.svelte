@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { IconName } from "./Icon.svelte";
-	import Icon from "./Icon.svelte";
+    import type { IconName } from "./Icon.svelte";
+    import Icon from "./Icon.svelte";
 
     type TagType = 'primary' |
         'secondary' | 
