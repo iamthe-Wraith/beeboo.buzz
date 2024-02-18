@@ -1,7 +1,7 @@
 import { ContextRole } from "@prisma/client";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
-import { BaseService, type IBaseServiceProps } from "./base-service";
+import { Service, type IServiceProps } from "./service";
 
 export interface IContextRequest {
     name: string;
@@ -9,7 +9,7 @@ export interface IContextRequest {
     role: ContextRole;
 }
 
-export class ContextService extends BaseService {
+export class ContextService extends Service {
     private defaultContexts: IContextRequest[] = [
         {
             name: 'Inbox',
@@ -50,7 +50,7 @@ export class ContextService extends BaseService {
         },
     ];
 
-    constructor(props: IBaseServiceProps) {
+    constructor(props: IServiceProps) {
         super(props);
     }
 

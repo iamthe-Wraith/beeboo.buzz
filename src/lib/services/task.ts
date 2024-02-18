@@ -4,7 +4,7 @@ import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import dayjs from "dayjs";
 import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
-import { BaseService, type IBaseServiceProps } from "./base-service";
+import { Service, type IServiceProps } from "./service";
 
 interface IGetOptions {
     includeCompleted: boolean;
@@ -40,8 +40,8 @@ const defaultGetOptions: IGetOptions = {
     includeInactive: false,
 };
 
-export class TaskService extends BaseService {
-    constructor(props: IBaseServiceProps) {
+export class TaskService extends Service {
+    constructor(props: IServiceProps) {
         super(props);
     }
 

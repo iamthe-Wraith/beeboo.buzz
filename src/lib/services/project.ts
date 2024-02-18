@@ -1,7 +1,7 @@
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
-import { BaseService, type IBaseServiceProps } from "./base-service";
+import { Service, type IServiceProps } from "./service";
 
 export interface ICreateProjectRequest {
     title: string;
@@ -29,8 +29,8 @@ const defaultGetOptions: IGetOptions = {
     includeCompleted: false,
 };
 
-export class ProjectService extends BaseService {
-    constructor(props: IBaseServiceProps) {
+export class ProjectService extends Service {
+    constructor(props: IServiceProps) {
         super(props);
     }
 
