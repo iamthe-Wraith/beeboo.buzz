@@ -38,7 +38,7 @@ model Context {
 
 model Project {
   id            Int           @id @default(autoincrement())
-  title         String
+  title         String        @db.VarChar(125)
   description   String?       @db.VarChar(3000)
   dueDate       DateTime?     @db.Timestamp(6) @map("due_date")
   completed     Boolean       @default(false)
