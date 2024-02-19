@@ -7,19 +7,6 @@ interface IQuickActions {
     newTask: Locator;
 }
 
-interface ILegacyQuickActionElements {
-    modal: Locator;
-    modalClose: Locator;
-    form: Locator;
-    title: Locator;
-    notes: Locator;
-    titleError: Locator;
-    notesError: Locator;
-    genError: Locator;
-    cancelButton: Locator;
-    createButton: Locator;
-}
-
 interface IQuickActionElements {
     modal: Locator;
     modalClose: Locator;
@@ -42,7 +29,7 @@ export class QuickActionsFixture {
     public mobileQuickActions: IQuickActions;
 
     public task: IQuickActionElements;
-    public project: ILegacyQuickActionElements;
+    public project: IQuickActionElements;
 
     constructor(public readonly page: Page, public readonly viewport?: ViewportSize | null) {
         this.isMobile = !!viewport && viewport.width < 768;
@@ -58,7 +45,7 @@ export class QuickActionsFixture {
         };
 
         this.task = {} as IQuickActionElements;
-        this.project = {} as ILegacyQuickActionElements;
+        this.project = {} as IQuickActionElements;
 
         if (this.isMobile) {
             this.task.modal = this.mobileQuickActions.container.getByTestId('new-quick-task-modal');
@@ -77,13 +64,13 @@ export class QuickActionsFixture {
         this.task.title = this.task.form.getByTestId('new-quick-task-title');
         this.task.description = this.task.form.getByTestId('new-quick-task-description');
         this.project.title = this.project.form.getByTestId('new-quick-project-title');
-        this.project.notes = this.project.form.getByTestId('new-quick-project-notes');
+        this.project.description = this.project.form.getByTestId('new-quick-project-description');
 
         this.task.titleError = this.task.form.getByTestId('title-error');
         this.task.descriptionError = this.task.form.getByTestId('description-error');
         this.task.genError = this.task.form.getByTestId('new-quick-task-gen-error');
         this.project.titleError = this.project.form.getByTestId('title-error');
-        this.project.notesError = this.project.form.getByTestId('notes-error');
+        this.project.descriptionError = this.project.form.getByTestId('description-error');
         this.project.genError = this.project.form.getByTestId('new-quick-project-gen-error');
 
         this.task.cancelButton = this.task.form.getByTestId('new-quick-task-cancel');

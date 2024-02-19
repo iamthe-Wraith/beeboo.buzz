@@ -37,7 +37,7 @@
 >
     <input type="hidden" name="id" value="{project.id}" />
     <input type="hidden" name="title" value="{project.title}" />
-    <input type="hidden" name="description" value="{project.notes}" />
+    <input type="hidden" name="description" value="{project.description}" />
     <input type="hidden" name="completed" value={!project.completed} />
 
     <!--

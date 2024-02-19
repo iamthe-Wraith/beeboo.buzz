@@ -30,7 +30,7 @@
     onMount(() => {
         if (project) {
             if (!title) title = project.title;
-            if (!description) description = project.notes || '';
+            if (!description) description = project.description || '';
         }
     })
 
@@ -41,7 +41,7 @@
             project &&
             (
                 project.title !== title ||
-                (project.notes || '') !== description
+                (project.description || '') !== description
             )
         ) {
             changesDetected = true;
@@ -86,7 +86,7 @@
                             case 'title':
                                 titleError = e.message;
                                 break;
-                            case 'notes':
+                            case 'description':
                                 description = e.message;
                                 break;
                             default:
@@ -111,7 +111,7 @@
 
     function reset() {
         title = project.title;
-        description = project.notes || '';
+        description = project.description || '';
         titleError = '';
         descriptionError = '';
         disableUpdating = true;

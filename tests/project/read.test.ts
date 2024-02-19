@@ -13,7 +13,7 @@ test.describe('project - read', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -32,7 +32,7 @@ test.describe('project - read', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }
@@ -62,7 +62,7 @@ test.describe('project - read', () => {
         await expect(projectPage.delete.trigger).toBeVisible();
 
         await expect(projectPage.projectInfo.title).toHaveText(projects[0].title);
-        await expect(projectPage.projectInfo.description).toHaveText(projects[0].notes);
+        await expect(projectPage.projectInfo.description).toHaveText(projects[0].description);
 
         // project notes
         await expect(projectPage.projectNotesContainer).toBeVisible();
@@ -82,7 +82,7 @@ test.describe('project - read', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -101,7 +101,7 @@ test.describe('project - read', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }

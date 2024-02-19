@@ -14,7 +14,7 @@ test.describe('project - update', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -33,7 +33,7 @@ test.describe('project - update', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }
@@ -75,7 +75,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -94,7 +94,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -122,7 +122,7 @@ test.describe('project - update', () => {
             await expect(projectPage.editProjectForm).toBeVisible();
     
             await expect(projectPage.edit.title).toHaveValue(projects[0].title);
-            await expect(projectPage.edit.description).toHaveValue(projects[0].notes);
+            await expect(projectPage.edit.description).toHaveValue(projects[0].description);
             await expect(projectPage.edit.submitButton).toBeVisible();
             await expect(projectPage.edit.submitButton).toBeDisabled();
             await expect(projectPage.edit.cancelButton).toBeVisible();
@@ -136,7 +136,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -155,7 +155,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -196,7 +196,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -215,7 +215,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -257,7 +257,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -276,7 +276,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -300,14 +300,14 @@ test.describe('project - update', () => {
             await projectPage.projectInfo.editButton.click();
     
             await projectPage.edit.description.clear();
-            await projectPage.edit.description.fill('Updated Notes');
+            await projectPage.edit.description.fill('Updated description');
             await projectPage.edit.description.blur();
     
             await projectPage.edit.submitButton.click();
             
             await expect(projectPage.projectInfoContainer).toBeVisible();
     
-            await expect(projectPage.projectInfo.description).toHaveText('Updated Notes');
+            await expect(projectPage.projectInfo.description).toHaveText('Updated description');
     
             await signup.cleanup(email, database);
         });
@@ -318,7 +318,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -337,7 +337,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -376,7 +376,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -395,7 +395,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }
@@ -435,7 +435,7 @@ test.describe('project - update', () => {
             const projects = [
                 {
                     title: 'Test Project 1',
-                    notes: 'Test Notes 1',
+                    description: 'Test description 1',
                 },
             ];
     
@@ -454,7 +454,7 @@ test.describe('project - update', () => {
                 const project = projects[i];
                 await quickActions.openProjectModal();
                 await quickActions.project.title.fill(project.title);
-                if (project.notes) await quickActions.project.notes.fill(project.notes);
+                if (project.description) await quickActions.project.description.fill(project.description);
                 await quickActions.project.createButton.click();
                 await expect(quickActions.project.modal).not.toBeVisible();
             }

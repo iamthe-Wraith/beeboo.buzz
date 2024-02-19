@@ -13,7 +13,7 @@ test.describe('project - delete', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -32,7 +32,7 @@ test.describe('project - delete', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }
@@ -71,7 +71,7 @@ test.describe('project - delete', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -90,7 +90,7 @@ test.describe('project - delete', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }
@@ -127,7 +127,7 @@ test.describe('project - delete', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
         ];
 
@@ -146,7 +146,7 @@ test.describe('project - delete', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }

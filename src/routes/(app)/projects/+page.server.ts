@@ -11,11 +11,11 @@ export const actions: Actions = {
 
         const data = await request.formData();
         const title = data.get('title')! as string;
-        const notes = data.get('notes')! as string;
+        const description = data.get('description')! as string;
 
         try {
             const projectService = new ProjectService({ user: locals.session.user });
-            const project = await projectService.quickCreateProject({ title, notes });
+            const project = await projectService.quickCreateProject({ title, description });
 
             return { project };
         } catch (err) {
