@@ -8,7 +8,7 @@ describe('services - project', () => {
         test('should return no errors for valid project', () => {
             const project = {
                 title: 'Test Project',
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
             };
 
             const errors = ProjectService.isValidNewProjectRequest(project);
@@ -18,7 +18,7 @@ describe('services - project', () => {
 
         test('should return error if no title is provided', () => {
             const project = {
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
             } as unknown as ICreateProjectRequest;
 
             const errors = ProjectService.isValidNewProjectRequest(project);
@@ -32,7 +32,7 @@ describe('services - project', () => {
         test('should return error if title is too long', () => {
             const project = {
                 title: 'a'.repeat(MAX_PROJECT_TITLE_LENGTH + 1),
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
             } as unknown as ICreateProjectRequest;
 
             const errors = ProjectService.isValidNewProjectRequest(project);
@@ -49,7 +49,7 @@ describe('services - project', () => {
             const project = {
                 id: 123,
                 title: 'Test Project',
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
                 completed: false,
             };
 
@@ -74,7 +74,7 @@ describe('services - project', () => {
         test('should return error if no id is provided', () => {
             const project = {
                 title: 'Test Project',
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
@@ -89,7 +89,7 @@ describe('services - project', () => {
         test('should return error if no title is provided', () => {
             const project = {
                 id: 123,
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
@@ -105,7 +105,7 @@ describe('services - project', () => {
             const project = {
                 id: 123,
                 title: 'a'.repeat(MAX_PROJECT_TITLE_LENGTH + 1),
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
                 completed: false,
             } as unknown as IUpdateProjectRequest;
 
@@ -121,7 +121,7 @@ describe('services - project', () => {
             const project = {
                 id: 123,
                 title: 'Test Project',
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
             } as unknown as IUpdateProjectRequest;
 
             const errors = ProjectService.isValidUpdateProjectRequest(project);
@@ -136,7 +136,7 @@ describe('services - project', () => {
             const project = {
                 id: 123,
                 title: 'Test Project',
-                notes: 'This is a test project.',
+                description: 'This is a test project.',
                 completed: 'invalid',
             } as unknown as IUpdateProjectRequest;
 

@@ -92,7 +92,7 @@
 
             <h1 data-testid="title">{project.title}</h1>
 
-            <p data-testid="description">{project.notes}</p>
+            <p data-testid="description">{project.description}</p>
         </div>
     {/if}
 

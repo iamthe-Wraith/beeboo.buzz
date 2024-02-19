@@ -42,11 +42,11 @@ test.describe('projects - read', () => {
         const projects = [
             {
                 title: 'Test Project 1',
-                notes: 'Test Notes 1',
+                description: 'Test description 1',
             },
             {
                 title: 'Test Project 2',
-                notes: 'Test Notes 2',
+                description: 'Test description 2',
             },
             {
                 title: 'Test Project 3',
@@ -56,7 +56,7 @@ test.describe('projects - read', () => {
             },
             {
                 title: 'Test Project 5',
-                notes: 'Test Notes 5',
+                description: 'Test description 5',
             },
         ];
 
@@ -75,7 +75,7 @@ test.describe('projects - read', () => {
             const project = projects[i];
             await quickActions.openProjectModal();
             await quickActions.project.title.fill(project.title);
-            if (project.notes) await quickActions.project.notes.fill(project.notes);
+            if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
         }

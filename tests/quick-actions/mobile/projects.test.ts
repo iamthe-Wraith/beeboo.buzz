@@ -26,7 +26,7 @@ test.describe('mobile quick actions - new project', () => {
         await expect(quickActions.project.form).toBeVisible();
 
         await expect(quickActions.project.title).toBeVisible();
-        await expect(quickActions.project.notes).toBeVisible();
+        await expect(quickActions.project.description).toBeVisible();
         await expect(quickActions.project.cancelButton).toBeVisible();
         await expect(quickActions.project.createButton).toBeVisible();
         await expect(quickActions.project.createButton).toBeDisabled();
@@ -113,7 +113,7 @@ test.describe('mobile quick actions - new project', () => {
             await signup.cleanup(email, database);
         });
 
-        test('should create new project when title and notes are provided', async ({ page, viewport, database }) => {
+        test('should create new project when title and description are provided', async ({ page, viewport, database }) => {
             if (viewport && viewport.width >= 768) test.skip();
     
             const email = getEmail();
@@ -132,7 +132,7 @@ test.describe('mobile quick actions - new project', () => {
             await expect(quickActions.project.modal).toBeVisible();
 
             await quickActions.project.title.fill('Test Project');
-            await quickActions.project.notes.fill('Test notes');
+            await quickActions.project.description.fill('Test description');
 
             await quickActions.project.createButton.click();
 

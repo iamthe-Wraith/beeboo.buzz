@@ -8,17 +8,17 @@
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
 
-    type FormField = 'title' | 'notes';
+    type FormField = 'title' | 'description';
 
     export let onCancel: () => void = () => {};
 
     let processing = false;
     let title = '';
-    let notes = '';
+    let description = '';
     let disabled = true;
 
     let titleError = '';
-    let notesError = '';
+    let descriptionError = '';
     let genError = '';
 
     $: disabled = title === '';
@@ -49,8 +49,8 @@
                             case 'title':
                                 titleError = e.message;
                                 break;
-                            case 'notes':
-                                notes = e.message;
+                            case 'description':
+                                description = e.message;
                                 break;
                             default:
                                 genError = e.message;
@@ -82,8 +82,8 @@
                         titleError = '';
                     }
                     break;
-                case 'notes':
-                    notes = notes.trim();
+                case 'description':
+                    description = description.trim();
                     break;
             }
         }
@@ -91,7 +91,7 @@
 
     function reset() {
         title = '';
-        notes = '';
+        description = '';
     }
 </script>
 
@@ -113,13 +113,13 @@
     />
 
     <Textarea
-        id="notes"
-        data-testid="new-quick-project-notes"
-        label="Notes"
-        placeholder="Project Notes"
-        error={notesError}
-        bind:value={notes}
-        on:blur={onBlur('notes')}
+        id="description"
+        data-testid="new-quick-project-description"
+        label="Description"
+        placeholder="Project Description"
+        error={descriptionError}
+        bind:value={description}
+        on:blur={onBlur('description')}
     />
 
     {#if genError}

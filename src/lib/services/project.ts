@@ -5,7 +5,7 @@ import { Service, type IServiceProps } from "./service";
 
 export interface ICreateProjectRequest {
     title: string;
-    notes: string;
+    description: string;
 }
 
 export interface IUpdateProjectRequest {
@@ -121,12 +121,12 @@ export class ProjectService extends Service {
     
         if (validationErrors.length) throw validationErrors;
     
-        const { title, notes } = request;
+        const { title, description } = request;
 
         return this.transaction(async (tx) => tx.project.create({
             data: {
                 title,
-                notes,
+                description,
                 ownerId: this.user.id,
             },
         }))
@@ -147,7 +147,7 @@ export class ProjectService extends Service {
             data: {
                 title,
                 completed,
-                notes: description,
+                description,
             },
         }))
     
