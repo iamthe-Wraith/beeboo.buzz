@@ -7,6 +7,7 @@
     import type { ActionResult } from "@sveltejs/kit";
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
+	import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 
     type FormField = 'title' | 'description';
 
@@ -21,11 +22,10 @@
     let descriptionError = '';
     let genError = '';
 
-    $: disabled = title === '';
+    $: disabled = !title || !!titleError || !!descriptionError || !!genError || processing;
     
     onMount(() => {
         reset();
-
         return reset;
     })
 
@@ -50,7 +50,7 @@
                                 titleError = e.message;
                                 break;
                             case 'description':
-                                description = e.message;
+                                descriptionError = e.message;
                                 break;
                             default:
                                 genError = e.message;
@@ -78,12 +78,19 @@
                     title = title.trim();
                     if (!title) {
                         titleError = 'Title is required.';
+                    } else if (title.length > MAX_PROJECT_TITLE_LENGTH) {
+                        titleError = `Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`;
                     } else {
                         titleError = '';
                     }
                     break;
                 case 'description':
                     description = description.trim();
+                    if (description && description.length > MAX_PROJECT_DESCRIPTION_LENGTH) {
+                        descriptionError = `Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`;
+                    } else {
+                        descriptionError = '';
+                    }
                     break;
             }
         }
@@ -92,6 +99,10 @@
     function reset() {
         title = '';
         description = '';
+        titleError = '';
+        descriptionError = '';
+        genError = '';
+        disabled = true;
     }
 </script>
 

@@ -1,6 +1,6 @@
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
-import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
+import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 import { Service, type IServiceProps } from "./service";
 
 export interface ICreateProjectRequest {
@@ -45,6 +45,10 @@ export class ProjectService extends Service {
         } else {
             errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
         }
+
+        if (project.description && project.description.length > MAX_PROJECT_DESCRIPTION_LENGTH) {
+            errors.push(new ApiError(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'description'));
+        }
     
         return errors;
     };
@@ -71,9 +75,11 @@ export class ProjectService extends Service {
         } else {
             errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
         }
-    
-        // TODO: Add validation for description
-        // descriptions should have a max length to ensure the database can handle it.
+
+
+        if (project.description && project.description.length > MAX_PROJECT_DESCRIPTION_LENGTH) {
+            errors.push(new ApiError(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'description'));
+        }
     
         if (project.completed === undefined) {
             errors.push(new ApiError('Completed status is required.', HttpStatus.UNPROCESSABLE, 'completed'));

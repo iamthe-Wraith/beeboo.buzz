@@ -52,8 +52,6 @@
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
-        width: var(--textarea-width);
-        height: var(--textarea-height);
         padding: var(--outline-offset);
     }
 
@@ -77,7 +75,8 @@
 
     textarea {
         flex-grow: 1;
-        width: 100%;
+        width: var(--textarea-width, 100%);
+        height: var(--textarea-height, 6rem);
         padding: 0.5rem;
         border: 1px solid var(--dark-600);
         border-radius: 0.25rem;

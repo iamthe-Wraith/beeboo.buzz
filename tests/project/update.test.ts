@@ -5,7 +5,7 @@ import { test, expect } from "../custom-test";
 import { NavFixture } from "../fixtures/nav";
 import { ProjectsPageFixture } from "../fixtures/projects-page";
 import { ProjectPageFixture } from "../fixtures/project-page";
-import { MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
+import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 
 test.describe('project - update', () => {
     test('user should be able to complete the project', async ({ page, viewport, database }) => {
@@ -424,6 +424,65 @@ test.describe('project - update', () => {
     
             await expect(projectPage.edit.titleError).toBeVisible();
             await expect(projectPage.edit.titleError).toHaveText(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`);
+            await expect(projectPage.edit.submitButton).toBeDisabled();
+    
+            await signup.cleanup(email, database);
+        });
+
+        test('user should not be able to submit the form if the description is too long', async ({ page, viewport, database }) => {
+            const email = getEmail();
+            const password = 'Password123!';
+            const projects = [
+                {
+                    title: 'Test Project 1',
+                    description: 'Test description 1',
+                },
+            ];
+    
+            const signup = new SignUpFixture(page);
+            const nav = new NavFixture(page, viewport);
+            const quickActions = new QuickActionsFixture(page, viewport);
+            const projectsPage = new ProjectsPageFixture(page, viewport);
+    
+            await page.goto('/');
+    
+            await signup.signUp({ email, password, confirmPassword: password });
+    
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+    
+            for (let i = 0; i < projects.length; i++) {
+                const project = projects[i];
+                await quickActions.openProjectModal();
+                await quickActions.project.title.fill(project.title);
+                if (project.description) await quickActions.project.description.fill(project.description);
+                await quickActions.project.createButton.click();
+                await expect(quickActions.project.modal).not.toBeVisible();
+            }
+    
+            await nav.openMobileNav();
+            await nav.contextLinks.projects.click({ force: true });
+    
+            await page.waitForURL('/projects', {waitUntil: 'networkidle'});
+    
+            await expect(projectsPage.projects).toHaveCount(1);
+    
+            const [owner] = await database.executeQuery(`SELECT "id" FROM "User" WHERE "email" = '${email}'`);
+            const [project] = await database.executeQuery(`SELECT "id" FROM "Project" WHERE "owner_id" = '${owner.id}'`);
+    
+            projectsPage.projects.nth(0).click();
+    
+            await page.waitForURL(`/projects/${project.id}`, {waitUntil: 'networkidle'});
+    
+            const projectPage = new ProjectPageFixture(page, viewport);
+    
+            await projectPage.projectInfo.editButton.click();
+    
+            await projectPage.edit.description.clear();
+            await projectPage.edit.description.fill('a'.repeat(MAX_PROJECT_DESCRIPTION_LENGTH + 1));
+            await projectPage.edit.description.blur();
+    
+            await expect(projectPage.edit.descriptionError).toBeVisible();
+            await expect(projectPage.edit.descriptionError).toHaveText(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`);
             await expect(projectPage.edit.submitButton).toBeDisabled();
     
             await signup.cleanup(email, database);

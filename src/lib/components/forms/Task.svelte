@@ -12,6 +12,8 @@
     import type { IApiError } from "$lib/utils/api-error";
 	import Dropdown from "../Dropdown.svelte";
 	import { ContextRole } from "../../../types/contexts";
+	import { MAX_PROJECT_DESCRIPTION_LENGTH } from "$lib/constants/project";
+	import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 	
     type FormField = 'title' | 'description' | 'dueDate';
 
@@ -32,7 +34,7 @@
     let contextError = '';
     let genError = '';
 
-    $: disabled = title === '' || !!titleError || !!descriptionError || !!contextError || !!processing;
+    $: disabled = !title || !!titleError || !!descriptionError || !!contextError || !!processing;
     
     onMount(() => {
         return reset;
@@ -100,12 +102,19 @@
                     title = title.trim();
                     if (!title) {
                         titleError = 'Title is required.';
+                    } else if (title.length > MAX_TASK_TITLE_LENGTH) {
+                        titleError = `Title must be less than ${MAX_TASK_TITLE_LENGTH} characters.`;
                     } else {
                         titleError = '';
                     }
                     break;
                 case 'description':
                     description = description.trim();
+                    if (description && description.length > MAX_PROJECT_DESCRIPTION_LENGTH) {
+                        descriptionError = `Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`;
+                    } else {
+                        descriptionError = '';
+                    }
                     break;
             }
         }
@@ -114,6 +123,11 @@
     function reset() {
         title = task?.title || '';
         description = task?.description || '';
+        titleError = '';
+        descriptionError = '';
+        contextError = '';
+        genError = '';
+        disabled = true;
     }
 </script>
 
