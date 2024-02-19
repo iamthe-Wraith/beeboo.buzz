@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ProjectService, type ICreateProjectRequest, type IUpdateProjectRequest } from './project';
 import { HttpStatus } from '$lib/constants/error';
-import { MAX_PROJECT_TITLE_LENGTH } from '$lib/constants/project';
+import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from '$lib/constants/project';
 
 describe('services - project', () => {
     describe('isValidNewProjectRequest', () => {
@@ -40,6 +40,20 @@ describe('services - project', () => {
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
             expect(errors[0].message).toBe(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`);
+            expect(errors[0].statusCode).toBe(HttpStatus.UNPROCESSABLE);
+        });
+
+        test('should return error if description is too long', () => {
+            const project = {
+                title: 'Test Project',
+                description: 'a'.repeat(MAX_PROJECT_DESCRIPTION_LENGTH + 1),
+            } as unknown as ICreateProjectRequest;
+
+            const errors = ProjectService.isValidNewProjectRequest(project);
+
+            expect(errors.length).toBe(1);
+            expect(errors[0].field).toBe('description');
+            expect(errors[0].message).toBe(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`);
             expect(errors[0].statusCode).toBe(HttpStatus.UNPROCESSABLE);
         });
     });
@@ -114,6 +128,22 @@ describe('services - project', () => {
             expect(errors.length).toBe(1);
             expect(errors[0].field).toBe('title');
             expect(errors[0].message).toBe(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`);
+            expect(errors[0].statusCode).toBe(HttpStatus.UNPROCESSABLE);
+        });
+
+        test('should return error if description is too long', () => {
+            const project = {
+                id: 123,
+                title: 'Test Project',
+                description: 'a'.repeat(MAX_PROJECT_DESCRIPTION_LENGTH + 1),
+                completed: false,
+            } as unknown as IUpdateProjectRequest;
+
+            const errors = ProjectService.isValidUpdateProjectRequest(project);
+
+            expect(errors.length).toBe(1);
+            expect(errors[0].field).toBe('description');
+            expect(errors[0].message).toBe(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`);
             expect(errors[0].statusCode).toBe(HttpStatus.UNPROCESSABLE);
         });
 

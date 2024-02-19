@@ -1,3 +1,4 @@
+import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from '$lib/constants/project';
 import { test, expect } from '../../custom-test';
 import { QuickActionsFixture } from '../../fixtures/quick-actions';
 import { SignUpFixture } from '../../fixtures/signup';
@@ -164,6 +165,64 @@ test.describe('mobile quick actions - new project', () => {
 
             await expect(quickActions.project.titleError).toBeVisible();
             await expect(quickActions.project.titleError).toHaveText('Title is required.');
+
+            await expect(quickActions.project.createButton).toBeDisabled();
+    
+            await signup.cleanup(email, database);
+        });
+
+        test('should show error if title is too long', async ({ page, viewport, database }) => {
+            if (viewport && viewport.width >= 768) test.skip();
+    
+            const email = getEmail();
+            const password = 'Password123!';
+            const signup = new SignUpFixture(page);
+            const quickActions = new QuickActionsFixture(page, viewport);
+    
+            await page.goto('/');
+    
+            await signup.signUp({ email, password, confirmPassword: password });
+    
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+    
+            await quickActions.mobileQuickActions.newProject.click();
+    
+            await expect(quickActions.project.modal).toBeVisible();
+
+            await quickActions.project.title.fill('a'.repeat(MAX_PROJECT_TITLE_LENGTH + 1));
+            await page.keyboard.press('Tab');
+
+            await expect(quickActions.project.titleError).toBeVisible();
+            await expect(quickActions.project.titleError).toHaveText(`Title must be less than ${MAX_PROJECT_TITLE_LENGTH} characters.`);
+
+            await expect(quickActions.project.createButton).toBeDisabled();
+    
+            await signup.cleanup(email, database);
+        });
+
+        test('should show error if description is too long', async ({ page, viewport, database }) => {
+            if (viewport && viewport.width >= 768) test.skip();
+    
+            const email = getEmail();
+            const password = 'Password123!';
+            const signup = new SignUpFixture(page);
+            const quickActions = new QuickActionsFixture(page, viewport);
+    
+            await page.goto('/');
+    
+            await signup.signUp({ email, password, confirmPassword: password });
+    
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+    
+            await quickActions.mobileQuickActions.newProject.click();
+    
+            await expect(quickActions.project.modal).toBeVisible();
+
+            await quickActions.project.description.fill('a'.repeat(MAX_PROJECT_DESCRIPTION_LENGTH + 1));
+            await page.keyboard.press('Tab');
+
+            await expect(quickActions.project.descriptionError).toBeVisible();
+            await expect(quickActions.project.descriptionError).toHaveText(`Description must be less than ${MAX_PROJECT_DESCRIPTION_LENGTH} characters.`);
 
             await expect(quickActions.project.createButton).toBeDisabled();
     

@@ -3,7 +3,7 @@ import { ContextService } from "./context";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import dayjs from "dayjs";
-import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 import { Service, type IServiceProps } from "./service";
 
 interface IGetOptions {
@@ -11,25 +11,25 @@ interface IGetOptions {
     includeInactive: boolean;
 }
 
-interface ICreateTaskRequest {
+interface IGetTaskQuery {
+    id?: number;
+    ownerId: number;
+    completed?: boolean;
+    contextId?: number;
+    isActive?: boolean;
+}
+
+export interface ICreateTaskRequest {
     title: string;
     description?: string;
     contextId?: number;
     isActive?: boolean;
 }
 
-interface IUpdateTaskRequest {
+export interface IUpdateTaskRequest {
     id: number;
     title?: string;
     description?: string;
-    completed?: boolean;
-    contextId?: number;
-    isActive?: boolean;
-}
-
-interface IGetTaskQuery {
-    id?: number;
-    ownerId: number;
     completed?: boolean;
     contextId?: number;
     isActive?: boolean;
@@ -55,6 +55,10 @@ export class TaskService extends Service {
             }
         } else {
             errors.push(new ApiError('Title is required.', HttpStatus.UNPROCESSABLE, 'title'));
+        }
+
+        if (task.description && task.description.length > MAX_TASK_DESCRIPTION_LENGTH) {
+            errors.push(new ApiError(`Description must be less than ${MAX_TASK_DESCRIPTION_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'description'));
         }
     
         if (task.contextId) {
@@ -83,10 +87,12 @@ export class TaskService extends Service {
             errors.push(new ApiError('No updatable data received.', HttpStatus.UNPROCESSABLE));
         }
     
-        if (task.title) {
-            if (task.title.length > MAX_TASK_TITLE_LENGTH) {
-                errors.push(new ApiError(`Title must be less than ${MAX_TASK_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
-            } 
+        if (task.title && task.title.length > MAX_TASK_TITLE_LENGTH) {
+            errors.push(new ApiError(`Title must be less than ${MAX_TASK_TITLE_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'title'));
+        }
+
+        if (task.description && task.description.length > MAX_TASK_DESCRIPTION_LENGTH) {
+            errors.push(new ApiError(`Description must be less than ${MAX_TASK_DESCRIPTION_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'description'));
         }
     
         if (task.contextId) {
