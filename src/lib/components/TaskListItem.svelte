@@ -2,8 +2,8 @@
     import type { Task } from "@prisma/client";
 	import IconWithTooltip from "./IconWithTooltip.svelte";
 	import dayjs from "dayjs";
-	import TaskModal from "./modals/TaskModal.svelte";
 	import CompleteTask from "./forms/CompleteTask.svelte";
+	import Icon from "./Icon.svelte";
 
     export let task: Task;
 
@@ -11,52 +11,54 @@
     const hasTags = false;
 </script>
 
-<TaskModal {task} let:openTaskModal>
-    <div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-        <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
-            <CompleteTask {task} />
-        </div>
-        <button
-            class="task {daysUntilDue < 0 ? 'past-due' : ''}"
-            on:click={openTaskModal}
-        >
-            <div class="task-main">
-                <div>
-                    <p class="title">{task.title}</p>
-                </div>
-    
-                {#if task.dueDate}
-                    <div class="due-date">
-                        {#if daysUntilDue < 0}
-                            <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
-                        {:else if daysUntilDue === 0}
-                            <p class="due-today">Due Today</p>
-                        {:else if daysUntilDue === 1}
-                            <p>Due Tomorrow</p>
-                        {:else}
-                            <p>Due in {daysUntilDue} days</p>
-                        {/if}
-                    </div>
-                {/if}
-                
-                {#if hasTags}
-                    <div class="task-tags"></div>
-                {/if}
+<div class="task-container {daysUntilDue < 0 ? 'past-due' : ''}">
+    <div class="complete-task-container {daysUntilDue < 0 ? 'past-due' : ''}">
+        <CompleteTask {task}>
+            <button type="submit" class={task.completed ? 'completed' : ''} data-testid="task-complete-button">
+                <Icon name="checkmark" data-testid="task-complete-button-icon"/>
+            </button>
+        </CompleteTask>
+    </div>
+    <a
+        href="/tasks/{task.id}"
+        class="task {daysUntilDue < 0 ? 'past-due' : ''}"
+    >
+        <div class="task-main">
+            <div>
+                <p class="title">{task.title}</p>
             </div>
-            <div class="task-icons-container">
-                <div class="task-icons">
+
+            {#if task.dueDate}
+                <div class="due-date">
                     {#if daysUntilDue < 0}
-                        <IconWithTooltip
-                            icon="alert-circle" 
-                            text="Past Due"
-                            testid="past-due-icon"
-                        />
+                        <p class="past-due">Was due {Math.abs(daysUntilDue)} days ago</p>
+                    {:else if daysUntilDue === 0}
+                        <p class="due-today">Due Today</p>
+                    {:else if daysUntilDue === 1}
+                        <p>Due Tomorrow</p>
+                    {:else}
+                        <p>Due in {daysUntilDue} days</p>
                     {/if}
                 </div>
+            {/if}
+            
+            {#if hasTags}
+                <div class="task-tags"></div>
+            {/if}
+        </div>
+        <div class="task-icons-container">
+            <div class="task-icons">
+                {#if daysUntilDue < 0}
+                    <IconWithTooltip
+                        icon="alert-circle" 
+                        text="Past Due"
+                        testid="past-due-icon"
+                    />
+                {/if}
             </div>
-        </button>
-    </div>
-</TaskModal>
+        </div>
+    </a>
+</div>
 
 <style>
     .task-container {
@@ -143,6 +145,7 @@
         border-bottom-right-radius: 0.25rem;
         background: var(--dark-400);
         outline: none;
+        text-decoration: none;
         transition: 0.25s ease-in-out border;
         
         &:hover {

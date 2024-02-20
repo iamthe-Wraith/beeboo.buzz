@@ -124,7 +124,7 @@ export class TaskService extends Service {
     
         if (!options.includeInactive) query.isActive = true;
     
-        return this.transaction(async (tx) => tx.task.findMany({
+        return this.transaction(async (tx) => tx.task.findFirst({
             where: { ...query },
         }));
     };
