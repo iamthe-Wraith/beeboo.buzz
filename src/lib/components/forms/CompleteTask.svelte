@@ -39,6 +39,7 @@
     <input type="hidden" name="title" value="{task.title}" />
     <input type="hidden" name="description" value="{task.description}" />
     <input type="hidden" name="completed" value={!task.completed} />
+    <input type="hidden" name="contextId" value="{task.contextId}" /> 
 
     <!--
         using slot because different kinds of submit buttons are used throughout the app.

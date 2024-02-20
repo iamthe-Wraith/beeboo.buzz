@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     if (isNaN(taskId)) error(HttpStatus.BAD_REQUEST, { message: 'Invalid task id.' });
 
     const taskService = new TaskService({ user: locals.session.user });
-    const task = await taskService.getTaskById(taskId);
+    const task = await taskService.getTaskById(taskId, { includeCompleted: true });
 
     if (!task) error(HttpStatus.NOT_FOUND, { message: 'Task not found.' });
 
