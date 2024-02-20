@@ -7,8 +7,8 @@ import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constan
 import { Service, type IServiceProps } from "./service";
 
 interface IGetOptions {
-    includeCompleted: boolean;
-    includeInactive: boolean;
+    includeCompleted?: boolean;
+    includeInactive?: boolean;
 }
 
 interface IGetTaskQuery {
@@ -115,16 +115,25 @@ export class TaskService extends Service {
     //#endregion
 
     //#region Public Methods
+    public deleteTask = async (taskId: number) => {
+        return this.transaction(async (tx) => tx.task.delete({
+            where: {
+                id: taskId,
+                ownerId: this.user.id,
+            },
+        }));
+    }
+
     public getTaskById = (id: number, options: IGetOptions = defaultGetOptions) => {
         const query: IGetTaskQuery = {
             id,
             ownerId: this.user.id,
-            completed: !!options.includeCompleted,
         };
-    
+
         if (!options.includeInactive) query.isActive = true;
+        if (!options.includeCompleted) query.completed = true;
     
-        return this.transaction(async (tx) => tx.task.findMany({
+        return this.transaction(async (tx) => tx.task.findFirst({
             where: { ...query },
         }));
     };
@@ -205,7 +214,7 @@ export class TaskService extends Service {
             if (context) data.contextId = context.id;
             if (completed !== undefined) data.completed = !!completed;
             if (isActive !== undefined) data.isActive = !!isActive;
-    
+
             const task = await tx.task.update({
                 where: { id, ownerId: this.user.id },
                 data: {

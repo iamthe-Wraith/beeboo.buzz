@@ -2,6 +2,7 @@ import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
 import { Service, type IServiceProps } from "./service";
+import dayjs from "dayjs";
 
 export interface ICreateProjectRequest {
     title: string;
@@ -16,7 +17,7 @@ export interface IUpdateProjectRequest {
 }
 
 interface IGetOptions {
-    includeCompleted: boolean;
+    includeCompleted?: boolean;
 }
 
 interface IGetProjectQuery {
@@ -154,6 +155,7 @@ export class ProjectService extends Service {
                 title,
                 completed,
                 description,
+                updatedAt: dayjs().utc().toDate(),
             },
         }))
     
