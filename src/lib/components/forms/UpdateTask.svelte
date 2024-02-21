@@ -1,13 +1,15 @@
 <script lang="ts">
     import type { ActionResult } from "@sveltejs/kit";
+	import { onMount } from "svelte";
     import { enhance } from "$app/forms";
     import type { Task } from "@prisma/client";
+    import { contexts } from '$lib/stores/contexts';
     import TextInput from "$lib/components/TextInput.svelte";
     import Button from "$lib/components/Button.svelte";
     import Textarea from "$lib/components/Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
-	import { onMount } from "svelte";
 	import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+	import Dropdown from "$lib/components/Dropdown.svelte";
 
     type FormField = 'title' | 'description';
 
@@ -15,17 +17,23 @@
     export let onCancel: () => void = () => {};
     export let onSave: (task: Task) => void = () => {};
 
+    const context = $contexts?.find(c => c.id === task?.contextId);
+
     let title: string;
     let description: string;
+    let contextValue = context ? { label: context.name, value: context.id } : null;
+
+    let contextItems = $contexts ? $contexts.map(c => ({ label: c.name, value: c.id })) : [];
 
     let processing = false;
     let titleError: string;
     let descriptionError: string;
+    let contextError = '';
     let genError: string;
     let disableUpdating = true;
     let changesDetected = false;
 
-    $: disableUpdating = !!titleError || !!descriptionError || !!genError || !changesDetected || processing;
+    $: disableUpdating = !!titleError || !!descriptionError || !!contextError || !!genError || !changesDetected || processing;
 
     onMount(() => {
         if (task) {
@@ -41,7 +49,8 @@
             task &&
             (
                 task.title !== title ||
-                (task.description || '') !== description
+                (task.description || '') !== description ||
+                task.contextId !== contextValue?.value
             )
         ) {
             changesDetected = true;
@@ -78,6 +87,17 @@
     function onCancelClick() {
         reset();
         onCancel();
+    }
+
+    function onContextChange(e: CustomEvent<{ label: string; value: number }>) {
+        contextError = '';
+        contextValue = e.detail;
+        detectChanges();
+    }
+
+    function onContextClear() {
+        contextError = 'A context is required.';
+        contextValue = null;
     }
 
     function onSaveResponse() {
@@ -133,26 +153,46 @@
 
     <input type="hidden" name="id" value={task.id} />
 
-    <TextInput
-        required
-        id="title"
-        label="Title"
-        data-testid="edit-task-title"
-        placeholder="Task Title"
-        error={titleError}
-        bind:value={title}
-        on:blur={onBlur('title')}
-    />
+    <div class="row col-1">
+        <TextInput
+            required
+            id="title"
+            label="Title"
+            data-testid="edit-task-title"
+            placeholder="Task Title"
+            error={titleError}
+            bind:value={title}
+            on:blur={onBlur('title')}
+        />
+    </div>
 
-    <Textarea
-        id="description"
-        label="Description"
-        data-testid="edit-task-description"
-        placeholder="Task Description"
-        error={descriptionError}
-        bind:value={description}
-        on:blur={onBlur('description')}
-    />
+    <div class="row col-1">
+        <Textarea
+            id="description"
+            label="Description"
+            data-testid="edit-task-description"
+            placeholder="Task Description"
+            error={descriptionError}
+            bind:value={description}
+            on:blur={onBlur('description')}
+        />
+    </div>
+
+    <div class="row col-2">
+        <Dropdown
+            id="context"
+            label="Context"
+            name="contextId"
+            items={contextItems}
+            placeholder="Select a Context"
+            value={contextValue}
+            error={contextError}
+            on:change={onContextChange}
+            on:clear={onContextClear}
+        />
+
+        <div></div>
+    </div>
 
     {#if genError}
         <p class="error" data-testid="edit--task-gen-error">{genError}</p>
@@ -211,6 +251,17 @@
             &.row-reverse {
                 flex-direction: row-reverse;
             }
+        }
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        padding: 0 var(--outline-offset);
+
+        & > * {
+            flex: 1;
         }
     }
 

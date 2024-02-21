@@ -11,7 +11,6 @@
     import Textarea from "../Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
 	import Dropdown from "../Dropdown.svelte";
-	import { ContextRole } from "../../../types/contexts";
 	import { MAX_PROJECT_DESCRIPTION_LENGTH } from "$lib/constants/project";
 	import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 	
