@@ -7,6 +7,35 @@ import { ContextPageFixture } from "../fixtures/context-page";
 import { TaskFixture } from "../fixtures/task";
 
 test.describe('tasks - read', () => {
+    test('should display messaging when no tasks are found', async ({ page, viewport, database }) => {
+        const email = getEmail();
+        const password = 'Password123!';
+
+        const signup = new SignUpFixture(page);
+        const nav = new NavFixture(page, viewport);
+        const inbox = new ContextPageFixture(page, viewport);
+
+        await page.goto('/');
+
+        await signup.signUp({ email, password, confirmPassword: password });
+
+        await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+
+        await nav.openMobileNav();
+        await nav.contextLinks.inbox.click({ force: true });
+
+        await page.waitForURL('/inbox', {waitUntil: 'networkidle'});
+
+        await expect(inbox.layout).toBeVisible();
+        await expect(inbox.title).toHaveText('Inbox');
+        await expect(inbox.count).toHaveText(`${0} tasks`);
+        await expect(inbox.tasks).toHaveCount(0);
+        await expect(inbox.noTasks).toBeVisible();
+        await expect(inbox.noTasks).toHaveText('No tasks found');
+
+        await signup.cleanup(email, database);
+    });
+
     test('should display all tasks for the current context', async ({ page, viewport, database }) => {
         const email = getEmail();
         const password = 'Password123!';
