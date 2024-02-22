@@ -311,6 +311,70 @@ test.describe('task - update', () => {
     
             await signup.cleanup(email, database);
         });
+
+        test('user should be able to edit the task context', async ({ page, viewport, database }) => {
+            const email = getEmail();
+            const password = 'Password123!';
+            const tasks = [
+                {
+                    title: 'Test Task 1',
+                    description: 'Test description 1',
+                },
+            ];
+    
+            const signup = new SignUpFixture(page);
+            const nav = new NavFixture(page, viewport);
+            const quickActions = new QuickActionsFixture(page, viewport);
+            const inboxPage = new ContextPageFixture(page, viewport);
+    
+            await page.goto('/');
+    
+            await signup.signUp({ email, password, confirmPassword: password });
+    
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+    
+            for (let i = 0; i < tasks.length; i++) {
+                const task = tasks[i];
+                await quickActions.openTaskModal();
+                await quickActions.task.title.fill(task.title);
+                if (task.description) await quickActions.task.description.fill(task.description);
+                await quickActions.task.createButton.click();
+                await expect(quickActions.task.modal).not.toBeVisible();
+            }
+    
+            await nav.openMobileNav();
+            await nav.contextLinks.inbox.click({ force: true });
+    
+            await page.waitForURL('/inbox', {waitUntil: 'networkidle'});
+    
+            await expect(inboxPage.tasks).toHaveCount(1);
+    
+            const [owner] = await database.executeQuery(`SELECT "id" FROM "User" WHERE "email" = '${email}'`);
+            const [task] = await database.executeQuery(`SELECT "id" FROM "Task" WHERE "owner_id" = '${owner.id}'`);
+    
+            inboxPage.tasks.nth(0).click();
+    
+            await page.waitForURL(`/tasks/${task.id}`, {waitUntil: 'networkidle'});
+    
+            const taskPage = new TaskPageFixture(page, viewport);
+    
+            await taskPage.taskInfo.editButton.click();
+
+            await taskPage.edit.contextTrigger.click();
+
+            await expect(taskPage.edit.context).toBeVisible();
+            const option = await taskPage.edit.context.getByText('At Work');
+            await option.scrollIntoViewIfNeeded();
+            await option.click();
+    
+            await taskPage.edit.submitButton.click();
+            
+            await expect(taskPage.taskInfoContainer).toBeVisible();
+    
+            await expect(taskPage.taskInfo.backLink).toHaveText('At Work');
+    
+            await signup.cleanup(email, database);
+        });
     
         test('user should not be able to submit the form if the title is empty', async ({ page, viewport, database }) => {
             const email = getEmail();
