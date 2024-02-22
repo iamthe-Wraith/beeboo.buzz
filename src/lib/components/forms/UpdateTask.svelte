@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { ActionResult } from "@sveltejs/kit";
-	import { onMount } from "svelte";
+    import { onMount } from "svelte";
     import { enhance } from "$app/forms";
     import type { Task } from "@prisma/client";
     import { contexts } from '$lib/stores/contexts';
@@ -8,8 +8,8 @@
     import Button from "$lib/components/Button.svelte";
     import Textarea from "$lib/components/Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
-	import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
-	import Dropdown from "$lib/components/Dropdown.svelte";
+    import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+    import Dropdown from "$lib/components/Dropdown.svelte";
 
     type FormField = 'title' | 'description';
 
