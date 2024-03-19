@@ -1,0 +1,5 @@
+services:
+  app:
+    image: iamthewraith/oh-my-gtd:latest
+    ports:
+      - "3000:3000"

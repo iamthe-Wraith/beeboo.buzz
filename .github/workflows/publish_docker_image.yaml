@@ -1,0 +1,42 @@
+name: Publish Docker Image
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    docker:
+        name: Push Docker image to Docker Hub
+        runs-on: ubuntu-latest
+        steps:
+            -
+                name: Check out the repo
+                uses: actions/checkout@v4
+    
+            - 
+                name: Login to Docker Hub
+                uses: docker/login-action@v3
+                with:
+                    username: ${{ secrets.DOCKER_USERNAME }}
+                    password: ${{ secrets.DOCKER_PASSWORD }}
+
+            -
+                name: Set environment variables
+                run: |
+                    rm -rf .env
+                    echo "PUBLIC_APP_ENV=${{ secrets.PUBLIC_APP_ENV }}" >> .env
+                    echo "PUBLIC_SENTRY_DSN=${{ secrets.PUBLIC_SENTRY_DSN }}" >> .env
+                    echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+                    echo "REDIS_URL=${{ secrets.REDIS_URL }}" >> .env
+                    echo "JWT_SESSION_SECRET=${{ secrets.JWT_SESSION_SECRET }}" >> .env
+
+            -
+                name: Build docker image
+                run: |
+                    docker build . -t iamthewraith/oh-my-gtd:latest
+            
+            -
+                name: Push docker image
+                run: |
+                    docker push iamthewraith/oh-my-gtd:latest                 
