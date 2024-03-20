@@ -130,7 +130,6 @@ export class Session {
             await cache.set(
                 this.token,
                 JSON.stringify(userCache),
-                'EX',
                 (this.options.expiresIn as number) / 1000,
             );
         } catch (err) {
