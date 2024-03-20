@@ -6,8 +6,6 @@ class Cache {
     private _client: Redis | null = null;
 
     constructor() {
-        if (!REDIS_URL) return;
-
         this._client = new Redis(REDIS_URL);
 
         this._client.on('error', (error) => {
