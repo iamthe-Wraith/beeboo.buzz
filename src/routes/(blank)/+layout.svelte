@@ -20,8 +20,8 @@
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
-                connect-src https://ohmygtd.app ws://ohmygtd.app https://api.unisvg.com/ *.sentry.io blob:; 
-                img-src https://ohmygtd.app blob:; 
+                connect-src https://ohmygtd.wraithcode.io ws://ohmygtd.wraithcode.io https://api.unisvg.com/ *.sentry.io blob:; 
+                img-src https://ohmygtd.wraithcode.io blob:; 
                 child-src blob:; 
                 worker-src blob:;"
 		/>
