@@ -3,41 +3,66 @@ import type { PageServerLoad } from "./$types";
 import type { Actions } from './$types';
 import { FeatureFlagService } from "$lib/services/feature-flag";
 import { HttpStatus } from '$lib/constants/error';
-import { UserRole } from '@prisma/client';
+import { ApiResponse } from '$lib/utils/api-response';
+import { ApiError } from '$lib/utils/api-error';
 
 export const actions: Actions = {
     create: async ({ request, locals }) => {
-        if (
-            !locals.session.user || 
-            !locals.session.user.role || 
-            (
-                locals.session.user.role !== UserRole.ADMIN &&
-                locals.session.user.role !== UserRole.SUPER_ADMIN
-            )
-        ) {
+        if (!locals.session.user || !locals.session.user.role) {
             return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
         }
 
-        const data = await request.formData();
+        try {
+            const featureFlagService = new FeatureFlagService({ user: locals.session.user });
 
-        const name = data.get('name')! as string;
-        const description = data.get('description')! as string;
-        const isEnabled = data.get('isEnabled')! as string === 'true';
+            featureFlagService.authorize();
 
-        const featureFlagService = new FeatureFlagService({ user: locals.session.user });
-        const featureFlag = await featureFlagService.createFeatureFlag({ name, description, isEnabled });
+            const data = await request.formData();
 
-        console.log('Feature flag created:', featureFlag);
+            const name = data.get('name')! as string;
+            const description = data.get('description')! as string;
+            const isEnabled = data.get('isEnabled')! as string === 'true';
 
-        redirect(303, `/admin/feature-flags`);
+            const featureFlag = await featureFlagService.create({ name, description, isEnabled });
+            return { featureFlag };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
     },
+    toggleEnabled: async ({ request, locals }) => {
+        if (!locals.session.user || !locals.session.user.role) {
+            return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+        }
+
+        try {
+            const featureFlagService = new FeatureFlagService({ user: locals.session.user });
+
+            featureFlagService.authorize();
+
+            const data = await request.formData();
+            const id = parseInt(data.get('id')! as string);
+
+            let featureFlag = await featureFlagService.getById(id);
+
+            if (!featureFlag) {
+                return fail(HttpStatus.NOT_FOUND, { errors: ['Feature flag not found.'] });
+            }
+
+            featureFlag = await featureFlagService.update({ ...featureFlag, isEnabled: !featureFlag.isEnabled });
+            return { featureFlag };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    }
 };
 
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.session.user) redirect(303, '/?signin=true');
 
     const featureFlagService = new FeatureFlagService({ user: locals.session.user });
-    const featureFlags = featureFlagService.getFeatureFlags();
+    const featureFlags = await featureFlagService.getAll();
 
     return {
         featureFlags,
