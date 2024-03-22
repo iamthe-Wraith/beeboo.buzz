@@ -8,9 +8,6 @@
     import { contexts } from '$lib/stores/contexts';
     import Signout from './forms/Signout.svelte';
     import Avatar from './Avatar.svelte';
-    import NewQuickTask from './modals/NewQuickTaskModal.svelte';
-    import NewQuickProject from './modals/NewQuickProjectModal.svelte';
-    import Button from './Button.svelte';
 
     let nav: HTMLElement;
 
@@ -44,93 +41,22 @@
     bind:this={nav}
 >
     <div class="upper-nav">
-        {#if !loadingError}
-            <div
-                data-testid="quick-actions"
-                class="nav-section quick-actions"
-            >
-                <NewQuickProject let:openNewQuickProjectModal>
-                    <Button
-                        data-testid="new-quick-project-button"
-                        kind="secondary"
-                        on:click={openNewQuickProjectModal}
-                    >
-                        New Project
-                    </Button>
-                </NewQuickProject>
-                
-                <NewQuickTask let:openNewQuickTaskModal>
-                    <Button
-                        data-testid="new-quick-task-button"
-                        kind="primary"
-                        on:click={openNewQuickTaskModal}
-                    >
-                        New Task
-                    </Button>
-                </NewQuickTask>
-            </div>
-        {/if}
+        <div class="admin-area-alert">
+            Admin Area!
+        </div>
 
         <div class="nav-section">
             <a
                 href="/dashboard" 
                 class={$page.url.pathname === '/dashboard' ? 'active' : ''}
             >
-                Dashboard
+                My Dashboard
             </a>
         </div>
 
         {#if loadingError}
             <div class="loading-error">
                 {loadingError}
-            </div>
-        {/if}
-        
-        {#if !loadingError && contextsWithRoles.length}
-            <div class="nav-section">
-                {#each contextsWithRoles as context}
-                    <a
-                        href={`/${context.role.toLocaleLowerCase()}`}
-                        class={$page.url.pathname === `/${context.role.toLocaleLowerCase()}` ? 'active' : ''}
-                    >
-                        {context.name}
-                    </a>
-                {/each}
-
-                <a
-                    href="/projects"
-                    class={$page.url.pathname === '/projects' ? 'active' : ''}
-                >
-                    Projects
-                </a>
-            </div>
-        {/if}
-
-        {#if !loadingError && contextsWithoutRoles.length}
-            <div class="nav-section">
-                {#each contextsWithoutRoles as context}
-                    <a
-                        href={`/contexts/${context.id}`}
-                        class={$page.url.pathname === `/contexts/${context.id}` ? 'active' : ''}
-                    >
-                        {context.name}
-                    </a>
-                {/each}
-            </div>
-        {/if}
-
-        {#if $user?.role === 'ADMIN' || $user?.role === 'SUPER_ADMIN'}
-            <div class="nav-section">
-                <p class="restricted-areas-container">Restricted Areas</p>
-                
-                {#if $user?.role === 'ADMIN' || $user?.role === 'SUPER_ADMIN'}
-                    <a
-                        href="/admin"
-                        class={$page.url.pathname === '/admin' ? 'active' : ''}
-                    >
-                        Admin
-                    </a>
-                {/if}
             </div>
         {/if}
     </div>
@@ -168,15 +94,15 @@
         overflow: auto;
     }
 
-    .restricted-areas-container {
-        margin: 0;
-        padding: 0 0.5rem;
-        font-size: 0.75rem;
-        color: var(--danger-500);
-        text-transform: uppercase;
-    }
-
     .upper-nav {
+        & .admin-area-alert {
+            padding: 0.5rem 0.25rem;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: var(--danger-100);
+        }
+
         & .loading-error {
             padding: 3rem 0 1rem;
             text-align: center;

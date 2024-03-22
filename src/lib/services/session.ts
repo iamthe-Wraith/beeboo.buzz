@@ -70,7 +70,7 @@ export class Session {
                 };
     
                 const user = await cache.get(this.token);
-    
+
                 if (user) {
                     this._user = JSON.parse(user) as SessionUser;   
                 }
@@ -123,6 +123,7 @@ export class Session {
                 email: this.user!.email,
                 username: this.user!.username,
                 accountType: this.user!.accountType,
+                role: this.user!.role,
                 createdAt: this.user!.createdAt,
                 updatedAt: this.user!.updatedAt
             };
