@@ -19,6 +19,7 @@ model User {
   contexts      Context[]
   tasks         Task[]
   projects      Project[]
+  role          UserRole      @default(USER)
   createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
@@ -81,4 +82,10 @@ enum ContextRole {
   NONE
   INBOX
   WAITING
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
 }
