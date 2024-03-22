@@ -37,6 +37,16 @@ model Context {
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
 
+model FeatureFlag {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  isEnabled     Boolean       @default(false) @map("is_enabled")
+  createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
+  updatedBy     Int           @map("updated_by")
+}
+
 model Project {
   id            Int           @id @default(autoincrement())
   title         String        @db.VarChar(125)
