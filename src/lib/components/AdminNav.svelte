@@ -54,6 +54,15 @@
             </a>
         </div>
 
+        <div class="nav-section">
+            <a
+                href="/admin/feature-flags" 
+                class={$page.url.pathname === '/feature-flags' ? 'active' : ''}
+            >
+                Feature Flags
+            </a>
+        </div>
+
         {#if loadingError}
             <div class="loading-error">
                 {loadingError}
