@@ -110,8 +110,6 @@ export class FeatureFlagService extends Service {
     };
 
     public getAll = () => {
-        this.authorize();
-    
         return this.transaction(async (tx) => {
             return tx.featureFlag.findMany({
                 orderBy: [ { name: 'asc' } ],
