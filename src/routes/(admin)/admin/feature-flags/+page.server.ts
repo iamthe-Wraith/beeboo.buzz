@@ -30,6 +30,31 @@ export const actions: Actions = {
             return fail(response.statusCode, { errors: response.errors });
         }
     },
+    delete: async ({ request, locals }) => {
+        if (!locals.session.user || !locals.session.user.role) {
+            return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+        }
+
+        try {
+            const featureFlagService = new FeatureFlagService({ user: locals.session.user });
+
+            featureFlagService.authorize();
+
+            const data = await request.formData();
+            const id = parseInt(data.get('id')! as string);
+
+            const featureFlag = await featureFlagService.delete(id);
+
+            if (!featureFlag) {
+                return fail(HttpStatus.NOT_FOUND, { errors: ['Feature flag not found.'] });
+            }
+
+            return { featureFlag };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
     toggleEnabled: async ({ request, locals }) => {
         if (!locals.session.user || !locals.session.user.role) {
             return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });

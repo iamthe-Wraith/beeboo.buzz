@@ -76,6 +76,14 @@ export class FeatureFlagService extends Service {
         }));
     };
 
+    public delete = async (id: number) => {
+        this.authorize();
+
+        return this.transaction(async (tx) => tx.featureFlag.delete({
+            where: { id },
+        }));
+    }
+
     public getById = async (id: number) => {
         this.authorize();
 

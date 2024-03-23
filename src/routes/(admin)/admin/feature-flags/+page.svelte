@@ -84,6 +84,7 @@
                                 <input type="hidden" name="id" value="{featureFlag.id}" />
                                 <button
                                     class="{ featureFlag.isEnabled ? 'enabled' : '' }"
+                                    disabled={processing}
                                 >
                                     <Icon name="checkmark" />
                                 </button>
@@ -98,6 +99,19 @@
                     <div class="description">
                         {featureFlag.description}
                     </div>
+
+                    <div class="delete">
+                        <form
+                            method="POST"
+                            action="/admin/feature-flags?/delete"
+                            use:enhance={onSubmitResponse}
+                        >
+                            <input type="hidden" name="id" value="{featureFlag.id}" />
+                            <button disabled={processing}>
+                                <Icon name="trash" />
+                            </button>
+                        </form>
+                    </div>
                 </li>
             {/each}
         </ul>
@@ -110,7 +124,6 @@
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
-        margin-bottom: 1rem;
     }
 
     h1 {
@@ -124,14 +137,14 @@
     }
 
     .feature-flags {
+        container-type: inline-size;
         padding: 1rem 0;
     }
 
     .feature-flag {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
         padding: 0.5rem;
         border: 1px solid var(--dark-500);
         border-radius: 0.25rem;
@@ -148,11 +161,13 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            width: 20rem;
+            width: 100%;
+            flex-shrink: 0;
         }
     }
 
-    .enabled {
+    .enabled,
+    .delete {
         width: 2rem;
 
         & button {
@@ -162,16 +177,21 @@
             width: 1.75rem;
             height: 1.75rem;
             background: none;
-            border: 1px solid var(--dark-500);
             border-radius: 0.25rem;
+        }
+    }
 
-            & svg {
-                display: none;
-                font-size: 1.5rem;
-            }
+    .enabled {
+        & button {
+            border: 1px solid var(--dark-500);
 
             &.enabled {
                 border: 1px solid var(--primary-500);
+
+                & svg {
+                    display: none;
+                    font-size: 1.5rem;
+                }
 
                 & svg {
                     display: block;
@@ -184,5 +204,47 @@
     .description {
         flex-grow: 1;
         color: var(--dark-700);
+    }
+
+    .delete {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+
+        & button {
+            border: none;
+            background: none;
+
+            &:hover {
+                cursor: pointer;
+                
+                & svg {
+                    color: var(--danger-400);
+                }
+            }
+
+            & svg {
+                font-size: 1.25rem;
+                color: var(--dark-600);
+            }
+        }
+    }
+
+    @container (min-width: 580px) {
+        .feature-flag {
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .feature-flag > div:first-child {
+            width: 15rem;
+        }
+
+        .delete {
+            width: auto;
+            justify-content: center;
+        }
     }
 </style>
