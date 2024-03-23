@@ -1,4 +1,4 @@
-import { UserRole } from "@prisma/client";
+import { UserRole, type FeatureFlag } from "@prisma/client";
 import { Service, type IServiceProps } from "./service";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
@@ -21,6 +21,11 @@ export interface IUpdateFeatureFlagRequest {
 export class FeatureFlagService extends Service {
     constructor(props: IServiceProps) {
         super(props);
+    }
+
+    public static featureIsEnabled = (slug: string, featureFlags: FeatureFlag[]) => {
+        const ff = featureFlags.find((ff) => ff.slug === slug);
+        return !!ff?.isEnabled;
     }
 
     public static isValidFeatureFlagRequest = (featureFlag: ICreateFeatureFlagRequest) => {

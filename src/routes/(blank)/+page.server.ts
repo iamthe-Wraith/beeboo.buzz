@@ -23,7 +23,7 @@ export const actions: Actions = {
         locals.session?.delete(cookies);
         return redirect(302, '/');
     },
-	signup: async ({ request, cookies }) => {
+	signup: async ({ request, cookies, locals }) => {
         const authService = new AuthService(cookies);
 
 		const data = await request.formData();
@@ -32,7 +32,7 @@ export const actions: Actions = {
 		const password = data.get('password')! as string;
 
         try {
-            await authService.signup({ email, username, password });
+            await authService.signup({ email, username, password }, locals.featureFlags);
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });

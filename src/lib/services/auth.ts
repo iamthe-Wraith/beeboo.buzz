@@ -1,6 +1,6 @@
 import { prisma } from "$lib/storage/db";
 import { emailSchema, passwordSchema, usernameSchema } from "$lib/utils/schemas";
-import { $Enums, type User } from "@prisma/client";
+import { $Enums, type FeatureFlag, type User } from "@prisma/client";
 import { generatePasswordHash, isValidPassword } from "../utils/auth";
 import type { SafeParseSuccess } from "zod";
 import { ApiError } from "$lib/utils/api-error";
@@ -9,6 +9,7 @@ import { Logger } from "./logger";
 import type { Cookies } from "@sveltejs/kit";
 import { Session } from "./session";
 import { ContextService } from "./context";
+import { FeatureFlagService } from "./feature-flag";
 
 export interface ISigninRequest {
     emailOrUsername: string;
@@ -65,7 +66,11 @@ export class AuthService {
         }
     }
 
-    public signup = async ({ email, username, password }: ISignupRequest) => {
+    public signup = async ({ email, username, password }: ISignupRequest, featureFlags: FeatureFlag[]) => {
+        if (!FeatureFlagService.featureIsEnabled('allow-new-users', featureFlags)) {
+            throw new ApiError('Sorry, we\'re not accepting new users at this time.', HttpStatus.FORBIDDEN);
+        }
+
         const validatedEmail = emailSchema.safeParse(email.trim());
         const validatedUsername = usernameSchema.safeParse(username.trim());
         const validatedPassword = passwordSchema.safeParse(password.trim());

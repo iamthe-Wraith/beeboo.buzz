@@ -8,6 +8,8 @@
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { IApiError } from '$lib/utils/api-error';
 	import { user } from '$lib/stores/user';
+	import { FeatureFlagService } from '$lib/services/feature-flag';
+	import { featureFlags } from '$lib/stores/featureFlags';
 
     let email: string = '';
     let username: string = '';
@@ -144,75 +146,80 @@
     }
 </script>
 
-<form
-    method="POST" 
-    action="/?/signup" 
-    data-testid={'signup-form'}
-    use:enhance={onSubmitResponse}
->
-    <TextInput
-        bind:value={email}
-        required
-        id="email"
-        type="email"
-        label="Email"
-        placeholder="Enter your email"
-        error={emailError}
-        on:blur={onEmailBlur}
-    />
+{#if FeatureFlagService.featureIsEnabled('allow-new-users', $featureFlags)}
+    <form
+        method="POST" 
+        action="/?/signup" 
+        data-testid={'signup-form'}
+        use:enhance={onSubmitResponse}
+    >
+        <TextInput
+            bind:value={email}
+            required
+            id="email"
+            type="email"
+            label="Email"
+            placeholder="Enter your email"
+            error={emailError}
+            on:blur={onEmailBlur}
+        />
 
-    <TextInput
-        bind:value={username}
-        required
-        id="username"
-        type="text"
-        label="Username"
-        placeholder="Enter your username"
-        error={usernameError}
-        on:blur={onUsernameBlur}
-    />
+        <TextInput
+            bind:value={username}
+            required
+            id="username"
+            type="text"
+            label="Username"
+            placeholder="Enter your username"
+            error={usernameError}
+            on:blur={onUsernameBlur}
+        />
 
-    <TextInput
-        bind:value={password}
-        required
-        id="password"
-        type="password"
-        label="Password"
-        text="Must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character."
-        placeholder="Enter your password"
-        error={passwordError}
-        on:blur={onPasswordBlur}
-    />
+        <TextInput
+            bind:value={password}
+            required
+            id="password"
+            type="password"
+            label="Password"
+            text="Must be at least 8 characters long and contain at least one number, one uppercase letter, one lowercase letter, and one special character."
+            placeholder="Enter your password"
+            error={passwordError}
+            on:blur={onPasswordBlur}
+        />
 
-    <TextInput
-        bind:value={confirmPassword}
-        required
-        id="confirm-password"
-        type="password"
-        label="Confirm Password"
-        placeholder="Confirm your password"
-        error={confirmPasswordError}
-        on:blur={onConfirmPasswordBlur}
-    />
+        <TextInput
+            bind:value={confirmPassword}
+            required
+            id="confirm-password"
+            type="password"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            error={confirmPasswordError}
+            on:blur={onConfirmPasswordBlur}
+        />
 
-    <div class="signout-footer">
-        {#if genError}
-            <p class="error">{genError}</p>
-        {/if}
+        <div class="signout-footer">
+            {#if genError}
+                <p class="error">{genError}</p>
+            {/if}
 
-        <div class="buttons-container">
-            <Button
-                {processing}
-                type="submit"
-                disabled={disabled}
-            >
-                Sign Up
-            </Button>
+            <div class="buttons-container">
+                <Button
+                    {processing}
+                    type="submit"
+                    disabled={disabled}
+                >
+                    Sign Up
+                </Button>
 
-            <slot name="secondary-action" />
+                <slot name="secondary-action" />
+            </div>
         </div>
-    </div>
-</form>
+    </form>
+{:else}
+    <p class="error sorry">Sorry, we're not accepting new users at this time. Please try again later.</p>
+{/if}
+
 
 <style>
     form {
@@ -248,5 +255,9 @@
 
     p.error {
         text-align: center;
+    }
+
+    p.sorry {
+        padding: 2rem 0;
     }
 </style>

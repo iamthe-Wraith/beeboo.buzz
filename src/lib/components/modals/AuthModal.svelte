@@ -4,6 +4,8 @@
     import Modal from "./Modal.svelte";
     import Button from "../Button.svelte";
     import Signin from "../forms/Signin.svelte";
+	import { FeatureFlagService } from "$lib/services/feature-flag";
+	import { featureFlags } from "$lib/stores/featureFlags";
 
     export let id: string;
     export let open: boolean;
@@ -30,16 +32,18 @@
     {#if method === 'signin'}
         <Signin bind:reset={reset}>
             <div slot="secondary-action">
-                <p>
-                    Don't have an account yet?
-                    
-                    <Button
-                        kind="primary-transparent"
-                        on:click={onChangeAuthMethod('signup')}
-                    >
-                        Sign Up
-                    </Button>
-                </p>
+                {#if FeatureFlagService.featureIsEnabled('allow-new-users', $featureFlags)}
+                    <p>
+                        Don't have an account yet?
+                        
+                        <Button
+                            kind="primary-transparent"
+                            on:click={onChangeAuthMethod('signup')}
+                        >
+                            Sign Up
+                        </Button>
+                    </p>
+                {/if}
             </div>
         </Signin>
     {:else}

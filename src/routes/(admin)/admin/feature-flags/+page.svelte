@@ -164,6 +164,24 @@
             width: 100%;
             flex-shrink: 0;
         }
+
+        & button {
+            border: 1px solid var(--dark-500);
+
+            & svg {
+                display: none;
+                font-size: 1.5rem;
+            }
+
+            &.enabled {
+                border: 1px solid var(--primary-500);
+
+                & svg {
+                    display: block;
+                    color: var(--success-500);
+                }
+            }
+        }
     }
 
     .enabled,
@@ -178,26 +196,6 @@
             height: 1.75rem;
             background: none;
             border-radius: 0.25rem;
-        }
-    }
-
-    .enabled {
-        & button {
-            border: 1px solid var(--dark-500);
-
-            &.enabled {
-                border: 1px solid var(--primary-500);
-
-                & svg {
-                    display: none;
-                    font-size: 1.5rem;
-                }
-
-                & svg {
-                    display: block;
-                    color: var(--success-500);
-                }
-            }
         }
     }
 
