@@ -86,10 +86,7 @@ export const actions: Actions = {
 export const load: PageServerLoad = async ({ locals }) => {
     if (!locals.session.user) redirect(303, '/?signin=true');
 
-    const featureFlagService = new FeatureFlagService({ user: locals.session.user });
-    const featureFlags = await featureFlagService.getAll();
-
     return {
-        featureFlags,
+        featureFlags: locals.featureFlags || [],
     };
 };

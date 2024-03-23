@@ -3,6 +3,7 @@ import { Service, type IServiceProps } from "./service";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { MAX_FEATURE_FLAG_DESCRIPTION_LENGTH, MAX_FEATURE_FLAG_NAME_LENGTH } from "$lib/constants/feature-flag";
+import slugify from "slugify";
 
 export interface ICreateFeatureFlagRequest {
     name: string;
@@ -66,9 +67,20 @@ export class FeatureFlagService extends Service {
         const validationErrors = FeatureFlagService.isValidFeatureFlagRequest({ name, description, isEnabled });
         if (validationErrors.length) throw validationErrors;
 
+        const existingFeatureFlag = await this.transaction(async (tx) => tx.featureFlag.findUnique({
+            where: { name },
+        }));
+
+        if (existingFeatureFlag) {
+            throw new ApiError('Feature flag with this name already exists.', HttpStatus.CONFLICT);
+        }
+
+        const slug = this.slugify(name);
+
         return this.transaction(async (tx) => tx.featureFlag.create({
             data: {
                 name,
+                slug,
                 description,
                 isEnabled,
                 updatedBy: this.user.id,
@@ -108,14 +120,42 @@ export class FeatureFlagService extends Service {
         const validationErrors = FeatureFlagService.isValidFeatureFlagRequest({ name, description: description ?? undefined, isEnabled });
         if (validationErrors.length) throw validationErrors;
 
+        const existingFeatureFlag = await this.transaction(async (tx) => tx.featureFlag.findUnique({
+            where: { id },
+        }));
+        
+        if (!existingFeatureFlag) {
+            throw new ApiError('Feature flag not found.', HttpStatus.NOT_FOUND);
+        }
+
+        if (existingFeatureFlag.name !== name) {
+            const existingFeatureFlagWithNewName = await this.transaction(async (tx) => tx.featureFlag.findUnique({
+                where: { name },
+            }));
+
+            if (existingFeatureFlagWithNewName) {
+                throw new ApiError('Feature flag with this name already exists.', HttpStatus.CONFLICT);
+            }
+        }
+
+        const slug = this.slugify(name);
+
         return this.transaction(async (tx) => tx.featureFlag.update({
             where: { id },
             data: {
                 name,
+                slug,
                 description,
                 isEnabled,
                 updatedBy: this.user.id,
             },
         }));
+    }
+
+    private slugify = (name: string) => {
+        return slugify(name, {
+            lower: true,
+            strict: true,
+        });
     }
 }

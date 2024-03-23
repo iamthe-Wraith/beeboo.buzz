@@ -3,10 +3,12 @@
     import './global.css';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
+	import { featureFlags } from '$lib/stores/featureFlags';
 	
     export let data: LayoutData;
 
     $: if (data?.user) user.set(data.user);
+    $: if (data?.featureFlags) featureFlags.set(data.featureFlags);
 </script>
 
 <svelte:head>

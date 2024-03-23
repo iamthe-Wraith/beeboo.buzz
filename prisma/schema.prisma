@@ -40,6 +40,7 @@ model Context {
 model FeatureFlag {
   id            Int           @id @default(autoincrement())
   name          String        @unique
+  slug          String        @unique
   description   String?
   isEnabled     Boolean       @default(false) @map("is_enabled")
   createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")

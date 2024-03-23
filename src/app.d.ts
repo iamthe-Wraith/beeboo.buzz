@@ -1,6 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 
 import type { Session } from "$lib/services/session";
+import type { FeatureFlag } from "@prisma/client";
 
 // for information about these interfaces
 declare global {
@@ -15,6 +16,7 @@ declare global {
 	namespace App {
 		interface Locals {
 			session: Session;
+			featureFlags: FeatureFlag[];
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			metadata?: Record<string, any>;
 		}
