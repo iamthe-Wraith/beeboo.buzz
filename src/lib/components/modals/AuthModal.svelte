@@ -4,7 +4,6 @@
     import Modal from "./Modal.svelte";
     import Button from "../Button.svelte";
     import Signin from "../forms/Signin.svelte";
-	import { FeatureFlagService } from "$lib/services/feature-flag";
 	import { featureFlags } from "$lib/stores/featureFlags";
 
     export let id: string;
@@ -32,7 +31,7 @@
     {#if method === 'signin'}
         <Signin bind:reset={reset}>
             <div slot="secondary-action">
-                {#if FeatureFlagService.featureIsEnabled('allow-new-users', $featureFlags)}
+                {#if $featureFlags['allow-new-users']?.isEnabled}
                     <p>
                         Don't have an account yet?
                         

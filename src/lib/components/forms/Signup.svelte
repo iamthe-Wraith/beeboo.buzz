@@ -7,8 +7,6 @@
     import { onMount } from "svelte";
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { IApiError } from '$lib/utils/api-error';
-	import { user } from '$lib/stores/user';
-	import { FeatureFlagService } from '$lib/services/feature-flag';
 	import { featureFlags } from '$lib/stores/featureFlags';
 
     let email: string = '';
@@ -146,7 +144,7 @@
     }
 </script>
 
-{#if FeatureFlagService.featureIsEnabled('allow-new-users', $featureFlags)}
+{#if $featureFlags['allow-new-users']?.isEnabled}
     <form
         method="POST" 
         action="/?/signup" 
@@ -219,7 +217,6 @@
 {:else}
     <p class="error sorry">Sorry, we're not accepting new users at this time. Please try again later.</p>
 {/if}
-
 
 <style>
     form {

@@ -90,7 +90,7 @@ test.describe('new project', () => {
     test.describe('creating new project', () => {
         test('should create new project when only a title is provided', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
-    
+
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);
@@ -116,7 +116,7 @@ test.describe('new project', () => {
 
         test('should create new project when title and description are provided', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
-    
+
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);
@@ -144,7 +144,7 @@ test.describe('new project', () => {
 
         test('should show error if title is empty', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
-    
+
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);
@@ -173,7 +173,7 @@ test.describe('new project', () => {
 
         test('should show error if title is too long', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
-    
+
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);
@@ -202,7 +202,7 @@ test.describe('new project', () => {
 
         test('should show error if the description is too long', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
-    
+        
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);

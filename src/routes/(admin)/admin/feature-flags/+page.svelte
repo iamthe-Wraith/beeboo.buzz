@@ -3,7 +3,7 @@
     import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
     import type { PageData } from "./$types";
-	import { type FeatureFlag } from "@prisma/client";
+	import type { FeatureFlag } from "@prisma/client";
 	import { user } from "$lib/stores/user";
     import Button from "$lib/components/Button.svelte";
 	import NewFeatureFlagModal from "$lib/components/modals/NewFeatureFlagModal.svelte";
@@ -16,7 +16,7 @@
     let processing = false;
     let error = '';
 
-    $: featureFlags = data.featureFlags;
+    $: featureFlags = Object.values(data.featureFlags);
 
     function onSubmitResponse() {
         processing = true;
@@ -165,7 +165,7 @@
             flex-shrink: 0;
         }
 
-        & button {
+        & .enabled button {
             border: 1px solid var(--dark-500);
 
             & svg {

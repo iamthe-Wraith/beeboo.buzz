@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { ContextService, type IContextRequest } from './context';
-import { ContextRole } from '@prisma/client';
+import { ContextRole } from '../../types/contexts';
 
 describe('services - context', () => {
     describe('isValidContextRequest', () => {

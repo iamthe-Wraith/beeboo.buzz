@@ -32,7 +32,8 @@ const config: PlaywrightTestConfig = {
 			name: 'Mobile Safari',
 			use: { ...devices['iPhone 12'] }
 		}
-	]
+	],
+	globalSetup: './tests/global-setup',
 };
 
 export default config;

@@ -1,6 +1,5 @@
 <script lang="ts">
     import AuthModal from '$lib/components/modals/AuthModal.svelte';
-	import { FeatureFlagService } from '$lib/services/feature-flag';
 	import { featureFlags } from '$lib/stores/featureFlags';
 	import type { AuthMethod } from '$lib/types/modal';
 	import { onMount } from 'svelte';
@@ -42,9 +41,10 @@
 </script>
 
 <div class="button-container">
-    {#if (triggerType === 'both' || triggerType === 'signup') && FeatureFlagService.featureIsEnabled('allow-new-users', $featureFlags)}
+    {#if (triggerType === 'both' || triggerType === 'signup') && $featureFlags['allow-new-users']?.isEnabled})}
         <button on:click={onTriggerClick('signup')}>Sign up</button>
     {/if}
+
     {#if triggerType === 'both' || triggerType === 'signin'}
         <button on:click={onTriggerClick('signin')}>Sign in</button>
     {/if}

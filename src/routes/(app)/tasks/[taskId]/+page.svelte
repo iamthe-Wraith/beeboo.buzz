@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
     import type { Context, Task } from "@prisma/client";
     import type { PageData } from "./$types";
     import dayjs from "dayjs";

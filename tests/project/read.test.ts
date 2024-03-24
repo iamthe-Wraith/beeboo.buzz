@@ -8,6 +8,7 @@ import { ProjectPageFixture } from "../fixtures/project-page";
 
 test.describe('project - read', () => {
     test('should display the project info', async ({ page, viewport, database }) => {
+        
         const email = getEmail();
         const password = 'Password123!';
         const projects = [
@@ -77,6 +78,7 @@ test.describe('project - read', () => {
     });
 
     test('clicking projects link should redirect to /projects', async ({ page, viewport, database }) => {
+
         const email = getEmail();
         const password = 'Password123!';
         const projects = [

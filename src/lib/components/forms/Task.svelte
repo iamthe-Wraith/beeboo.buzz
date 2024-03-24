@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
-	import type { Context, Task } from "@prisma/client";
+	import type { Task } from "@prisma/client";
 	import dayjs from "dayjs";
     import { contexts } from '$lib/stores/contexts';
     import Button from "../Button.svelte";

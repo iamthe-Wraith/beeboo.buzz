@@ -82,19 +82,21 @@ model Task {
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
 
+// !IMPORTANT this must match the enum found in src/types/user.ts
 enum AccountType {
   FREE
-  PAID
-  ADMIN
-  SUPER_ADMIN
+  TRIAL
+  PRO
 }
 
+// !IMPORTANT this must match the enum found in src/types/contexts.ts
 enum ContextRole {
   NONE
   INBOX
   WAITING
 }
 
+// !IMPORTANT this must match the enum found in src/types/user.ts
 enum UserRole {
   USER
   ADMIN

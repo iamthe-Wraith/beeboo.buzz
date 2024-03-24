@@ -9,6 +9,7 @@ import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/c
 
 test.describe('project - update', () => {
     test('user should be able to complete the project', async ({ page, viewport, database }) => {
+        
         const email = getEmail();
         const password = 'Password123!';
         const projects = [
@@ -70,6 +71,7 @@ test.describe('project - update', () => {
 
     test.describe('edit project info', () => {
         test('clicking the edit button displays the project edit form', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -131,6 +133,7 @@ test.describe('project - update', () => {
         });
     
         test('clicking the cancel button returns user to project details page', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -191,6 +194,7 @@ test.describe('project - update', () => {
         });
     
         test('user should be able to update the project title', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -252,6 +256,7 @@ test.describe('project - update', () => {
         });
     
         test('user should be able to update the project description', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -313,6 +318,7 @@ test.describe('project - update', () => {
         });
     
         test('user should not be able to submit the form if the title is empty', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -371,6 +377,7 @@ test.describe('project - update', () => {
         });
     
         test('user should not be able to submit the form if the title is too long', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -430,6 +437,7 @@ test.describe('project - update', () => {
         });
 
         test('user should not be able to submit the form if the description is too long', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [
@@ -489,6 +497,7 @@ test.describe('project - update', () => {
         });
     
         test('user should not be able to submit the form if no changes have been made', async ({ page, viewport, database }) => {
+    
             const email = getEmail();
             const password = 'Password123!';
             const projects = [

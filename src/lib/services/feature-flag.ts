@@ -1,9 +1,9 @@
-import { UserRole, type FeatureFlag } from "@prisma/client";
 import { Service, type IServiceProps } from "./service";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { MAX_FEATURE_FLAG_DESCRIPTION_LENGTH, MAX_FEATURE_FLAG_NAME_LENGTH } from "$lib/constants/feature-flag";
 import slugify from "slugify";
+import { UserRole } from "../../types/user";
 
 export interface ICreateFeatureFlagRequest {
     name: string;
@@ -21,11 +21,6 @@ export interface IUpdateFeatureFlagRequest {
 export class FeatureFlagService extends Service {
     constructor(props: IServiceProps) {
         super(props);
-    }
-
-    public static featureIsEnabled = (slug: string, featureFlags: FeatureFlag[]) => {
-        const ff = featureFlags.find((ff) => ff.slug === slug);
-        return !!ff?.isEnabled;
     }
 
     public static isValidFeatureFlagRequest = (featureFlag: ICreateFeatureFlagRequest) => {
