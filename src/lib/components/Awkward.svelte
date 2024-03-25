@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Link from "./Link.svelte";
+	import { user } from "$lib/stores/user";
+    import Link from "./Link.svelte";
 
     export let message: string;
 </script>
@@ -9,9 +10,11 @@
         <p>Well this is awkward...</p>
         <p>{ message }</p>
         
-        <div class="links-container">
-            <Link type="neutral" href="/dashboard">Back to Dashboard</Link>
-        </div>
+        {#if $user}
+            <div class="links-container">
+                <Link type="neutral" href="/dashboard">Back to Dashboard</Link>
+            </div>
+        {/if}
     </div>
 </div>
 

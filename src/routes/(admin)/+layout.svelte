@@ -2,12 +2,12 @@
     import { PUBLIC_APP_ENV } from '$env/static/public';
     import '../global.css';
     import Logo from '$lib/components/Logo.svelte';
-	import AdminNav from '$lib/components/AdminNav.svelte';
-	import MobileAdminNav from '$lib/components/MobileAdminNav.svelte';
+    import AdminNav from '$lib/components/AdminNav.svelte';
+    import MobileAdminNav from '$lib/components/MobileAdminNav.svelte';
 </script>
 
 <svelte:head>
-	{#if PUBLIC_APP_ENV === 'production'}
+    {#if PUBLIC_APP_ENV === 'production'}
         <meta
             http-equiv="Content-Security-Policy"
             content="
@@ -19,9 +19,9 @@
                 child-src blob:; 
                 worker-src blob:;"
         />
-	{/if}
+    {/if}
 
-	{#if PUBLIC_APP_ENV === 'test'}
+    {#if PUBLIC_APP_ENV === 'test'}
         <meta
             http-equiv="Content-Security-Policy"
             content="
@@ -33,7 +33,7 @@
                 child-src blob:; 
                 worker-src blob:;"
         />
-	{/if}
+    {/if}
 </svelte:head>
 
 <div class="container">

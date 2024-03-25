@@ -66,7 +66,6 @@ test.describe('project - delete', () => {
     });
 
     test('clicking the cancel button within the confirmation modal should close the modal and cancel the deletion', async ({ page, viewport, database }) => {
-
         const email = getEmail();
         const password = 'Password123!';
         const projects = [
@@ -123,7 +122,6 @@ test.describe('project - delete', () => {
     });
 
     test('clicking the delete button within the confirmation modal should delete the project', async ({ page, viewport, database }) => {
-
         const email = getEmail();
         const password = 'Password123!';
         const projects = [

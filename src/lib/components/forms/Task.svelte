@@ -3,16 +3,16 @@
     import { onMount } from "svelte";
     import { enhance } from "$app/forms";
     import { goto } from "$app/navigation";
-	import type { Task } from "@prisma/client";
-	import dayjs from "dayjs";
+    import type { Task } from "@prisma/client";
+    import dayjs from "dayjs";
     import { contexts } from '$lib/stores/contexts';
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
     import Textarea from "../Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
-	import Dropdown from "../Dropdown.svelte";
-	import { MAX_PROJECT_DESCRIPTION_LENGTH } from "$lib/constants/project";
-	import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+    import Dropdown from "../Dropdown.svelte";
+    import { MAX_PROJECT_DESCRIPTION_LENGTH } from "$lib/constants/project";
+    import { MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 	
     type FormField = 'title' | 'description' | 'dueDate';
 

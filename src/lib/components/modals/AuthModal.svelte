@@ -4,7 +4,7 @@
     import Modal from "./Modal.svelte";
     import Button from "../Button.svelte";
     import Signin from "../forms/Signin.svelte";
-	import { featureFlags } from "$lib/stores/featureFlags";
+    import { featureFlags } from "$lib/stores/featureFlags";
 
     export let id: string;
     export let open: boolean;

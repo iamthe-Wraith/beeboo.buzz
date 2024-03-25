@@ -4,11 +4,11 @@ import { error, redirect } from '@sveltejs/kit';
 import { UserRole } from '../../types/user';
 
 export const load: LayoutServerLoad = async ({ locals }) => {
-	if (!locals.session.user) redirect(303, '/?signin=true');
+    if (!locals.session.user) redirect(303, '/?signin=true');
 
     if (locals.session.user.role !== UserRole.ADMIN && locals.session.user.role !== UserRole.SUPER_ADMIN) {
         error(HttpStatus.FORBIDDEN);
     }
 
-	return {};
+    return {};
 };

@@ -7,8 +7,8 @@
     import type { ActionResult } from "@sveltejs/kit";
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
-	import { MAX_FEATURE_FLAG_DESCRIPTION_LENGTH, MAX_FEATURE_FLAG_NAME_LENGTH } from "$lib/constants/feature-flag";
-	import Checkbox from "../Checkbox.svelte";
+    import { MAX_FEATURE_FLAG_DESCRIPTION_LENGTH, MAX_FEATURE_FLAG_NAME_LENGTH } from "$lib/constants/feature-flag";
+    import Checkbox from "../Checkbox.svelte";
 
     type FormField = 'name' | 'description';
 
@@ -81,7 +81,7 @@
                     if (!name) {
                         nameError = 'Name is required.';
                     } else if (name.length > MAX_FEATURE_FLAG_NAME_LENGTH) {
-                        nameError = `Title must be less than ${MAX_FEATURE_FLAG_NAME_LENGTH} characters.`;
+                        nameError = `Name must be less than ${MAX_FEATURE_FLAG_NAME_LENGTH} characters.`;
                     } else {
                         nameError = '';
                     }
@@ -117,8 +117,8 @@
     <TextInput
         required
         id="name"
-        data-testid="new-feature-flag-title"
-        label="Title"
+        data-testid="new-feature-flag-name"
+        label="Name"
         placeholder="Feature Flag Name"
         error={nameError}
         bind:value={name}

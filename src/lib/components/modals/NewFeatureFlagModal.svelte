@@ -1,5 +1,5 @@
 <script lang="ts">
-	import NewFeatureFlag from "../forms/NewFeatureFlag.svelte";
+    import NewFeatureFlag from "../forms/NewFeatureFlag.svelte";
     import Modal from "./Modal.svelte";
 
     let open = false;

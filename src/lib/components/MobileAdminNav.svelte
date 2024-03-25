@@ -1,8 +1,8 @@
 <script lang="ts">
     import { clickOutside } from "$lib/actions/click-outside";
-	import { onMount } from "svelte";
-	import Icon from "./Icon.svelte";
-	import AdminNav from "./AdminNav.svelte";
+    import { onMount } from "svelte";
+    import Icon from "./Icon.svelte";
+    import AdminNav from "./AdminNav.svelte";
 
     let mobileGlobalNav: HTMLDialogElement;
     let open = false;

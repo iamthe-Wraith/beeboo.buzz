@@ -1,14 +1,14 @@
 <script lang="ts">
-	import type { ActionResult } from "@sveltejs/kit";
+    import type { ActionResult } from "@sveltejs/kit";
     import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
+    import { goto } from "$app/navigation";
     import type { PageData } from "./$types";
-	import type { FeatureFlag } from "@prisma/client";
-	import { user } from "$lib/stores/user";
+    import type { FeatureFlag } from "@prisma/client";
+    import { user } from "$lib/stores/user";
     import Button from "$lib/components/Button.svelte";
-	import NewFeatureFlagModal from "$lib/components/modals/NewFeatureFlagModal.svelte";
-	import Icon from "$lib/components/Icon.svelte";
-	import type { IApiError } from "$lib/utils/api-error";
+    import NewFeatureFlagModal from "$lib/components/modals/NewFeatureFlagModal.svelte";
+    import Icon from "$lib/components/Icon.svelte";
+    import type { IApiError } from "$lib/utils/api-error";
 
     export let data: PageData;
 

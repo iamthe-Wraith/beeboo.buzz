@@ -1,8 +1,8 @@
 <script lang="ts">
     import AuthModal from '$lib/components/modals/AuthModal.svelte';
-	import { featureFlags } from '$lib/stores/featureFlags';
-	import type { AuthMethod } from '$lib/types/modal';
-	import { onMount } from 'svelte';
+    import { featureFlags } from '$lib/stores/featureFlags';
+    import type { AuthMethod } from '$lib/types/modal';
+    import { onMount } from 'svelte';
 
     export let triggerType: 'both' | 'signin' | 'signup' = 'both';
     export let allowOpenFromQueryParams = false;
@@ -41,7 +41,7 @@
 </script>
 
 <div class="button-container">
-    {#if (triggerType === 'both' || triggerType === 'signup') && $featureFlags['allow-new-users']?.isEnabled})}
+    {#if (triggerType === 'both' || triggerType === 'signup') && $featureFlags['allow-new-users']?.isEnabled}
         <button on:click={onTriggerClick('signup')}>Sign up</button>
     {/if}
 

@@ -63,7 +63,6 @@ test.describe('desktop nav', () => {
         test('nav should have links for each default context created after signup', async ({ page, viewport, database }) => {
             if (viewport && viewport.width < 768) test.skip();
 
-    
             const email = getEmail();
             const password = 'Password123!';
             const signup = new SignUpFixture(page);

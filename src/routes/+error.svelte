@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-	import Awkward from "$lib/components/Awkward.svelte";
+    import { page } from "$app/stores";
+    import Awkward from "$lib/components/Awkward.svelte";
 </script>
 
 <div class="error-container">

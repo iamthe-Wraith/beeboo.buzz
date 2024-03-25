@@ -3,7 +3,7 @@
     import './global.css';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
-	import { featureFlags } from '$lib/stores/featureFlags';
+    import { featureFlags } from '$lib/stores/featureFlags';
 	
     export let data: LayoutData;
 
@@ -12,10 +12,10 @@
 </script>
 
 <svelte:head>
-	{#if PUBLIC_APP_ENV === 'production'}
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="
+    {#if PUBLIC_APP_ENV === 'production'}
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
@@ -23,13 +23,13 @@
                 img-src https://ohmygtd.wraithcode.io blob:; 
                 child-src blob:; 
                 worker-src blob:;"
-		/>
-	{/if}
+        />
+    {/if}
 
-	{#if PUBLIC_APP_ENV === 'test'}
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="
+    {#if PUBLIC_APP_ENV === 'test'}
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="
                 default-src 'self' 'unsafe-inline';
                 style-src 'self' 'unsafe-inline';
                 font-src 'self'; 
@@ -37,8 +37,8 @@
                 img-src http://localhost:5173 http://localhost:4173 blob:; 
                 child-src blob:; 
                 worker-src blob:;"
-		/>
-	{/if}
+        />
+    {/if}
 </svelte:head>
 
 <slot></slot>

@@ -2,7 +2,7 @@
     import Auth from '$lib/components/Auth.svelte';
     import { user } from '$lib/stores/user';
     import Signout from '$lib/components/forms/Signout.svelte';
-	import Logo from '$lib/components/Logo.svelte';
+    import Logo from '$lib/components/Logo.svelte';
 </script>
 
 <header data-testid="global-header">

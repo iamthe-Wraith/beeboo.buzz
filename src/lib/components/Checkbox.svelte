@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Icon from "./Icon.svelte";
+    import Icon from "./Icon.svelte";
 
     type CheckboxType = 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'danger';
 
