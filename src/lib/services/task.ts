@@ -1,10 +1,11 @@
-import { ContextRole, type Context } from "@prisma/client";
+import { type Context } from "@prisma/client";
 import { ContextService } from "./context";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import dayjs from "dayjs";
 import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
 import { Service, type IServiceProps } from "./service";
+import { ContextRole } from "../../types/contexts";
 
 interface IGetOptions {
     includeCompleted?: boolean;

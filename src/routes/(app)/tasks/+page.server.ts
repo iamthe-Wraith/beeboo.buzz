@@ -4,8 +4,9 @@ import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
 import { TaskService } from '$lib/services/task';
 import { HttpStatus } from '$lib/constants/error';
-import { ContextRole, type Context } from '@prisma/client';
+import { type Context } from '@prisma/client';
 import { ContextService } from '$lib/services/context';
+import { ContextRole } from '../../../types/contexts';
 
 export const actions: Actions = {
     create: async ({ request, locals }) => {

@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/sveltekit';
 import { PUBLIC_SENTRY_DSN, PUBLIC_APP_ENV } from "$env/static/public";
 import { getDenyUrls, getTracesSampleRate } from "$lib/utils/sentry";
 import { authenticate } from "$lib/hooks/authenticate";
+import { loadFeatureFlags } from "$lib/hooks/loadFeatureFlags";
 
 Sentry.init({
   dsn: PUBLIC_SENTRY_DSN,
@@ -18,7 +19,7 @@ Sentry.init({
 });
 
 // If you have custom handlers, make sure to place them after `sentryHandle()` in the `sequence` function.
-export const handle = sequence(sentryHandle(), authenticate);
+export const handle = sequence(sentryHandle(), authenticate, loadFeatureFlags);
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`
 export const handleError = handleErrorWithSentry();

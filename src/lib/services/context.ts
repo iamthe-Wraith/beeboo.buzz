@@ -1,12 +1,12 @@
-import { ContextRole } from "@prisma/client";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { Service, type IServiceProps } from "./service";
+import { ContextRole, type IContextRole } from "../../types/contexts";
 
 export interface IContextRequest {
     name: string;
     description?: string;
-    role: ContextRole;
+    role: keyof IContextRole;
 }
 
 export class ContextService extends Service {
@@ -82,7 +82,7 @@ export class ContextService extends Service {
         }));
     }
 
-    public getContextByRole = async (role: ContextRole) => {
+    public getContextByRole = async (role: keyof IContextRole) => {
         return this.transaction(async (tx) => tx.context.findFirst({
             where: {
                 ownerId: this.user.id,

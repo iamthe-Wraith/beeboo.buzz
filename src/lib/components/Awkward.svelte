@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { user } from "$lib/stores/user";
+    import Link from "./Link.svelte";
+
     export let message: string;
 </script>
 
@@ -6,6 +9,12 @@
     <div>
         <p>Well this is awkward...</p>
         <p>{ message }</p>
+        
+        {#if $user}
+            <div class="links-container">
+                <Link type="neutral" href="/dashboard">Back to Dashboard</Link>
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -30,5 +39,15 @@
                 color: var(--secondary-700);
             }
         }
+    }
+
+    .links-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--dark-400);
     }
 </style>

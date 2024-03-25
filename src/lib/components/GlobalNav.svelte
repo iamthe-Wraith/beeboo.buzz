@@ -118,6 +118,21 @@
                 {/each}
             </div>
         {/if}
+
+        {#if $user?.role === 'ADMIN' || $user?.role === 'SUPER_ADMIN'}
+            <div class="nav-section">
+                <p class="restricted-areas-container">Restricted Areas</p>
+                
+                {#if $user?.role === 'ADMIN' || $user?.role === 'SUPER_ADMIN'}
+                    <a
+                        href="/admin"
+                        class={$page.url.pathname === '/admin' ? 'active' : ''}
+                    >
+                        Admin
+                    </a>
+                {/if}
+            </div>
+        {/if}
     </div>
 
     <div class="lower-nav">
@@ -151,6 +166,14 @@
         width: 100%;
         height: 100%;
         overflow: auto;
+    }
+
+    .restricted-areas-container {
+        margin: 0;
+        padding: 0 0.5rem;
+        font-size: 0.75rem;
+        color: var(--danger-500);
+        text-transform: uppercase;
     }
 
     .upper-nav {

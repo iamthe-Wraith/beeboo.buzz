@@ -132,11 +132,6 @@ body * {
 				opacity 0.2s ease-in-out;
 }
 
-input,
-textarea {
-	outline: none;
-}
-
 a,
 button,
 input,
@@ -148,6 +143,11 @@ select {
 		outline: 1px dashed var(--light-500);
 		outline-offset: calc(var(--outline-offset) - 1px);
 	}
+}
+
+label:has(input:focus-visible) {
+	outline: 1px dashed var(--light-500);
+	outline-offset: calc(var(--outline-offset) - 1px);
 }
 
 p:not(:last-child) {
