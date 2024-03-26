@@ -13,6 +13,38 @@ interface INewUserRequest {
 export class AuthFixture {
     public modal: Locator;
     public modalCloseButton: Locator;
+
+    public invalidUsernames = [
+        'Invalid Username',
+        'Invalid@Username',
+        'Invalid#Username',
+        'Invalid$Username',
+        'Invalid%Username',
+        'Invalid^Username',
+        'Invalid&Username',
+        'Invalid*Username',
+        'Invalid(Username',
+        'Invalid)Username',
+        'Invalid+Username',
+        'Invalid=Username',
+        'Invalid{Username',
+        'Invalid}Username',
+        'Invalid[Username',
+        'Invalid]Username',
+        'Invalid|Username',
+        'Invalid;Username',
+        'Invalid:Username',
+        'Invalid\'Username',
+        'Invalid"Username',
+        'Invalid<Username',
+        'Invalid>Username',
+        'Invalid,Username',
+        'Invalid.Username',
+        'Invalid/Username',
+        'Invalid?Username',
+        'Invalid\\Username',
+        'Invalid`Username',
+    ];
     
     constructor(public readonly page: Page) {
         this.modal = this.page.getByTestId('auth-modal');

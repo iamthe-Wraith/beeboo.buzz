@@ -21,5 +21,6 @@ export const getRandomInt = (min: number, max: number) => {
  * @returns string - a username;
  */
 export const getUsername = () => {
-    return `${faker.internet.userName()}-${new Date().getTime() + getRandomInt(10000, 100000)}`;
+    const username = `${faker.internet.userName()}-${new Date().getTime() + getRandomInt(10000, 100000)}`;
+    return username.replace(/[^a-zA-Z0-9-_]/g, '');
 }

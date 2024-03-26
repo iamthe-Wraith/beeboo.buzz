@@ -4,8 +4,8 @@ export const emailSchema = z.string({
     required_error: 'Email is required',
     invalid_type_error: "Email must be a string",
 })
-    .min(1, 'Email is required')
     .trim()
+    .min(1, 'Email is required')
     .email();
 
 export const passwordSchema = z.string({
@@ -30,4 +30,6 @@ export const usernameSchema = z.string({
 })
     .trim()
     .min(1, 'Username is required')
-    .min(3, 'Username must be at least 3 characters');
+    .min(3, 'Username must be at least 3 characters')
+    .max(80, 'Username must be less than 80 characters')
+    .regex(/^[a-zA-Z0-9_-]+$/, 'Username must contain only letters, numbers, underscores and hyphens');
