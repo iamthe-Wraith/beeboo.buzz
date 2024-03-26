@@ -90,6 +90,8 @@ body {
 	--font-secondary: Balsamiq, sans-serif;
 
 	--outline-offset: 3px;
+
+	background-color: var(--dark-300);
 }
 
 h1,
