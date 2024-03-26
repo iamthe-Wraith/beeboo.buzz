@@ -72,6 +72,7 @@
         email = email.trim();
         if (!username) {
             username = email.split('@')[0];
+            username = username.replace(/[^a-zA-Z0-9-_]/g, '');
             usernameError = '';
         }
         emailError = '';

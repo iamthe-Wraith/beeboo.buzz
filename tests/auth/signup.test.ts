@@ -461,6 +461,46 @@ test.describe('sign up', () => {
             await expect(signup.usernameError).toBeVisible();
             await expect(signup.usernameError).toHaveText('Username must be at least 3 characters');
         })
+
+        test('sign up form username field should show error message when username is too long', async ({ page }) => {
+            await page.goto('/');
+        
+            const signup = new SignUpFixture(page);
+        
+            await expect(signup.modal).not.toBeVisible();
+        
+            await signup.trigger.click();
+        
+            await expect(signup.modal).toBeVisible();
+            await expect(signup.form).toBeVisible();
+        
+            await signup.username.fill('thisUsernameIsWayTooLongAndShouldNotBeAllowedBecauseItIsOverTheEightyCharacterLimit');
+            await signup.username.press('Tab');
+        
+            await expect(signup.usernameError).toBeVisible();
+            await expect(signup.usernameError).toHaveText('Username must be less than 80 characters');
+        })
+
+        test('sign up form username field should show error message when username contains invalid characters', async ({ page }) => {
+            await page.goto('/');
+        
+            const signup = new SignUpFixture(page);
+        
+            await expect(signup.modal).not.toBeVisible();
+        
+            await signup.trigger.click();
+        
+            await expect(signup.modal).toBeVisible();
+            await expect(signup.form).toBeVisible();
+
+            for (const username of signup.invalidUsernames) {
+                await signup.username.fill(username);
+                await signup.username.press('Tab');
+            
+                await expect(signup.usernameError).toBeVisible();
+                await expect(signup.usernameError).toHaveText('Username must contain only letters, numbers, underscores and hyphens');
+            }
+        })
     })
 
     test.describe('submit', () => {

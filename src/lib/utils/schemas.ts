@@ -31,4 +31,5 @@ export const usernameSchema = z.string({
     .trim()
     .min(1, 'Username is required')
     .min(3, 'Username must be at least 3 characters')
+    .max(80, 'Username must be less than 80 characters')
     .regex(/^[a-zA-Z0-9_-]+$/, 'Username must contain only letters, numbers, underscores and hyphens');
