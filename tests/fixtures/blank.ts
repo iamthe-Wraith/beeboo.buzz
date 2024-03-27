@@ -3,6 +3,8 @@ import type { Locator, Page, ViewportSize } from "@playwright/test";
 export class BlankFixture {
     public header: Locator;
 
+    public logo: Locator;
+
     public signInButton: Locator;
     public signUpButton: Locator;
 
@@ -12,10 +14,12 @@ export class BlankFixture {
     constructor(public readonly page: Page, public readonly viewport?: ViewportSize | null) {
         this.header = this.page.getByTestId('global-header');
 
-        this.signInButton = this.header.getByRole('button', { name: 'Sign in' });
-        this.signUpButton = this.header.getByRole('button', { name: 'Sign up' });
+        this.logo = this.header.getByTestId('logo');
 
-        this.dashboardLink = this.header.getByRole('link', { name: 'Dashboard' });
-        this.signoutButton = this.header.getByRole('button', { name: 'Sign out' });
+        this.signInButton = this.header.getByTestId('signin-button');
+        this.signUpButton = this.header.getByTestId('signup-button');
+
+        this.dashboardLink = this.header.getByTestId('dashboard-link');
+        this.signoutButton = this.header.getByTestId('signout-button');
     }
 }

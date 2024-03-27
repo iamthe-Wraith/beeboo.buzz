@@ -1,30 +1,31 @@
-import { sleep } from '$lib/utils/gen';
+// import { sleep } from '$lib/utils/gen';
 import { test, expect } from '../custom-test';
 import { BlankFixture } from '../fixtures/blank';
+import { NavFixture } from '../fixtures/nav';
 import { SignUpFixture } from '../fixtures/signup';
 import { getEmail } from '../helpers';
 
 test.describe('homepage', () => {
     test('should have a header when user is not signed in', async ({ page }) => {
         await page.goto('/');
-        await page.waitForURL('/', {waitUntil: 'networkidle'});
 
         const blank = new BlankFixture(page);
 
-        expect(blank.header).toBeVisible();
+        await expect(blank.header).toBeVisible();
 
-        expect(blank.signInButton).toBeVisible();
-        expect(blank.signUpButton).toBeVisible();
+        await expect(blank.logo).toBeVisible();
+        await expect(blank.signInButton).toBeVisible();
+        await expect(blank.signUpButton).toBeVisible();
     });
 
     test('should have a header when user is signed in', async ({ page }) => {
         const email = getEmail();
         const password = 'Password123!';
     
-        await page.goto('/');
-    
         const signup = new SignUpFixture(page);
         const blank = new BlankFixture(page);
+
+        await page.goto('/');
         
         await signup.signUp({
             email, 
@@ -37,21 +38,21 @@ test.describe('homepage', () => {
         await page.goto('/');
         await page.waitForURL('/', {waitUntil: 'networkidle'});
 
-        expect(blank.header).toBeVisible();
+        await expect(blank.header).toBeVisible();
 
-        expect(blank.dashboardLink).toBeVisible();
-        expect(blank.signoutButton).toBeVisible();
+        await expect(blank.dashboardLink).toBeVisible();
+        await expect(blank.signoutButton).toBeVisible();
     });
 
-    test('user should be able to sign out', async ({ page }) => {
+    test('user should be able to sign out', async ({ page, viewport }) => {
         const email = getEmail();
         const password = 'Password123!';
     
-        await page.goto('/');
-        await page.waitForURL('/', {waitUntil: 'networkidle'});
-    
-        const signup = new SignUpFixture(page);
         const blank = new BlankFixture(page);
+        const signup = new SignUpFixture(page);
+        const nav = new NavFixture(page, viewport);
+
+        await page.goto('/');
         
         await signup.signUp({
             email, 
@@ -61,29 +62,32 @@ test.describe('homepage', () => {
 
         await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
+        if (viewport && viewport.width < 768) {
+            await nav.openMobileNav();
+        }
+
+        await expect(nav.dashboardLink).toBeVisible();
+
         await page.goto('/');
+        
+        await expect(blank.header).toBeVisible();
 
-        expect(blank.header).toBeVisible();
+        await blank.signoutButton.click();
 
-        blank.signoutButton.click();
-
-        await sleep(500);
-
-        expect(blank.header).toBeVisible();
-
-        expect(blank.signInButton).toBeVisible();
-        expect(blank.signUpButton).toBeVisible();
+        await expect(blank.header).toBeVisible();
+        await expect(blank.signInButton).toBeVisible();
+        await expect(blank.signUpButton).toBeVisible();
     });
 
-    test('user should be able to navigate to their dashboard when signed in', async ({ page }) => {
+    test('user should be able to navigate to their dashboard when signed in', async ({ page, viewport }) => {
         const email = getEmail();
         const password = 'Password123!';
+
+        const blank = new BlankFixture(page);
+        const signup = new SignUpFixture(page);
+        const nav = new NavFixture(page, viewport);
     
         await page.goto('/');
-        await page.waitForURL('/', {waitUntil: 'networkidle'});
-    
-        const signup = new SignUpFixture(page);
-        const blank = new BlankFixture(page);
         
         await signup.signUp({
             email, 
@@ -93,11 +97,17 @@ test.describe('homepage', () => {
 
         await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
+        if (viewport && viewport.width < 768) {
+            await nav.openMobileNav();
+        }
+
+        await expect(nav.dashboardLink).toBeVisible();
+;
         await page.goto('/');
 
-        expect(blank.header).toBeVisible();
+        await expect(blank.header).toBeVisible();
 
-        blank.dashboardLink.click();
+        await blank.dashboardLink.click();
 
         await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
     });

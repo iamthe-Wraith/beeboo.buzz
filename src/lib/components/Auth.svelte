@@ -42,11 +42,21 @@
 
 <div class="button-container">
     {#if (triggerType === 'both' || triggerType === 'signup') && $featureFlags['allow-new-users']?.isEnabled}
-        <button on:click={onTriggerClick('signup')}>Sign up</button>
+        <button
+            on:click={onTriggerClick('signup')}
+            data-testid="signup-button"
+        >
+            Sign up
+        </button>
     {/if}
 
     {#if triggerType === 'both' || triggerType === 'signin'}
-        <button on:click={onTriggerClick('signin')}>Sign in</button>
+        <button
+            on:click={onTriggerClick('signin')}
+            data-testid="signin-button"
+        >
+            Sign in
+        </button>
     {/if}
 </div>
 

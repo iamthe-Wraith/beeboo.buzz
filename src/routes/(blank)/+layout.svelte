@@ -3,7 +3,7 @@
     import { user } from '$lib/stores/user';
     import Signout from '$lib/components/forms/Signout.svelte';
     import Logo from '$lib/components/Logo.svelte';
-	import Link from '$lib/components/Link.svelte';
+    import Link from '$lib/components/Link.svelte';
 </script>
 
 <header data-testid="global-header">
@@ -11,7 +11,13 @@
 
     <nav>
         {#if $user}
-            <Link type="neutral" href="/dashboard">Dashboard</Link>
+            <Link
+                type="neutral"
+                href="/dashboard"
+                data-testid="dashboard-link"
+            >
+                Dashboard
+            </Link>
             <Signout />
         {:else}
             <Auth allowOpenFromQueryParams />
