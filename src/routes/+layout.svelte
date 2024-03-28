@@ -42,9 +42,3 @@
 </svelte:head>
 
 <slot></slot>
-
-<style>
-    :global(body) {
-        background-color: var(--dark-300);
-    }
-</style>

@@ -1,4 +1,4 @@
-<a href="/" class="logo">
+<a href="/" class="logo" data-testid="logo">
     Oh My GTD
 </a>
 

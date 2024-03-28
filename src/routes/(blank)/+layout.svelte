@@ -3,18 +3,26 @@
     import { user } from '$lib/stores/user';
     import Signout from '$lib/components/forms/Signout.svelte';
     import Logo from '$lib/components/Logo.svelte';
+    import Link from '$lib/components/Link.svelte';
 </script>
 
 <header data-testid="global-header">
     <Logo />
 
-    <div>
+    <nav>
         {#if $user}
+            <Link
+                type="neutral"
+                href="/dashboard"
+                data-testid="dashboard-link"
+            >
+                Dashboard
+            </Link>
             <Signout />
         {:else}
             <Auth allowOpenFromQueryParams />
         {/if}
-    </div>
+    </nav>
 </header>
 
 <main data-testid="global-main" class="no-scrollbar">
@@ -41,6 +49,11 @@
 
     header {
         height: 4rem;
+
+        & nav {
+            display: flex;
+            gap: 1rem;
+        }
     }
 
     footer {
