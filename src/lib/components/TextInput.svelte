@@ -83,6 +83,11 @@
         color: var(--light-500);
         background-color: var(--dark-200);
 
+        &:disabled {
+            border: 1px solid var(--dark-400);
+            color: var(--dark-900);
+        }
+
         &.error {
             border-color: var(--danger-500);
         }

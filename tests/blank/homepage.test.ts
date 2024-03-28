@@ -1,4 +1,3 @@
-// import { sleep } from '$lib/utils/gen';
 import { test, expect } from '../custom-test';
 import { BlankFixture } from '../fixtures/blank';
 import { NavFixture } from '../fixtures/nav';

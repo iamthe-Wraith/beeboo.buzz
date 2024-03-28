@@ -1,5 +1,5 @@
 import { generatePasswordHash } from "$lib/utils/auth";
-import { AccountType, type IAccountType } from "../../src/types/user";
+import { AccountType } from "../../src/types/user";
 import type { Database } from "../db";
 import type { Locator, Page } from "@playwright/test";
 
@@ -7,7 +7,7 @@ interface INewUserRequest {
     email: string;
     username?: string;
     password?: string;
-    accountType?: IAccountType
+    accountType?: typeof AccountType
 }
 
 export class AuthFixture {

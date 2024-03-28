@@ -1,25 +1,13 @@
 // !IMPORTANT this must match the AccountType and UserRole enums in ./prisma/schema.prisma
-export interface IAccountType {
-    FREE: 'FREE';
-    PAID: 'PAID';
-    TRIAL: 'TRIAL';
-}
-
-export interface IUserRole {
-    USER: 'USER';
-    ADMIN: 'ADMIN';
-    SUPER_ADMIN: 'SUPER_ADMIN';
-}
-
-export const AccountType: IAccountType = {
+export const AccountType = {
     FREE: 'FREE',
-    PAID: 'PAID',
+    PRO: 'PRO',
     TRIAL: 'TRIAL',
-};
+} as const;
 
-export const UserRole: IUserRole = {
+export const UserRole = {
     USER: 'USER',
     ADMIN: 'ADMIN',
     SUPER_ADMIN: 'SUPER_ADMIN',
-};
+} as const;
 // !END IMPORTANT
