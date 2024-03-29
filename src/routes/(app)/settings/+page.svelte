@@ -18,11 +18,11 @@
 
 <div class="settings-container no-scrollbar">
     {#if $user}
-        <div>
+        <div data-testid="settings-header">
             <h1>Account Settings</h1>
 
             <div class="plan-container">
-                <div class="plan">
+                <div data-testid="plan" class="plan">
                     <span>Plan</span>
                     <span class="{$user.accountType.toLowerCase()}">
                         {$user.accountType.toLowerCase()}
@@ -37,10 +37,10 @@
                 <p>Manage your personal information.</p>
                 <form data-testid="user-info-form" class="user-info-container-form">
                     <div>
-                        <div data-testid="user-info-username" class="user-info">
+                        <div class="user-info">
                             <TextInput
                                 id="username"
-                                data-testid="user-info-username-input"
+                                data-testid="user-info-username"
                                 label="Username"
                                 placeholder="Enter your new username"
                                 value={$user.username}
@@ -48,10 +48,10 @@
                             />
                         </div>
         
-                        <div data-testid="user-info-email" class="user-info">
+                        <div class="user-info">
                             <TextInput
                                 id="email"
-                                data-testid="user-info-email-input"
+                                data-testid="user-info-email"
                                 label="Email"
                                 placeholder="Enter your new email"
                                 value={$user.email}
@@ -63,6 +63,7 @@
                     <div class="section-actions">
                         <Button
                             kind="primary"
+                            data-testid="user-info-update-button"
                             disabled
                         >
                             Update
@@ -75,10 +76,10 @@
                 <div data-testid="change-password-header" class="h4">Change Password</div>
                 <p>It's always a good idea to change your password from time to time.</p>
                 <form data-testid="change-password-form" class="change-password-form">
-                    <div data-testid="current-password" class="current-password">
+                    <div class="current-password">
                         <TextInput
                             id="current-password"
-                            data-testid="current-password-input"
+                            data-testid="current-password"
                             label="Current Password"
                             type="password"
                             placeholder="Enter your current password"
@@ -86,10 +87,10 @@
                         />
                     </div>
     
-                    <div data-testid="new-password" class="new-password">
+                    <div class="new-password">
                         <TextInput
                             id="new-password"
-                            data-testid="new-password-input"
+                            data-testid="new-password"
                             label="New Password"
                             type="password"
                             placeholder="Enter your new password"
@@ -97,10 +98,10 @@
                         />
                     </div>
     
-                    <div data-testid="confirm-password" class="confirm-password">
+                    <div class="confirm-password">
                         <TextInput
                             id="confirm-password"
-                            data-testid="confirm-password-input"
+                            data-testid="confirm-password"
                             label="Confirm Password"
                             type="password"
                             placeholder="Confirm your new password"
@@ -111,6 +112,7 @@
                     <div class="section-actions">
                         <Button
                             kind="primary"
+                            data-testid="change-password-button"
                             disabled
                         >
                             Change Password
@@ -125,7 +127,7 @@
                 <div data-testid="contexts" class="contexts-container">
                     {#if $contexts && $contexts.length > 0}
                         {#each contextsWithoutRoles as context}
-                            <div data-testid="context" class="context">
+                            <div data-testid="{context.id}" class="context">
                                 <div class="context-info">
                                     <div data-testid="context-name" class="context-name">
                                         {context.name}
@@ -135,12 +137,14 @@
                                 <div class="context-actions">
                                     <Button
                                         kind="neutral"
+                                        data-testid="edit-context-button"
                                     >
                                         Edit
                                     </Button>
     
                                     <Button
                                         kind="danger-transparent"
+                                        data-testid="delete-context-button"
                                     >
                                         <Icon name="trash" />
                                     </Button>
@@ -157,6 +161,7 @@
                 <div class="section-actions">
                     <Button
                         kind="neutral"
+                        data-testid="add-context-button"
                     >
                         + Add Context
                     </Button>
@@ -164,7 +169,7 @@
             </section>
         </div>
 
-        <div class="metadata-container">
+        <div data-testid="metadata-container" class="metadata-container">
             {#if $user.updatedAt !== $user.createdAt}
                 <div data-testid="last-updated" class="metadata last-updated">
                     Your account was last updated on {dayjs($user.updatedAt).format('MMM DD, YYYY')}
