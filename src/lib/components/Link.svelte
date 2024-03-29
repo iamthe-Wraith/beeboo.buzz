@@ -1,9 +1,10 @@
 <script lang="ts">
     export let href: string;
     export let type: 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'danger' = 'primary';
+    export let inline: boolean = false;
 </script>
 
-<a {href} {...$$restProps} class={`${$$restProps.class} ${type}`}>
+<a {href} {...$$restProps} class={`${$$restProps.class} ${type} ${inline ? 'inline' : ''}`}>
     <slot></slot>
 </a>
 
@@ -14,6 +15,10 @@
         gap: 0.25rem;
         border-radius: 0.25rem;
         text-decoration: none;
+
+        &.inline {
+            display: inline-block;
+        }
 
         &.primary {
             color: var(--primary-500);
