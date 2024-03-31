@@ -24,8 +24,7 @@ export const actions: Actions = {
             const session = new Session();
             await session.save(user);
             session.setCookie(cookies);
-
-            console.log('session user: ', session.user);
+            await session.loadUser();
 
             return { user: session.user };
         } catch (err) {

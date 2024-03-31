@@ -7,6 +7,7 @@
 	import Button from "$lib/components/Button.svelte";
 	import { validateEmail, validateUsername } from "$lib/utils/validators";
 	import type { IApiError } from "$lib/utils/api-error";
+	import type { SessionUser } from '$lib/services/session';
 
     let email = $user?.email || '';
     let username = $user?.username || '';
@@ -39,7 +40,7 @@
     function onSubmitResponse() {
         processing = true;
 
-        return ({ result }: { result: ActionResult<{ message: string }> }) => {
+        return ({ result }: { result: ActionResult<{ message: string, user: SessionUser }> }) => {
             if (result.type === 'redirect') {
 				goto(result.location);
 			}
@@ -63,7 +64,10 @@
 
             if (result.type === 'success') {
                 reset();
-                window.location.reload();
+
+                if (result.data?.user) {
+                    user.set(result.data.user);
+                }
             }
 
             processing = false;
