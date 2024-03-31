@@ -145,7 +145,7 @@
                 <Avatar size="medium" />
             </div>
             <div class="user-info" data-testid="user-email">
-                <div class="email">{ $user?.email }</div>
+                <div class="email">{ $user?.username }</div>
             </div>
         </a>
 
