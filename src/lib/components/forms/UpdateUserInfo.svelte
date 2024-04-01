@@ -15,7 +15,7 @@
     let emailError: string;
     let usernameError: string;
     let genError: string;
-
+    let successMessage: string;
     let disabled = true;
     let processing = false;
 
@@ -29,6 +29,14 @@
                 $user?.username === username
             )
     );
+
+    $: {
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage = '';
+            }, 8000);
+        }
+    }
 
     function onEmailBlur() {
         const validated = validateEmail(email);
@@ -67,6 +75,7 @@
 
                 if (result.data?.user) {
                     user.set(result.data.user);
+                    successMessage = 'Your information has been updated successfully!';
                 }
             }
 
@@ -84,6 +93,8 @@
     function reset() {
         emailError = '';
         usernameError = '';
+        genError = '';
+        successMessage = '';
 
         disabled = true;
         processing = false;
@@ -131,6 +142,10 @@
                 <p class="error">{genError}</p>
             {/if}
 
+            {#if successMessage}
+                <p class="success" data-testid="success-message">{successMessage}</p>
+            {/if}
+
             <div class="buttons-container">
                 <Button
                     type="submit"
@@ -176,6 +191,11 @@
     .user-info-error {
         padding: 2rem 1rem 1rem;
         border: none;
+        text-align: center;
+    }
+
+    .success {
+        color: var(--primary-500);
         text-align: center;
     }
 </style>

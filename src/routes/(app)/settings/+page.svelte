@@ -11,6 +11,25 @@
 	import UpdateUserInfo from '$lib/components/forms/UpdateUserInfo.svelte';
 
     let contextsWithoutRoles: Context[] = [];
+    let lastUpdated = '';
+
+    $: {
+        const now = dayjs();
+        const createdAt = dayjs($user!.createdAt);
+        const updatedAt = dayjs($user!.updatedAt);
+            
+        if (updatedAt.diff(createdAt, 'second') < 10) lastUpdated = '';
+
+        const daysAgo = Math.abs(updatedAt.diff(now, 'day'));
+
+        if (daysAgo === 0) {
+            lastUpdated = `Your account information was updated today.`;
+        } else if (daysAgo === 1) {
+            lastUpdated = `Your account information was updated yesterday.`;
+        } else {
+            lastUpdated = `Your account information was last updated ${daysAgo} days ago.`;
+        }
+    }
 
     $: if ($contexts && $contexts.length) {
             contextsWithoutRoles = $contexts.filter(c => c.role === ContextRole.NONE);
@@ -142,14 +161,12 @@
         </div>
 
         <div data-testid="metadata-container" class="metadata-container">
-            {#if $user.updatedAt !== $user.createdAt}
-                <div data-testid="last-updated" class="metadata last-updated">
-                    Your account was last updated on {dayjs($user.updatedAt).format('MMM DD, YYYY')}
-                </div>
-            {/if}
+            <div data-testid="last-updated" class="metadata last-updated">
+                {lastUpdated}
+            </div>
 
             <div data-testid="member-since" class="metadata member-since">
-                You created your account on {dayjs($user.createdAt).format('MMM DD, YYYY')}
+                You created your account on {dayjs($user.createdAt).format('MMM DD, YYYY')}.
             </div>
         </div>
     {:else}

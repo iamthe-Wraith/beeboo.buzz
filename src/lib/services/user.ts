@@ -3,8 +3,11 @@ import type { User as UserModel } from "@prisma/client";
 import { Service, type IServiceProps } from "./service";
 import { validateEmail, validateUsername } from "$lib/utils/validators";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+
+dayjs.extend(utc)
 
 export class UserService extends Service {
     public constructor(props: IServiceProps) {
@@ -28,6 +31,7 @@ export class UserService extends Service {
             throw new ApiError('No updatable data found.', HttpStatus.BAD_REQUEST);
         }
 
+        // only these fields can be updated on the user object
         const updatableData: {
             username?: string;
             email?: string;
@@ -36,6 +40,7 @@ export class UserService extends Service {
             updatedAt: dayjs().utc().toDate(),
         };
 
+        // validate username if is being updated
         if (data.username && data.username !== this.user.username) {
             const validated = validateUsername(data.username);
 
@@ -44,6 +49,7 @@ export class UserService extends Service {
             updatableData.username = validated.value;
         }
 
+        // validate email if is being updated
         if (data.email && data.email !== this.user.email) {
             const validated = validateEmail(data.email);
 
@@ -57,8 +63,10 @@ export class UserService extends Service {
         if (updatableData.username) OR.push({ username: updatableData.username });
         if (updatableData.email) OR.push({ email: updatableData.email });
 
+        // check if username or email is already in use...
         const existingUsers = await prisma.user.findMany({ where: { OR } });
 
+        // ...if so, throw error...
         existingUsers.forEach((user) => {
             if (user.id !== this.user.id) {
                 if (user.username === updatableData.username) {
@@ -71,6 +79,7 @@ export class UserService extends Service {
             }
         });
 
+        // ...otherwise, update user
         return prisma.user.update({
             where: { id: this.user.id },
             data: updatableData,

@@ -8,6 +8,8 @@ interface INewUserRequest {
     username?: string;
     password?: string;
     accountType?: typeof AccountType
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class AuthFixture {
@@ -62,10 +64,13 @@ export class AuthFixture {
         }
     };
 
-    public async createUser({ email, username, password, accountType }: INewUserRequest, database: Database): Promise<void> {
+    public async createUser({ email, username, password, accountType, createdAt, updatedAt }: INewUserRequest, database: Database): Promise<void> {
         const _username = username || email.split('@')[0];
         const _password = password || 'Password123!';
         const _accountType = accountType || AccountType.FREE;
-        await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type) VALUES ('${email}', '${_username}', '${await generatePasswordHash(_password)}', '${_accountType}')`);
+        const _createdAt = createdAt || new Date();
+        const _updatedAt = updatedAt || new Date();
+
+        await database.executeQuery(`INSERT INTO "User" (email, username, password, account_type, created_at, updated_at) VALUES ('${email}', '${_username}', '${await generatePasswordHash(_password)}', '${_accountType}', '${_createdAt.toISOString()}', '${_updatedAt.toISOString()}')`);
     }
 }

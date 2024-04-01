@@ -1,5 +1,7 @@
 import { expect, type Locator, type Page, type ViewportSize } from "@playwright/test";
 import type { Context } from "@prisma/client";
+import type { NavFixture } from "./nav";
+import type { Database } from "../db";
 
 export class SettingsFixture {
     public pageHeader: Locator;
@@ -8,8 +10,11 @@ export class SettingsFixture {
 
     public userInfoSection: Locator;
     public userInfoUsername: Locator;
+    public userInfoUsernameError: Locator;
     public userInfoEmail: Locator;
+    public userInfoEmailError: Locator;
     public userInfoUpdateButton: Locator;
+    public userInfoSuccessMessage: Locator;
 
     public changePasswordSection: Locator;
     public changePasswordCurrentPassword: Locator;
@@ -35,8 +40,11 @@ export class SettingsFixture {
 
         this.userInfoSection = page.getByTestId('user-info-section');
         this.userInfoUsername = this.userInfoSection.getByTestId('user-info-username');
+        this.userInfoUsernameError = this.userInfoSection.getByTestId('username-error');
         this.userInfoEmail = this.userInfoSection.getByTestId('user-info-email');
+        this.userInfoEmailError = this.userInfoSection.getByTestId('email-error');
         this.userInfoUpdateButton = this.userInfoSection.getByTestId('user-info-update-button');
+        this.userInfoSuccessMessage = this.userInfoSection.getByTestId('success-message');
 
         this.changePasswordSection = page.getByTestId('change-password-section');
         this.changePasswordCurrentPassword = this.changePasswordSection.getByTestId('current-password');
@@ -61,5 +69,11 @@ export class SettingsFixture {
         await expect(context.getByTestId('context-description')).toHaveText(ctx.description || '');
         await expect(context.getByTestId('edit-context-button')).toBeVisible();
         await expect(context.getByTestId('delete-context-button')).toBeVisible();
+    }
+
+    public async navigateToSettings(nav: NavFixture) {
+        await nav.openMobileNav();
+        await nav.settingsLink.scrollIntoViewIfNeeded();
+        await nav.settingsLink.click();
     }
 }
