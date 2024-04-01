@@ -8,6 +8,7 @@
 	import type { ActionResult } from '@sveltejs/kit';
 	import type { IApiError } from '$lib/utils/api-error';
 	import { featureFlags } from '$lib/stores/featureFlags';
+	import { validateEmail, validateUsername } from '$lib/utils/validators';
 
     let email: string = '';
     let username: string = '';
@@ -61,21 +62,18 @@
     }
 
     function onEmailBlur() {
-        const validated = emailSchema.safeParse(email.trim());
+        const validated = validateEmail(email);
 
-        if (!validated.success) {
-            const formatted = validated.error.format();
-            emailError = formatted._errors[0];
-            return;
-        }
-        
-        email = email.trim();
+        email = validated.value;
+        emailError = validated.error;
+
+        if (emailError) return;
+
         if (!username) {
             username = email.split('@')[0];
             username = username.replace(/[^a-zA-Z0-9-_]/g, '');
             usernameError = '';
         }
-        emailError = '';
     }
 
     function onPasswordBlur() {
@@ -132,16 +130,10 @@
     };
 
     function onUsernameBlur() {
-        const validated = usernameSchema.safeParse(username.trim());
+        const validated = validateUsername(username);
 
-        if (!validated.success) {
-            const formatted = validated.error.format();
-            usernameError = formatted._errors[0];
-            return;
-        }
-
-        username = username.trim();
-        usernameError = '';
+        username = validated.value;
+        usernameError = validated.error;
     }
 </script>
 

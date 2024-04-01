@@ -8,8 +8,28 @@
 	import Button from "$lib/components/Button.svelte";
 	import { ContextRole } from "../../../types/contexts";
 	import Icon from '$lib/components/Icon.svelte';
+	import UpdateUserInfo from '$lib/components/forms/UpdateUserInfo.svelte';
 
     let contextsWithoutRoles: Context[] = [];
+    let lastUpdated = '';
+
+    $: {
+        const now = dayjs();
+        const createdAt = dayjs($user!.createdAt);
+        const updatedAt = dayjs($user!.updatedAt);
+            
+        if (updatedAt.diff(createdAt, 'second') < 10) lastUpdated = '';
+
+        const daysAgo = Math.abs(updatedAt.diff(now, 'day'));
+
+        if (daysAgo === 0) {
+            lastUpdated = `Your account information was updated today.`;
+        } else if (daysAgo === 1) {
+            lastUpdated = `Your account information was updated yesterday.`;
+        } else {
+            lastUpdated = `Your account information was last updated ${daysAgo} days ago.`;
+        }
+    }
 
     $: if ($contexts && $contexts.length) {
             contextsWithoutRoles = $contexts.filter(c => c.role === ContextRole.NONE);
@@ -35,78 +55,49 @@
             <section data-testid="user-info-section" class="user-info-section">
                 <div data-testid="user-info-header" class="h4">User information</div>
                 <p>Manage your personal information.</p>
-                <form data-testid="user-info-form" class="user-info-container-form">
-                    <div>
-                        <div class="user-info">
-                            <TextInput
-                                id="username"
-                                data-testid="user-info-username"
-                                label="Username"
-                                placeholder="Enter your new username"
-                                value={$user.username}
-                                required
-                            />
-                        </div>
-        
-                        <div class="user-info">
-                            <TextInput
-                                id="email"
-                                data-testid="user-info-email"
-                                label="Email"
-                                placeholder="Enter your new email"
-                                value={$user.email}
-                                required
-                            />
-                        </div>
-                    </div>
-    
-                    <div class="section-actions">
-                        <Button
-                            kind="primary"
-                            data-testid="user-info-update-button"
-                            disabled
-                        >
-                            Update
-                        </Button>
-                    </div>
-                </form>
+                <UpdateUserInfo />
             </section>
     
             <section data-testid="change-password-section" class="change-password-section">
                 <div data-testid="change-password-header" class="h4">Change Password</div>
                 <p>It's always a good idea to change your password from time to time.</p>
-                <form data-testid="change-password-form" class="change-password-form">
-                    <div class="current-password">
-                        <TextInput
-                            id="current-password"
-                            data-testid="current-password"
-                            label="Current Password"
-                            type="password"
-                            placeholder="Enter your current password"
-                            required
-                        />
-                    </div>
-    
-                    <div class="new-password">
-                        <TextInput
-                            id="new-password"
-                            data-testid="new-password"
-                            label="New Password"
-                            type="password"
-                            placeholder="Enter your new password"
-                            required
-                        />
-                    </div>
-    
-                    <div class="confirm-password">
-                        <TextInput
-                            id="confirm-password"
-                            data-testid="confirm-password"
-                            label="Confirm Password"
-                            type="password"
-                            placeholder="Confirm your new password"
-                            required
-                        />
+                <form
+                    data-testid="change-password-form"
+                    class="change-password-form"
+                >
+                    <div class="current-password-inputs-container">
+                        <div class="current-password">
+                            <TextInput
+                                id="current-password"
+                                data-testid="current-password"
+                                label="Current Password"
+                                type="password"
+                                placeholder="Enter your current password"
+                                required
+                            />
+                        </div>
+        
+                        <div class="new-password">
+                            <TextInput
+                                id="new-password"
+                                data-testid="new-password"
+                                label="New Password"
+                                type="password"
+                                placeholder="Enter your new password"
+                                required
+                            />
+                        </div>
+        
+                        <div class="confirm-password">
+                            <TextInput
+                                id="confirm-password"
+                                data-testid="confirm-password"
+                                label="Confirm Password"
+                                type="password"
+                                placeholder="Confirm your new password"
+                                required
+                            />
+                        </div>
                     </div>
     
                     <div class="section-actions">
@@ -170,14 +161,12 @@
         </div>
 
         <div data-testid="metadata-container" class="metadata-container">
-            {#if $user.updatedAt !== $user.createdAt}
-                <div data-testid="last-updated" class="metadata last-updated">
-                    Your account was last updated on {dayjs($user.updatedAt).format('MMM DD, YYYY')}
-                </div>
-            {/if}
+            <div data-testid="last-updated" class="metadata last-updated">
+                {lastUpdated}
+            </div>
 
             <div data-testid="member-since" class="metadata member-since">
-                You created your account on {dayjs($user.createdAt).format('MMM DD, YYYY')}
+                You created your account on {dayjs($user.createdAt).format('MMM DD, YYYY')}.
             </div>
         </div>
     {:else}
@@ -269,7 +258,7 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            gap: 0.5rem;
+            gap: 1rem;
 
             &.user-info-container-form {
                 justify-content: space-between;
@@ -285,12 +274,18 @@
         }
     }
 
+    .current-password-inputs-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
     .section-actions {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         gap: 1rem;
-        padding: 0.25rem 0.5rem 0;
+        padding: 0 var(--outline-offset);
     }
 
     .user-info-section {
