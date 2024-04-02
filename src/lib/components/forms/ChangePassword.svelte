@@ -168,7 +168,7 @@
         <div class="confirm-password">
             <TextInput
                 bind:value={confirmPassword}
-                id="confirmPassword"
+                id="confirm-password"
                 data-testid="confirm-password"
                 label="Confirm Password"
                 type="password"
