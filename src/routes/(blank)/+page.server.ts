@@ -21,7 +21,7 @@ export const actions: Actions = {
     },
     signout: async ({ locals, cookies }) => {
         locals.session?.delete(cookies);
-        return redirect(302, '/');
+        redirect(302, '/');
     },
 	signup: async ({ request, cookies, locals }) => {
         const authService = new AuthService(cookies);

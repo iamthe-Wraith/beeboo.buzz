@@ -1,4 +1,4 @@
-import { emailSchema, usernameSchema } from "./schemas";
+import { emailSchema, passwordSchema, usernameSchema } from "./schemas";
 
 export interface IValidator<T> {
     value: T;
@@ -18,6 +18,22 @@ export const validateEmail = (email: string): IValidator<string> => {
     return {
         value: email.trim(),
         error: emailError,
+    }
+}
+
+export const validatePassword = (password: string): IValidator<string> => {
+    const validated = passwordSchema.safeParse(password.trim());
+
+    let passwordError = '';
+
+    if (!validated.success) {
+        const formatted = validated.error.format();
+        passwordError = formatted._errors[0];
+    }
+
+    return {
+        value: password.trim(),
+        error: passwordError,
     }
 }
 

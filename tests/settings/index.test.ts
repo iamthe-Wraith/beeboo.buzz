@@ -105,9 +105,9 @@ test.describe('main settings page', () => {
             await page.waitForURL('/settings', { waitUntil: 'networkidle' });
     
             await expect(settings.changePasswordSection).toBeVisible();
-            await expect(settings.changePasswordCurrentPassword).toBeVisible();
-            await expect(settings.changePasswordNewPassword).toBeVisible();
-            await expect(settings.changePasswordConfirmPassword).toBeVisible();
+            await expect(settings.currentPassword).toBeVisible();
+            await expect(settings.newPassword).toBeVisible();
+            await expect(settings.confirmPassword).toBeVisible();
             await expect(settings.changePasswordButton).toBeVisible();
             await expect(settings.changePasswordButton).toBeDisabled();
     

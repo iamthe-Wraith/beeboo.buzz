@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
+import { generatePasswordHash, isValidPassword } from "$lib/utils/auth";
 
 dayjs.extend(utc)
 
@@ -18,6 +19,53 @@ export class UserService extends Service {
         return prisma.user.findUnique({
             where: { id },
         });
+    }
+
+    public changePassword = async (currentPassword: string, newPassword: string): Promise<UserModel> => {
+        if (!currentPassword) {
+            throw new ApiError('You must provide your current password in order to change your password in this way.', HttpStatus.BAD_REQUEST, 'current');
+        }
+
+        if (!newPassword) {
+            throw new ApiError('You must provide a new password.', HttpStatus.BAD_REQUEST, 'password');
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: this.user.id },
+        });
+
+        if (!user) {
+            throw new ApiError('User not found.', HttpStatus.NOT_FOUND, 'user');
+        }
+
+        try {
+            await isValidPassword(currentPassword, user.password);
+        } catch (err) {
+            throw new ApiError('That\'s not your current password', HttpStatus.BAD_REQUEST, 'current');
+        }
+
+        try {
+            await isValidPassword(newPassword, user.password);
+            throw new ApiError('New password must be different from your current password.', HttpStatus.BAD_REQUEST, 'password');
+        } catch {
+            // if error was thrown, means the new password is different from the current password so...
+            // do nothing...
+        }
+
+        const password = await generatePasswordHash(newPassword);
+
+        const updatedUser = prisma.user.update({
+            where: { id: this.user.id },
+            data: {
+                ...user,
+                password,
+                updatedAt: dayjs().utc().toDate(),
+            },
+        });
+
+        // TODO: send email to user notifying them of password change.
+
+        return updatedUser;
     }
 
     public update = async (data: Partial<UserModel>): Promise<UserModel> => {

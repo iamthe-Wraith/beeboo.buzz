@@ -1,7 +1,6 @@
 import { expect, type Locator, type Page, type ViewportSize } from "@playwright/test";
 import type { Context } from "@prisma/client";
 import type { NavFixture } from "./nav";
-import type { Database } from "../db";
 
 export class SettingsFixture {
     public pageHeader: Locator;
@@ -17,10 +16,14 @@ export class SettingsFixture {
     public userInfoSuccessMessage: Locator;
 
     public changePasswordSection: Locator;
-    public changePasswordCurrentPassword: Locator;
-    public changePasswordNewPassword: Locator;
-    public changePasswordConfirmPassword: Locator;
+    public currentPassword: Locator;
+    public currentPasswordError: Locator;
+    public newPassword: Locator;
+    public newPasswordError: Locator;
+    public confirmPassword: Locator;
+    public confirmPasswordError: Locator;
     public changePasswordButton: Locator;
+    public changePasswordSuccessMessage: Locator;
 
     public contextsSection: Locator;
     public contexts: Locator;
@@ -47,10 +50,14 @@ export class SettingsFixture {
         this.userInfoSuccessMessage = this.userInfoSection.getByTestId('success-message');
 
         this.changePasswordSection = page.getByTestId('change-password-section');
-        this.changePasswordCurrentPassword = this.changePasswordSection.getByTestId('current-password');
-        this.changePasswordNewPassword = this.changePasswordSection.getByTestId('new-password');
-        this.changePasswordConfirmPassword = this.changePasswordSection.getByTestId('confirm-password');
+        this.currentPassword = this.changePasswordSection.getByTestId('current-password');
+        this.currentPasswordError = this.changePasswordSection.getByTestId('current-error');
+        this.newPassword = this.changePasswordSection.getByTestId('new-password');
+        this.newPasswordError = this.changePasswordSection.getByTestId('password-error');
+        this.confirmPassword = this.changePasswordSection.getByTestId('confirm-password');
+        this.confirmPasswordError = this.changePasswordSection.getByTestId('confirm-password-error');
         this.changePasswordButton = this.changePasswordSection.getByTestId('change-password-button');
+        this.changePasswordSuccessMessage = this.changePasswordSection.getByTestId('success-message');
 
         this.contextsSection = page.getByTestId('contexts-section');
         this.contexts = this.contextsSection.locator('.context');
@@ -75,5 +82,16 @@ export class SettingsFixture {
         await nav.openMobileNav();
         await nav.settingsLink.scrollIntoViewIfNeeded();
         await nav.settingsLink.click();
+    }
+
+    public async fillOutChangePasswordForm(currentPassword: string, newPassword: string, confirmPassword: string = '') {
+        await this.currentPassword.fill(currentPassword);
+        await this.userInfoUsername.press('Tab');
+
+        await this.newPassword.fill(newPassword);
+        await this.userInfoUsername.press('Tab');
+
+        await this.confirmPassword.fill(confirmPassword);
+        await this.userInfoUsername.press('Tab');
     }
 }
