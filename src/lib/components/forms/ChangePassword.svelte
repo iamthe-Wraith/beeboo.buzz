@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { ActionResult } from "@sveltejs/kit";
     import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+    import { goto } from '$app/navigation';
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
     import type { IApiError } from "$lib/utils/api-error";
     import type { SessionUser } from '$lib/services/session';
-	import { validatePassword } from '$lib/utils/validators';
+    import { validatePassword } from '$lib/utils/validators';
 
     type Field = 'current' | 'new' | 'confirm';
 
@@ -17,7 +17,7 @@
     let currentPasswordError: string;
     let newPasswordError: string;
     let confirmPasswordError: string;
-	let genError: string;
+    let genError: string;
     let successMessage: string;
     let disabled = true;
     let processing = false;
@@ -76,8 +76,8 @@
 
         return ({ result }: { result: ActionResult<{ message: string, user: SessionUser }> }) => {
             if (result.type === 'redirect') {
-				goto(result.location);
-			}
+                goto(result.location);
+            }
             
             if (result.type === 'failure') {
                 if (result.data?.errors) {
