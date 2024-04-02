@@ -8,6 +8,29 @@ import { ApiError } from '$lib/utils/api-error';
 import { Session } from '$lib/services/session';
 
 export const actions: Actions = {
+    changePassword: async ({ request, locals, cookies }) => {
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        const data = await request.formData();
+        const currentPassword = data.get('current')! as string;
+        const newPassword = data.get('password')! as string;
+
+        const userService = new UserService({ user: locals.session.user });
+        
+        try {
+            const user = await userService.changePassword(currentPassword, newPassword);
+
+            const session = new Session();
+            await session.save(user);
+            session.setCookie(cookies);
+            await session.loadUser();
+
+            return { user: session.user };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
     updateUserInfo: async ({ request, locals, cookies }) => {
         if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
 

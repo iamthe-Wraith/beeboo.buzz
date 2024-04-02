@@ -1,13 +1,13 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
-	import { goto } from "$app/navigation";
-	import type { ActionResult } from "@sveltejs/kit";
+    import { goto } from "$app/navigation";
+    import type { ActionResult } from "@sveltejs/kit";
     import { user } from "$lib/stores/user";
     import TextInput from "$lib/components/TextInput.svelte";
-	import Button from "$lib/components/Button.svelte";
-	import { validateEmail, validateUsername } from "$lib/utils/validators";
-	import type { IApiError } from "$lib/utils/api-error";
-	import type { SessionUser } from '$lib/services/session';
+    import Button from "$lib/components/Button.svelte";
+    import { validateEmail, validateUsername } from "$lib/utils/validators";
+    import type { IApiError } from "$lib/utils/api-error";
+    import type { SessionUser } from '$lib/services/session';
 
     let email = $user?.email || '';
     let username = $user?.username || '';

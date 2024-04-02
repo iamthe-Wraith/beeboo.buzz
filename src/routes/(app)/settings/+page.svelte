@@ -9,14 +9,15 @@
 	import { ContextRole } from "../../../types/contexts";
 	import Icon from '$lib/components/Icon.svelte';
 	import UpdateUserInfo from '$lib/components/forms/UpdateUserInfo.svelte';
+	import ChangePassword from '$lib/components/forms/ChangePassword.svelte';
 
     let contextsWithoutRoles: Context[] = [];
     let lastUpdated = '';
 
     $: {
         const now = dayjs();
-        const createdAt = dayjs($user!.createdAt);
-        const updatedAt = dayjs($user!.updatedAt);
+        const createdAt = dayjs($user?.createdAt);
+        const updatedAt = dayjs($user?.updatedAt);
             
         if (updatedAt.diff(createdAt, 'second') < 10) lastUpdated = '';
 
@@ -61,55 +62,7 @@
             <section data-testid="change-password-section" class="change-password-section">
                 <div data-testid="change-password-header" class="h4">Change Password</div>
                 <p>It's always a good idea to change your password from time to time.</p>
-                <form
-                    data-testid="change-password-form"
-                    class="change-password-form"
-                >
-                    <div class="current-password-inputs-container">
-                        <div class="current-password">
-                            <TextInput
-                                id="current-password"
-                                data-testid="current-password"
-                                label="Current Password"
-                                type="password"
-                                placeholder="Enter your current password"
-                                required
-                            />
-                        </div>
-        
-                        <div class="new-password">
-                            <TextInput
-                                id="new-password"
-                                data-testid="new-password"
-                                label="New Password"
-                                type="password"
-                                placeholder="Enter your new password"
-                                required
-                            />
-                        </div>
-        
-                        <div class="confirm-password">
-                            <TextInput
-                                id="confirm-password"
-                                data-testid="confirm-password"
-                                label="Confirm Password"
-                                type="password"
-                                placeholder="Confirm your new password"
-                                required
-                            />
-                        </div>
-                    </div>
-    
-                    <div class="section-actions">
-                        <Button
-                            kind="primary"
-                            data-testid="change-password-button"
-                            disabled
-                        >
-                            Change Password
-                        </Button>
-                    </div>
-                </form>
+                <ChangePassword />
             </section>
     
             <section data-testid="contexts-section" class="contexts-section">
