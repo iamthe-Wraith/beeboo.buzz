@@ -81,7 +81,7 @@ describe('schemas', () => {
             await expect((validated as SafeParseError<string>).error.format()._errors[0]).toEqual('Password must be at least 8 characters');
         });
 
-        test('invalid password - too short', async () => {
+        test('invalid password - too long', async () => {
             const validated = passwordSchema.safeParse('1Nv@lid-ljhabdvouyqwbrvlbqelihslkdmngmerbgljerugtluqjehb&^%janbfnbasdbluyfgabdljhfbjanevlahjebvualydhvblajhsdvKJGFUHJVkhgvfjhgfj');
             await expect(validated.success).toEqual(false);
             await expect((validated as SafeParseError<string>).error.format()._errors[0]).toEqual('Password must be less than 100 characters');
