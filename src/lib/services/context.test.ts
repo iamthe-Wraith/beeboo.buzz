@@ -1,45 +1,77 @@
 import { describe, expect, test } from 'vitest';
 import { ContextService, type IContextRequest } from './context';
 import { ContextRole } from '../../types/contexts';
+import { MAX_CONTEXT_DESCRIPTION_LENGTH, MAX_CONTEXT_NAME_LENGTH } from '$lib/constants/context';
 
 describe('services - context', () => {
     describe('isValidContextRequest', () => {
-        test('should return true for valid context', () => {
+        test('should return no errors if context is valid', () => {
             const context: IContextRequest = {
                 name: 'Test Context',
                 description: 'This is a test context.',
                 role: ContextRole.NONE,
             };
 
-            expect(ContextService.isValidContextRequest(context)).toBe(true);
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(0);
         });
 
-        test('should return false if no name is provided', () => {
+        test('should return error if no name is provided', () => {
             const context = {
                 description: 'This is a test context.',
                 role: ContextRole.NONE,
             } as unknown as IContextRequest;
 
-            expect(ContextService.isValidContextRequest(context)).toBe(false);
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual('Name is required.');
         });
 
-        test('should return false if an no role is provided', () => {
+        test('should return error if name is too long', () => {
+            const context = {
+                name: 'a'.repeat(MAX_CONTEXT_NAME_LENGTH + 1),
+                description: 'This is a test context.',
+                role: ContextRole.NONE,
+            } as unknown as IContextRequest;
+
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual(`Name must be less than ${MAX_CONTEXT_NAME_LENGTH} characters.`);
+        });
+
+        test('should return error if description is too long', () => {
+            const context = {
+                name: 'Test Context',
+                description: 'a'.repeat(MAX_CONTEXT_DESCRIPTION_LENGTH + 1),
+                role: ContextRole.NONE,
+            } as unknown as IContextRequest;
+
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual(`Description must be less than ${MAX_CONTEXT_DESCRIPTION_LENGTH} characters.`);
+        });
+
+        test('should return error if an no role is provided', () => {
             const context = {
                 name: 'Test Context',
                 description: 'This is a test context.',
             } as unknown as IContextRequest;
 
-            expect(ContextService.isValidContextRequest(context)).toBe(false);
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual('Role is required.');
         });
 
-        test('should return false if an invalid role is provided', () => {
+        test('should return error if an invalid role is provided', () => {
             const context = {
                 name: 'Test Context',
                 description: 'This is a test context.',
                 role: 'INVALID',
             } as unknown as IContextRequest;
 
-            expect(ContextService.isValidContextRequest(context)).toBe(false);
+            const errors = ContextService.isValidNewContextRequest(context);
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual('Invalid role.');
         });
     });
 });

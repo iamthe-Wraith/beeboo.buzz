@@ -1,4 +1,5 @@
-import type { Locator, Page, ViewportSize } from "@playwright/test";
+import { expect, type Locator, type Page, type ViewportSize } from "@playwright/test";
+import type { Context } from "@prisma/client";
 
 interface IQuickActions {
     container: Locator;
@@ -75,11 +76,16 @@ export class NavFixture {
         this.copyright = this.nav.getByText(`Copyright ${new Date().getFullYear()}`);
     }
 
-    public async openMobileNav(): Promise<void> {
+    public openMobileNav = async (): Promise<void> => {
         if (!this.isMobile) return;
         
         await this.menuButton?.click({ force: true });
 
         await this.page.waitForTimeout(250);
+    }
+
+    public assertCustomContextExists = async (ctx: Context) => {
+        const context = this.nav.getByRole('link', { name: ctx.name });
+        await expect(context).toBeVisible();
     }
 }
