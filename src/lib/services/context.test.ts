@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest';
-import { ContextService, type IContextRequest } from './context';
+import { ContextService, type ICreateContextRequest } from './context';
 import { ContextRole } from '../../types/contexts';
 import { MAX_CONTEXT_DESCRIPTION_LENGTH, MAX_CONTEXT_NAME_LENGTH } from '$lib/constants/context';
 
 describe('services - context', () => {
     describe('isValidContextRequest', () => {
         test('should return no errors if context is valid', () => {
-            const context: IContextRequest = {
+            const context: ICreateContextRequest = {
                 name: 'Test Context',
                 description: 'This is a test context.',
                 role: ContextRole.NONE,
             };
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(0);
         });
 
@@ -20,9 +20,9 @@ describe('services - context', () => {
             const context = {
                 description: 'This is a test context.',
                 role: ContextRole.NONE,
-            } as unknown as IContextRequest;
+            } as unknown as ICreateContextRequest;
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual('Name is required.');
         });
@@ -32,9 +32,9 @@ describe('services - context', () => {
                 name: 'a'.repeat(MAX_CONTEXT_NAME_LENGTH + 1),
                 description: 'This is a test context.',
                 role: ContextRole.NONE,
-            } as unknown as IContextRequest;
+            } as unknown as ICreateContextRequest;
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual(`Name must be less than ${MAX_CONTEXT_NAME_LENGTH} characters.`);
         });
@@ -44,9 +44,9 @@ describe('services - context', () => {
                 name: 'Test Context',
                 description: 'a'.repeat(MAX_CONTEXT_DESCRIPTION_LENGTH + 1),
                 role: ContextRole.NONE,
-            } as unknown as IContextRequest;
+            } as unknown as ICreateContextRequest;
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual(`Description must be less than ${MAX_CONTEXT_DESCRIPTION_LENGTH} characters.`);
         });
@@ -55,9 +55,9 @@ describe('services - context', () => {
             const context = {
                 name: 'Test Context',
                 description: 'This is a test context.',
-            } as unknown as IContextRequest;
+            } as unknown as ICreateContextRequest;
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual('Role is required.');
         });
@@ -67,9 +67,9 @@ describe('services - context', () => {
                 name: 'Test Context',
                 description: 'This is a test context.',
                 role: 'INVALID',
-            } as unknown as IContextRequest;
+            } as unknown as ICreateContextRequest;
 
-            const errors = ContextService.isValidNewContextRequest(context);
+            const errors = ContextService.isValidContextRequest(context);
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual('Invalid role.');
         });

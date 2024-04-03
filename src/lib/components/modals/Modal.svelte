@@ -3,6 +3,7 @@
     import { navigating } from '$app/stores';
 	import { clickOutside } from '$lib/actions/click-outside';
 	import Icon from '../Icon.svelte';
+	import { OPEN_MODAL_EVENT } from '$lib/constants/custom-events';
 
     export let id: string;
     export let open: boolean;
@@ -25,15 +26,27 @@
         modal.addEventListener('cancel', onClose);
         modal.addEventListener('show', onShow);
 
+        document.addEventListener(OPEN_MODAL_EVENT, enhancedOpenModal);
+
         return () => {
             modal.removeEventListener('close', onClose);
             modal.removeEventListener('cancel', onClose);
             modal.removeEventListener('show', onShow);
+
+            document.removeEventListener(OPEN_MODAL_EVENT, enhancedOpenModal);
         }
     });
 
     function closeModal() {
         modal?.close();
+    }
+
+    function enhancedOpenModal(e: Event) {
+        if (e instanceof CustomEvent) {
+            if (e.detail.id === id) {
+                dispatch('modal-change', { ...(e.detail.data || {}), id, open: true });
+            }
+        }
     }
 
     function onClose() {

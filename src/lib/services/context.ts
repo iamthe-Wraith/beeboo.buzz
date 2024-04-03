@@ -3,15 +3,20 @@ import { HttpStatus } from "$lib/constants/error";
 import { Service, type IServiceProps } from "./service";
 import { ContextRole, type IContextRole } from "../../types/contexts";
 import { MAX_CONTEXT_DESCRIPTION_LENGTH, MAX_CONTEXT_NAME_LENGTH } from "$lib/constants/context";
+import dayjs from "dayjs";
 
-export interface IContextRequest {
+export interface ICreateContextRequest {
     name: string;
     description?: string;
     role?: keyof IContextRole;
 }
 
+export interface IUpdateContextRequest extends ICreateContextRequest {
+    id: number;
+}
+
 export class ContextService extends Service {
-    private defaultContexts: IContextRequest[] = [
+    private defaultContexts: ICreateContextRequest[] = [
         {
             name: 'Inbox',
             description: 'Everything you capture goes here.',
@@ -56,7 +61,7 @@ export class ContextService extends Service {
     }
 
     //#region Static Methods
-    public static isValidNewContextRequest = (context: IContextRequest) => {
+    public static isValidContextRequest = (context: ICreateContextRequest | IUpdateContextRequest) => {
         const { name, description, role } = context;
         const errors: ApiError[] = [];
 
@@ -85,10 +90,12 @@ export class ContextService extends Service {
     //#endregion
 
     //#region Public Methods
-    public createContext = async (name: string, description?: string) => {
-        const errors = ContextService.isValidNewContextRequest({ name, description, role: ContextRole.NONE });
+    public createContext = async (request: ICreateContextRequest) => {
+        const errors = ContextService.isValidContextRequest({ ...request, role: ContextRole.NONE });
 
         if (errors.length) throw errors;
+
+        const { name, description } = request;
 
         return this.transaction(async (tx) => {
             const [context] = await tx.context.findMany({
@@ -104,7 +111,9 @@ export class ContextService extends Service {
                     description: description || '', 
                     role: ContextRole.NONE,
                     order,
-                    ownerId: this.user.id
+                    ownerId: this.user.id,
+                    createdAt: dayjs().utc().toDate(),
+                    updatedAt: dayjs().utc().toDate(),
                 },
             });
         });
@@ -138,16 +147,35 @@ export class ContextService extends Service {
             orderBy: { order: 'asc' },
         }));
     };
+
+    public updateContext = async (request: IUpdateContextRequest) => {
+        const errors = ContextService.isValidContextRequest({ ...request, role: ContextRole.NONE });
+
+        if (errors.length) throw errors;
+
+        const { id, name, description } = request;
+
+        return this.transaction(async (tx) => {
+            return tx.context.update({
+                where: { id, ownerId: this.user.id },
+                data: {
+                    name,
+                    description: description || '',
+                    updatedAt: dayjs().utc().toDate(),
+                },
+            });
+        });
+    };
     //#endregion
 
     //#region Private Methods
-    private createManyContexts = async (contexts: IContextRequest[]) => {
+    private createManyContexts = async (contexts: ICreateContextRequest[]) => {
         let errors: ApiError[] = [];
 
         contexts.forEach((c) => {
             errors = [
                 ...errors,
-                ...ContextService.isValidNewContextRequest(c),
+                ...ContextService.isValidContextRequest(c),
             ];
         });
     

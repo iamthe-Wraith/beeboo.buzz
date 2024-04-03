@@ -42,7 +42,25 @@ export const actions: Actions = {
         const contextService = new ContextService({ user: locals.session.user });
         
         try {
-            const context = await contextService.createContext(name, description);
+            const context = await contextService.createContext({ name, description });
+            return { context };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
+    updateContext: async ({ request, locals }) => {
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        const data = await request.formData();
+        const id = parseInt(data.get('id')! as string);
+        const name = data.get('name')! as string;
+        const description = data.get('description')! as string;
+
+        const contextService = new ContextService({ user: locals.session.user });
+        
+        try {
+            const context = await contextService.updateContext({ id, name, description });
             return { context };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });

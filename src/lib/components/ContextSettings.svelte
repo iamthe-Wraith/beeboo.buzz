@@ -5,6 +5,7 @@
     import Icon from "./Icon.svelte";
     import ContextModal from "./modals/ContextModal.svelte";
 	import { ContextRole } from "../../types/contexts";
+	import OpenModalEmitter from "./OpenModalEmitter.svelte";
 
     let contextsWithoutRoles: Context[] = [];
 
@@ -24,12 +25,15 @@
                     <p data-testid="context-description" class="context-description">{context.description}</p>
                 </div>
                 <div class="context-actions">
-                    <Button
-                        kind="neutral"
-                        data-testid="edit-context-button"
-                    >
-                        Edit
-                    </Button>
+                    <OpenModalEmitter let:openModal>
+                        <Button
+                            kind="neutral"
+                            data-testid="edit-context-button"
+                            on:click={() => openModal('context-modal', { context })}
+                        >
+                            Edit
+                        </Button>
+                    </OpenModalEmitter>
 
                     <Button
                         kind="danger-transparent"
@@ -48,16 +52,18 @@
 </div>
 
 <div class="contexts-footer">
-    <ContextModal let:openContextModal>
+    <OpenModalEmitter let:openModal>
         <Button
             kind="neutral"
             data-testid="add-context-button"
-            on:click={() => openContextModal()}
+            on:click={() => openModal('context-modal')}
         >
             + Add Context
         </Button>
-    </ContextModal>
+    </OpenModalEmitter>
 </div>
+
+<ContextModal />
 
 <style>
     .contexts-container {

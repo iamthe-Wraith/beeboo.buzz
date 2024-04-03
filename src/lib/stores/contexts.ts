@@ -8,6 +8,7 @@ function createContextsStore() {
         subscribe,
         set: (contexts: Context[]) => set(contexts),
         add: (context: Context) => update((contexts) => contexts ? [...contexts, context] : [context]),
+        replace: (context: Context) => update((contexts) => contexts ? contexts.map(c => c.id === context.id ? context : c) : [context]),
         reset: () => set(null)
     };
 }
