@@ -6,6 +6,7 @@ import { UserService } from '$lib/services/user';
 import { ApiResponse } from '$lib/utils/api-response';
 import { ApiError } from '$lib/utils/api-error';
 import { Session } from '$lib/services/session';
+import { ContextService } from '$lib/services/context';
 
 export const actions: Actions = {
     changePassword: async ({ request, locals, cookies }) => {
@@ -26,6 +27,23 @@ export const actions: Actions = {
             await session.loadUser();
 
             return { user: session.user };
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
+    createContext: async ({ request, locals }) => {
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        const data = await request.formData();
+        const name = data.get('name')! as string;
+        const description = data.get('description')! as string;
+
+        const contextService = new ContextService({ user: locals.session.user });
+        
+        try {
+            const context = await contextService.createContext(name, description);
+            return { context };
         } catch (err) {
             const response = new ApiResponse({ errors: ApiError.parse(err) });
             return fail(response.statusCode, { errors: response.errors });

@@ -2,11 +2,12 @@ import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { Service, type IServiceProps } from "./service";
 import { ContextRole, type IContextRole } from "../../types/contexts";
+import { MAX_CONTEXT_DESCRIPTION_LENGTH, MAX_CONTEXT_NAME_LENGTH } from "$lib/constants/context";
 
 export interface IContextRequest {
     name: string;
     description?: string;
-    role: keyof IContextRole;
+    role?: keyof IContextRole;
 }
 
 export class ContextService extends Service {
@@ -55,20 +56,60 @@ export class ContextService extends Service {
     }
 
     //#region Static Methods
-    public static isValidContextRequest = (context: IContextRequest) => {
-        if (!context.name) return false;
-        
-        if (context.role) {
-            if (!Object.values(ContextRole).includes(context.role)) return false;
+    public static isValidNewContextRequest = (context: IContextRequest) => {
+        const { name, description, role } = context;
+        const errors: ApiError[] = [];
+
+        if (name) {
+            if (name.length > MAX_CONTEXT_NAME_LENGTH) {
+                errors.push(new ApiError(`Name must be less than ${MAX_CONTEXT_NAME_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'name', { context }));
+            }
         } else {
-            return false;
+            errors.push(new ApiError('Name is required.', HttpStatus.UNPROCESSABLE, 'name', { context }));
         }
-    
-        return true;
+
+        if (description && description.length > MAX_CONTEXT_DESCRIPTION_LENGTH) {
+            errors.push(new ApiError(`Description must be less than ${MAX_CONTEXT_DESCRIPTION_LENGTH} characters.`, HttpStatus.UNPROCESSABLE, 'description', { context }));
+        }
+
+        if (role) {
+            if (!Object.values(ContextRole).includes(role)) {
+                errors.push(new ApiError('Invalid role.', HttpStatus.UNPROCESSABLE, 'role', { context }));    
+            }
+        } else {
+            errors.push(new ApiError('Role is required.', HttpStatus.UNPROCESSABLE, 'role', { context }));
+        }
+
+        return errors;
     };
     //#endregion
 
     //#region Public Methods
+    public createContext = async (name: string, description?: string) => {
+        const errors = ContextService.isValidNewContextRequest({ name, description, role: ContextRole.NONE });
+
+        if (errors.length) throw errors;
+
+        return this.transaction(async (tx) => {
+            const [context] = await tx.context.findMany({
+                where: { ownerId: this.user.id },
+                orderBy: { order: 'desc' },
+            });
+
+            const order = (context?.order || 0) + 100.0;
+
+            return tx.context.create({
+                data: {
+                    name,
+                    description: description || '', 
+                    role: ContextRole.NONE,
+                    order,
+                    ownerId: this.user.id
+                },
+            });
+        });
+    };
+
     public createDefaultUserContexts = async () => {
         return await this.createManyContexts(this.defaultContexts);
     }
@@ -101,12 +142,13 @@ export class ContextService extends Service {
 
     //#region Private Methods
     private createManyContexts = async (contexts: IContextRequest[]) => {
-        const errors: ApiError[] = [];
+        let errors: ApiError[] = [];
 
         contexts.forEach((c) => {
-            if (!ContextService.isValidContextRequest(c)) {
-                errors.push(new ApiError('Invalid context.', HttpStatus.UNPROCESSABLE, undefined, { context: c }));
-            }
+            errors = [
+                ...errors,
+                ...ContextService.isValidNewContextRequest(c),
+            ];
         });
     
         if (errors.length) throw errors;

@@ -10,6 +10,7 @@
 	import Icon from '$lib/components/Icon.svelte';
 	import UpdateUserInfo from '$lib/components/forms/UpdateUserInfo.svelte';
 	import ChangePassword from '$lib/components/forms/ChangePassword.svelte';
+	import ContextModal from '$lib/components/modals/ContextModal.svelte';
 
     let contextsWithoutRoles: Context[] = [];
     let lastUpdated = '';
@@ -103,12 +104,15 @@
                 </div>
     
                 <div class="section-actions">
-                    <Button
-                        kind="neutral"
-                        data-testid="add-context-button"
-                    >
-                        + Add Context
-                    </Button>
+                    <ContextModal let:openContextModal>
+                        <Button
+                            kind="neutral"
+                            data-testid="add-context-button"
+                            on:click={() => openContextModal()}
+                        >
+                            + Add Context
+                        </Button>
+                    </ContextModal>
                 </div>
             </section>
         </div>
