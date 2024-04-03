@@ -1,9 +1,10 @@
 <script lang="ts">
     import { contexts } from "$lib/stores/contexts";
-    import { ContextRole, type Context } from "@prisma/client";
+    import { type Context } from "@prisma/client";
     import Button from "./Button.svelte";
     import Icon from "./Icon.svelte";
     import ContextModal from "./modals/ContextModal.svelte";
+	import { ContextRole } from "../../types/contexts";
 
     let contextsWithoutRoles: Context[] = [];
 

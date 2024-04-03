@@ -155,8 +155,8 @@
 
     <div class="buttons-container">
         <Button
-            id="context-create"
-            data-testid="context-create"
+            id="context-submit"
+            data-testid="context-submit"
             kind="primary"
             type="submit"
             {disabled}

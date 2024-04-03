@@ -8,7 +8,8 @@ export class Database {
         connectionTimeoutMillis: 2000,
     };
 
-    public async executeQuery(query: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public executeQuery = async <T = any>(query: string): Promise<T[]> => {
         const client = new pg.Client(this.config);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
