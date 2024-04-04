@@ -20,6 +20,7 @@
     let name = '';
     let description = '';
     let disabled = true;
+    let initialized = false;
 
     let nameError = '';
     let descriptionError = '';
@@ -28,9 +29,10 @@
     $: disabled = !name || !!nameError || !!descriptionError || !!genError || processing;
 
     $: {
-        if (context) {
+        if (context && !initialized) {
             name = context.name;
             description = context.description || '';
+            initialized = true;
         }
     }
     
@@ -74,11 +76,15 @@
             }
 
             if (result.type === 'success') {
-                reset();   
-
                 if (result.data?.context) {
-                    contexts.add(result.data.context);
+                    if (!!context) {
+                        contexts.replace(result.data.context);
+                    } else {
+                        contexts.add(result.data.context);
+                    }
                 }
+
+                reset();
 
                 onCancel?.();
             }
@@ -119,15 +125,21 @@
         descriptionError = '';
         genError = '';
         disabled = true;
+        context = null;
+        initialized = false;
     }
 </script>
 
 <form
     data-testid="context-form"
     method="POST" 
-    action="/settings?/createContext"
+    action="{ !!context ? '/settings?/updateContext' : '/settings?/createContext' }"
     use:enhance={onSubmitResponse}
 >
+    {#if !!context}
+        <input type="hidden" name="id" value="{context.id}" />
+    {/if}
+
     <TextInput
         required
         id="name"
