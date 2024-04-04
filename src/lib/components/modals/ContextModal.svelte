@@ -21,14 +21,7 @@
         
         open = e.detail.open;
     }
-
-    function openContextModal(ctx?: Context) {
-        open = true;
-        context = context;
-    }
 </script>
-
-<slot {openContextModal} />
 
 <Modal
     id="{modalId}"

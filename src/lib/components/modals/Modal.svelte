@@ -70,7 +70,7 @@
     on:click-outside={closeModal}
     {...$$restProps}
 >
-    <div class="modal-header">
+    <div class="modal-contents">
         <button
             class="close" 
             on:click={closeModal}
@@ -78,12 +78,17 @@
         >
             <Icon name="close" />
         </button>
-        <h3 class="h5">{title}</h3>
-    </div>
 
-    <section>
-        <slot />
-    </section>
+        {#if title}
+            <div class="modal-header">
+                <h3 class="h5">{title}</h3>
+            </div>
+        {/if}
+
+        <section>
+            <slot />
+        </section>
+    </div>
 </dialog>
 
 <style>
@@ -131,39 +136,46 @@
 		}
 	}
 
+    .modal-contents {
+        position: relative;
+    }
+
+    .close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--dark-500);
+        border: none;
+        border-radius: 0.25rem;
+        color: var(--light-500);
+        z-index: 10;
+        
+        & svg {
+            font-size: 1.5rem;
+        }
+
+        &:hover {
+            background-color: var(--dark-700);
+            cursor: pointer;
+        }
+    }
+
     .modal-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
-        flex-direction: row-reverse;
-        padding: 0.5rem 0.5rem 1rem 1rem;
+        padding: 0.5rem 2.5rem 0 1rem;
 
         & h3 {
             margin-right: 1rem;
             color: var(--light-900);
         }
-
-        & .close {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--dark-500);
-            border: none;
-            border-radius: 0.25rem;
-            color: var(--light-500);
-            
-            & svg {
-                font-size: 1.5rem;
-            }
-
-            &:hover {
-                background-color: var(--dark-700);
-                cursor: pointer;
-            }
-        }
     }
 
     section {
-        padding: 0 1rem 0.75rem 1rem;
+        padding: 1rem 1rem 0.75rem 1rem;
     }
 </style>
