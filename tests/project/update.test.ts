@@ -39,6 +39,7 @@ test.describe('project - update', () => {
         }
 
         await nav.openMobileNav();
+        await expect(nav.contextLinks.projects).toBeInViewport();
         await nav.contextLinks.projects.click({ force: true });
 
         await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -100,6 +101,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -161,6 +163,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -221,6 +224,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -282,6 +286,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -343,6 +348,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -401,6 +407,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -460,6 +467,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});
@@ -519,6 +527,7 @@ test.describe('project - update', () => {
             }
     
             await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
             await nav.contextLinks.projects.click({ force: true });
     
             await page.waitForURL('/projects', {waitUntil: 'networkidle'});

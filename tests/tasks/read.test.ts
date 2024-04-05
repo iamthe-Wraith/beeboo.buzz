@@ -22,6 +22,7 @@ test.describe('tasks - read', () => {
         await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
         await nav.openMobileNav();
+        await expect(nav.contextLinks.inbox).toBeInViewport();
         await nav.contextLinks.inbox.click({ force: true });
 
         await page.waitForURL('/inbox', {waitUntil: 'networkidle'});

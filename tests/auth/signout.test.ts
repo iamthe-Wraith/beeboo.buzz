@@ -14,17 +14,19 @@ test('sign out button exists in nav when user is signed in', async ({ page, data
     
     await page.goto('/');
 
-    signin.createUser({ email: emailOrUsername, password }, database);
+    try {
+        signin.createUser({ email: emailOrUsername, password }, database);
 
-    await signin.signIn({ emailOrUsername, password });
+        await signin.signIn({ emailOrUsername, password });
 
-    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
-    nav.openMobileNav();
-    
-    await expect(signout.button).toBeVisible();
-
-    await signin.cleanup(emailOrUsername, database);
+        nav.openMobileNav();
+        await expect(signout.button).toBeInViewport();
+        await expect(signout.button).toBeVisible();
+    } finally {
+        await signin.cleanup(emailOrUsername, database);
+    }
 });
 
 test('user cannot access sign out button when not signed in', async ({ page }) => {

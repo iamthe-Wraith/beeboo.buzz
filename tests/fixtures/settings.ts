@@ -29,6 +29,7 @@ export class SettingsFixture {
     public contextsSection: Locator;
     public contexts: Locator;
     public addContextButton: Locator;
+
     public contextModal: Locator;
     public contextName: Locator;
     public contextNameError: Locator;
@@ -36,6 +37,12 @@ export class SettingsFixture {
     public contextDescriptionError: Locator;
     public contextModalSubmitButton: Locator;
     public contextModalCancelButton: Locator;
+
+    public deleteContextModal: Locator;
+    public deleteContextModalHeader: Locator;
+    public deleteContextModalMessage: Locator;
+    public deleteContextModalCancelButton: Locator;
+    public deleteContextModalDeleteButton: Locator;
 
     public metadataContainer: Locator;
     public lastUpdated: Locator;
@@ -69,6 +76,7 @@ export class SettingsFixture {
 
         this.contextsSection = page.getByTestId('contexts-section');
         this.contexts = this.contextsSection.locator('.context');
+        
         this.addContextButton = this.contextsSection.getByTestId('add-context-button');
         this.contextModal = page.getByTestId('context-modal');
         this.contextName = this.contextModal.getByTestId('context-name');
@@ -77,6 +85,12 @@ export class SettingsFixture {
         this.contextDescriptionError = this.contextModal.getByTestId('description-error');
         this.contextModalSubmitButton = this.contextModal.getByTestId('context-submit');
         this.contextModalCancelButton = this.contextModal.getByTestId('context-cancel');
+
+        this.deleteContextModal = page.getByTestId('delete-context-modal');
+        this.deleteContextModalHeader = this.deleteContextModal.getByTestId('delete-context-modal-header');
+        this.deleteContextModalMessage = this.deleteContextModal.getByTestId('delete-context-modal-message');
+        this.deleteContextModalCancelButton = this.deleteContextModal.getByTestId('cancel-delete-context');
+        this.deleteContextModalDeleteButton = this.deleteContextModal.getByTestId('confirm-delete-context-submit');
 
         this.metadataContainer = page.getByTestId('metadata-container');
         this.lastUpdated = this.metadataContainer.getByTestId('last-updated');

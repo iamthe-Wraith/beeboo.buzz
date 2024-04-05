@@ -6,6 +6,7 @@
     import ContextModal from "./modals/ContextModal.svelte";
 	import { ContextRole } from "../../types/contexts";
 	import OpenModalEmitter from "./OpenModalEmitter.svelte";
+	import DeleteContextModal from "./modals/DeleteContextModal.svelte";
 
     let contextsWithoutRoles: Context[] = [];
 
@@ -35,12 +36,15 @@
                         </Button>
                     </OpenModalEmitter>
 
-                    <Button
-                        kind="danger-transparent"
-                        data-testid="delete-context-button"
-                    >
-                        <Icon name="trash" />
-                    </Button>
+                    <OpenModalEmitter let:openModal>
+                        <Button
+                            kind="danger-transparent"
+                            data-testid="delete-context-button"
+                            on:click={() => openModal('delete-context-modal', { contextId: context.id })}
+                        >
+                            <Icon name="trash" />
+                        </Button>
+                    </OpenModalEmitter>
                 </div>
             </div>
         {/each}
@@ -64,6 +68,7 @@
 </div>
 
 <ContextModal />
+<DeleteContextModal />
 
 <style>
     .contexts-container {

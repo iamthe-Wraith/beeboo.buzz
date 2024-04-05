@@ -1,3 +1,8 @@
+<!--
+    this app uses the IonIcons icon set, which can be
+    found at: https://icon-sets.iconify.design/
+-->
+
 <script lang="ts" context="module">
     export type IconName =
         'alert-circle' |

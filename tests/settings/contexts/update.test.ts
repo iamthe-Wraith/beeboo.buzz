@@ -57,7 +57,6 @@ test.describe('contexts settings - create', () => {
 
             await settings.assertContextExists(updatedCtx);
 
-            await nav.openMobileNav();
             await nav.assertCustomContextExists(updatedCtx);
         } finally {
             await signup.cleanup(email, database);
