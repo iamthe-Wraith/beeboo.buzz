@@ -153,6 +153,19 @@ export class TaskService extends Service {
         }));
     };
 
+    public moveManyToContext = async (contextId: number, context: Context) => {
+        return this.transaction(async (tx) => tx.task.updateMany({
+            where: {
+                contextId,
+                ownerId: this.user.id,
+            },
+            data: {
+                contextId: context.id,
+                updatedAt: dayjs().utc().toDate(),
+            },
+        }));
+    }
+
     public quickCreateTask = async (request: ICreateTaskRequest) => {
         const validationErrors = TaskService.isValidNewTaskRequest(request);
     

@@ -123,6 +123,14 @@ export class ContextService extends Service {
         return await this.createManyContexts(this.defaultContexts);
     }
 
+    public deleteContext = async (id: number) => {
+        return this.transaction(async (tx) => {
+            return tx.context.delete({
+                where: { id, ownerId: this.user.id},
+            });
+        });
+    };
+
     public getContextById = async (id: number) => {
         return this.transaction(async (tx) => tx.context.findFirst({
             where: {
