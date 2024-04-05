@@ -38,6 +38,7 @@ test.describe('task - read', () => {
         }
 
         await nav.openMobileNav();
+        await expect(nav.contextLinks.inbox).toBeInViewport();
         await nav.contextLinks.inbox.click({ force: true });
 
         await page.waitForURL('/inbox', {waitUntil: 'networkidle'});
@@ -107,6 +108,7 @@ test.describe('task - read', () => {
         }
 
         await nav.openMobileNav();
+        await expect(nav.contextLinks.inbox).toBeInViewport();
         await nav.contextLinks.inbox.click({ force: true });
 
         await page.waitForURL('/inbox', {waitUntil: 'networkidle'});

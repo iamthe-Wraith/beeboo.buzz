@@ -15,25 +15,28 @@ test.describe('projects - read', () => {
         const nav = new NavFixture(page, viewport);
         const projectPage = new ProjectsPageFixture(page, viewport);
 
-        await page.goto('/');
+        try {
+            await page.goto('/');
 
-        await signup.signUp({ email, password, confirmPassword: password });
+            await signup.signUp({ email, password, confirmPassword: password });
 
-        await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
-        await nav.openMobileNav();
-        await nav.contextLinks.projects.click({ force: true });
+            await nav.openMobileNav();
+            await expect(nav.contextLinks.projects).toBeInViewport();
+            await nav.contextLinks.projects.click({ force: true });
 
-        await page.waitForURL('/projects', {waitUntil: 'networkidle'});
+            await page.waitForURL('/projects', {waitUntil: 'networkidle'});
 
-        await expect(projectPage.layout).toBeVisible();
-        await expect(projectPage.title).toHaveText('Projects');
-        await expect(projectPage.count).toHaveText(`${0} projects`);
-        await expect(projectPage.projects).toHaveCount(0);
-        await expect(projectPage.noProjects).toBeVisible();
-        await expect(projectPage.noProjects).toHaveText('No projects found');
-
-        await signup.cleanup(email, database);
+            await expect(projectPage.layout).toBeVisible();
+            await expect(projectPage.title).toHaveText('Projects');
+            await expect(projectPage.count).toHaveText(`${0} projects`);
+            await expect(projectPage.projects).toHaveCount(0);
+            await expect(projectPage.noProjects).toBeVisible();
+            await expect(projectPage.noProjects).toHaveText('No projects found');
+        } finally {
+            await signup.cleanup(email, database);
+        }
     });
 
     test('should display all a user\'s projects', async ({ page, viewport, database }) => {
@@ -81,6 +84,7 @@ test.describe('projects - read', () => {
         }
 
         await nav.openMobileNav();
+        await expect(nav.contextLinks.projects).toBeInViewport();
         await nav.contextLinks.projects.click({ force: true });
 
         await page.waitForURL('/projects', {waitUntil: 'networkidle'});

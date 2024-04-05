@@ -81,7 +81,7 @@ export class NavFixture {
         
         await this.menuButton?.click({ force: true });
 
-        await this.page.waitForTimeout(250);
+        // await this.page.waitForTimeout(250);
     }
 
     public assertCustomContextDoesNotExist = async (ctx: Context) => {
