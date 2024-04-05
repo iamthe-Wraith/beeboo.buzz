@@ -84,7 +84,14 @@ export class NavFixture {
         await this.page.waitForTimeout(250);
     }
 
+    public assertCustomContextDoesNotExist = async (ctx: Context) => {
+        await this.openMobileNav();
+        const context = this.nav.getByRole('link', { name: ctx.name });
+        await expect(context).not.toBeVisible();
+    }
+
     public assertCustomContextExists = async (ctx: Context) => {
+        await this.openMobileNav();
         const context = this.nav.getByRole('link', { name: ctx.name });
         await expect(context).toBeVisible();
     }

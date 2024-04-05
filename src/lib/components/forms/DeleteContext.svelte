@@ -56,9 +56,9 @@
     action="/settings?/deleteContext"
     use:enhance={onSubmitResponse}
 >
-    <h2>Are you sure?</h2>
+    <h2 data-testid="delete-context-modal-header">Are you sure?</h2>
 
-    <div class="message-container">
+    <div class="message-container" data-testid="delete-context-modal-message">
         <p class="danger">This action cannot be undone!</p>
         <p>Any tasks assigned to this context will be moved to your inbox.</p>
     </div>
@@ -68,7 +68,7 @@
     <div class="buttons-container">
         <Button
             id="confirm-delete-context-submit"
-            data-testid="context-submit"
+            data-testid="confirm-delete-context-submit"
             kind="danger"
             type="submit"
             {processing}
@@ -77,8 +77,8 @@
         </Button>
     
         <Button
-            id="context-cancel"
-            data-testid="context-cancel"
+            id="cancel-delete-context"
+            data-testid="cancel-delete-context"
             kind="transparent"
             type="button"
             on:click={onCancelClick}
