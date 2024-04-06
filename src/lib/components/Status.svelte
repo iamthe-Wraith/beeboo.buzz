@@ -85,6 +85,7 @@
     }
 
     p {
+        margin: 0;
         line-height: 1rem;
     }
 </style>

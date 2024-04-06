@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { marked } from "marked";
     import type { Context, Task } from "@prisma/client";
     import type { PageData } from "./$types";
     import dayjs from "dayjs";
@@ -10,6 +11,7 @@
 	import UpdateTask from "$lib/components/forms/UpdateTask.svelte";
 	import CompleteTask from "$lib/components/forms/CompleteTask.svelte";
 	import DeleteTask from "$lib/components/forms/DeleteTask.svelte";
+	import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
     export let data: PageData;
     
@@ -59,13 +61,15 @@
 
 <div class="task-container">
     {#if editing}
-        <UpdateTask
-            {task}
-            onCancel={onCancelEdit}
-            onSave={onSave}
-        />
+        <div>
+            <UpdateTask
+                {task}
+                onCancel={onCancelEdit}
+                onSave={onSave}
+            />
+        </div>
     {:else}
-        <div data-testid="task-info-container">
+        <div data-testid="task-info-container" class="task-info-container">
             <div class="buttons-container">
                 <div>
                     <Link
@@ -101,19 +105,26 @@
                 </div>
             </div>
 
+            <h1 data-testid="title">{task.title}</h1>
+
             <div class="meta-container">
                 <Status status={getStatus()} data-testid="task-status" />
             </div>
 
-            <h1 data-testid="title">{task.title}</h1>
-
             {#if task.description}
-                <p data-testid="description">{task.description}</p>
+                <div data-testid="description">
+                    <MarkdownEditor
+                        hideControls
+                        disableEditing
+                        id="description"
+                        bind:value={task.description}
+                    />
+                </div>
             {/if}
         </div>
     {/if}
 
-    <div class={editing ? 'hidden' : ''} data-testid="task-notes-container">
+    <div data-testid="task-notes-container">
         <h2 data-testid="notes-title">Notes</h2>
     </div>
 </div>
@@ -126,14 +137,9 @@
         gap: 3rem;
         width: 100%;
         height: 100%;
-        overflow: auto;
 
         & > div {
             flex: unset;
-
-            &.hidden {
-                display: none;
-            }
 
             &:first-child {
                 display: flex;
@@ -163,11 +169,11 @@
                 }
 
                 &:first-child {
-                    padding-right: 1rem;
+                    padding-right: 0.5rem;
                 }
 
                 &:last-child {
-                    padding-left: 1rem;
+                    padding-left: 0.5rem;
                     border-left: 1px solid var(--dark-400);
                 }
 
@@ -176,7 +182,11 @@
                 }
             }
         }
-    }   
+    }
+
+    .task-info-container {
+        overflow: auto;
+    }
 
     .buttons-container {
         display: flex;
@@ -204,25 +214,9 @@
         align-items: center;
         justify-content: flex-start;
         gap: 0.5rem;
-        margin-bottom: 0.5rem;
-        padding: 1rem 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.7rem 0.5rem;
         border-top: 1px solid var(--dark-400);
         border-bottom: 1px solid var(--dark-400);
-    }
-
-    h1,
-    h2 {
-        margin-bottom: 1rem;
-        font-weight: 700;
-    }
-
-    h1 {
-        font-size: 2rem;
-        text-align: left;
-    }
-
-    h2 {
-        margin-bottom: 0;
-        font-size: 1.5rem;
     }
 </style>

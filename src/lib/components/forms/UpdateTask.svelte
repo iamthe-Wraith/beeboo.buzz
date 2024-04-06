@@ -6,10 +6,10 @@
     import { contexts } from '$lib/stores/contexts';
     import TextInput from "$lib/components/TextInput.svelte";
     import Button from "$lib/components/Button.svelte";
-    import Textarea from "$lib/components/Textarea.svelte";
     import type { IApiError } from "$lib/utils/api-error";
     import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
     import Dropdown from "$lib/components/Dropdown.svelte";
+	import MarkdownEditor from "../MarkdownEditor.svelte";
 
     type FormField = 'title' | 'description';
 
@@ -147,13 +147,42 @@
     method="POST"
     action="/tasks?/update"
     data-testid="edit-task-form"
+    class="no-scrollbar"
     use:enhance={onSaveResponse}
 >
-    <h2>Edit Task</h2>
+    <div>
+        <h2>Edit Task</h2>
+
+        <div class="buttons-container">
+            <div>
+                <!-- left empty intentionally -->
+            </div>
+
+            <div class="row-reverse">
+                <Button
+                    {processing}
+                    type="submit"
+                    data-testid="update-task-button"
+                    disabled={disableUpdating}
+                >
+                    Save Changes
+                </Button>
+
+                <Button
+                    disabled={processing}
+                    data-testid="cancel-edit-task-button"
+                    kind="transparent"
+                    on:click={onCancelClick}
+                >
+                    Cancel
+                </Button>
+            </div>
+        </div>
+    </div>
 
     <input type="hidden" name="id" value={task.id} />
 
-    <div class="row col-1">
+    <div class="row">
         <TextInput
             required
             id="title"
@@ -163,18 +192,6 @@
             error={titleError}
             bind:value={title}
             on:blur={onBlur('title')}
-        />
-    </div>
-
-    <div class="row col-1">
-        <Textarea
-            id="description"
-            label="Description"
-            data-testid="edit-task-description"
-            placeholder="Task Description"
-            error={descriptionError}
-            bind:value={description}
-            on:blur={onBlur('description')}
         />
     </div>
 
@@ -194,35 +211,21 @@
         <div></div>
     </div>
 
+    <div class="description-container">
+        <MarkdownEditor
+            id="description"
+            label="Description"
+            text="This is just a test."
+            placeholder="Task Description"
+            error={descriptionError}
+            bind:value={description}
+            on:blur={onBlur('description')}
+        />
+    </div>
+
     {#if genError}
         <p class="error" data-testid="edit--task-gen-error">{genError}</p>
     {/if}
-
-    <div class="buttons-container">
-        <div>
-            <!-- left empty intentionally -->
-        </div>
-
-        <div class="row-reverse">
-            <Button
-                {processing}
-                type="submit"
-                data-testid="update-task-button"
-                disabled={disableUpdating}
-            >
-                Save Changes
-            </Button>
-
-            <Button
-                disabled={processing}
-                data-testid="cancel-edit-task-button"
-                kind="transparent"
-                on:click={onCancelClick}
-            >
-                Cancel
-            </Button>
-        </div>
-    </div>
 </form>
 
 <style>
@@ -232,6 +235,15 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+        overflow: auto;
+    }
+
+    .description-container {
+        --markdown-editor-flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
     }
 
     .buttons-container {
@@ -268,7 +280,6 @@
     @media (min-width: 1100px) {
         form {
             flex: 1;
-            padding-right: 1rem;
         }
     }
 </style>

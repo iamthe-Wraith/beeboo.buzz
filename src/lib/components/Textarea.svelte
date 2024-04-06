@@ -17,13 +17,15 @@
         </label>
     {/if}
 
+    <slot />
+
     <textarea
         {id}
         {required}
         name={id}
-        class={error ? 'error' : ''}
         bind:value
         {...$$restProps}
+        class="{error ? 'error' : ''} {$$restProps.class ?? ''}"
         on:change
         on:click
         on:focus
@@ -44,6 +46,7 @@
 
 <style>
     :global(:root) {
+        --textarea-container-flex-grow: 0;
         --textarea-width: 100%;
         --textarea-height: 6rem;
     }
@@ -51,6 +54,7 @@
     .textarea-container {
         display: flex;
         flex-direction: column;
+        flex-grow: var(--textarea-container-flex-grow);
         gap: 0.5rem;
         padding: var(--outline-offset);
     }
