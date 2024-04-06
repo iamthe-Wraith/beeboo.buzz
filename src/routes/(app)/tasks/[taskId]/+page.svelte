@@ -59,7 +59,7 @@
     }
 </script>
 
-<div class="task-container">
+<div class="task-container no-scrollbar">
     {#if editing}
         <div>
             <UpdateTask
@@ -69,7 +69,7 @@
             />
         </div>
     {:else}
-        <div data-testid="task-info-container" class="task-info-container">
+        <div data-testid="task-info-container" class="task-info-container no-scrollbar">
             <div class="buttons-container">
                 <div>
                     <Link
@@ -153,6 +153,10 @@
             }
         }
 
+        @media (max-width: 1100px) {
+            overflow: auto;
+        }
+
         @media (min-width: 1100px) {
             flex-direction: row;
             justify-content: space-between;
@@ -185,7 +189,9 @@
     }
 
     .task-info-container {
-        overflow: auto;
+        @media (min-width: 1100px) {
+            overflow: auto;
+        }
     }
 
     .buttons-container {

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { marked } from "marked";
-	import Textarea from "./Textarea.svelte";
 
     export let id: string;
     export let value = '';
@@ -92,7 +91,7 @@
             placeholder="{placeholder}"
             bind:value={value}
             {...$$restProps}
-            class="{error ? 'error' : ''}"
+            class="{error ? 'error' : ''} no-scrollbar"
             on:change
             on:click
             on:focus
@@ -215,6 +214,121 @@
         & h6 {
             color: var(--dark-900);
             text-align: left;
+        }
+
+        & a {
+            color: var(--primary-500);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        & table {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-collapse: collapse;
+            overflow: auto;
+
+            & thead {
+                & th:nth-child(odd) {
+                    background: var(--primary-200);
+                }
+
+                & th:nth-child(even) {
+                    background: var(--primary-100);
+                }
+            }
+
+            & th,
+            & td {
+                padding: 0.5rem;
+            }
+
+            & tbody {
+                & tr {
+                    &:nth-child(odd) {
+                        & td:nth-child(odd) {
+                            background: var(--dark-300);
+                        }
+
+                        & td:nth-child(even) {
+                            background: var(--dark-200);
+                        }
+                    }
+
+                    &:nth-child(even) {
+                        & td:nth-child(odd) {
+                            background: var(--dark-400);
+                        }
+
+                        & td:nth-child(even) {
+                            background: var(--dark-300);
+                        }
+                    }
+                }
+            }
+        }
+
+        & ul {
+            padding-left: 1rem;
+            list-style-type: disc;
+            
+            & ul {
+                padding-top: 0.25rem;
+            }
+
+            & li {
+                padding: 0.15rem;
+
+                &:last-child {
+                    padding-bottom: 0;
+                }
+            }
+
+            & li::marker {
+                color: var(--primary-300);
+            }
+        }
+
+        & > ul {
+            margin: 1.5rem 0;
+        }
+
+        & code {
+            padding: 0.1rem 0.25rem;
+            background: var(--dark-500);
+        }
+
+        & pre code {
+            display: block;
+            margin: 1.5rem 0;
+            padding: 0.5rem;
+        }
+
+        & img {
+            display: block;
+            max-width: 90%;
+            height: auto;
+            margin: 1.5rem 0;
+        }
+
+        & blockquote {
+            padding: 0.5rem;
+            margin: 1.5rem 0;
+            border-left: 0.25rem solid var(--primary-500);
+            background: var(--dark-200);
+
+            & * {
+                margin: 0;
+            }
+        }
+
+        & hr {
+            margin: 1.5rem 0;
+            border: none;
+            border-top: 1px solid var(--dark-400);
         }
     }
 </style>

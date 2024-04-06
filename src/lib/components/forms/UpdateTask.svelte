@@ -215,7 +215,6 @@
         <MarkdownEditor
             id="description"
             label="Description"
-            text="This is just a test."
             placeholder="Task Description"
             error={descriptionError}
             bind:value={description}
