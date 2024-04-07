@@ -61,7 +61,7 @@
 
 <div class="task-container no-scrollbar">
     {#if editing}
-        <div>
+        <div class="update-task-container">
             <UpdateTask
                 {task}
                 onCancel={onCancelEdit}
@@ -140,8 +140,6 @@
         height: 100%;
 
         & > div {
-            flex: unset;
-
             &:first-child {
                 display: flex;
                 flex-direction: column;
@@ -187,6 +185,10 @@
                 }
             }
         }
+    }
+
+    .update-task-container {
+        flex-grow: 1;
     }
 
     .task-info-container {

@@ -234,6 +234,7 @@
 
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         gap: 1rem;
         overflow: auto;
     }
@@ -244,6 +245,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        min-height: 40rem;
     }
 
     .buttons-container {
