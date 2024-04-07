@@ -124,7 +124,7 @@ test.describe('task - update', () => {
             await expect(taskPage.editTaskForm).toBeVisible();
     
             await expect(taskPage.edit.title).toHaveValue(tasks[0].title);
-            await expect(taskPage.edit.description).toHaveValue(tasks[0].description);
+            await expect(taskPage.edit.descriptionPreview).toHaveValue(tasks[0].description);
             await expect(taskPage.edit.submitButton).toBeVisible();
             await expect(taskPage.edit.submitButton).toBeDisabled();
             await expect(taskPage.edit.cancelButton).toBeVisible();
@@ -312,7 +312,7 @@ test.describe('task - update', () => {
             
             await expect(taskPage.taskInfoContainer).toBeVisible();
     
-            await expect(taskPage.taskInfo.description).toHaveText('Updated description');
+            await expect(taskPage.taskInfo.descriptionPreview).toHaveText('Updated description');
     
             await signup.cleanup(email, database);
         });

@@ -63,7 +63,7 @@ test.describe('task - read', () => {
         await expect(taskPage.delete.trigger).toBeVisible();
 
         await expect(taskPage.taskInfo.title).toHaveText(tasks[0].title);
-        await expect(taskPage.taskInfo.description).toHaveText(tasks[0].description);
+        await expect(taskPage.taskInfo.descriptionPreview).toHaveText(tasks[0].description);
 
         // task notes
         await expect(taskPage.taskNotesContainer).toBeVisible();

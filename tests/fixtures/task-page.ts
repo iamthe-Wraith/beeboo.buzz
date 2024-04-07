@@ -12,11 +12,13 @@ export class TaskPageFixture {
         status: Locator;
         title: Locator;
         description: Locator;
+        descriptionPreview: Locator;
     }
 
     public edit: {
         title: Locator;
         description: Locator;
+        descriptionPreview: Locator;
         context: Locator;
         contextTrigger: Locator;
         contextValue: Locator;
@@ -53,6 +55,7 @@ export class TaskPageFixture {
             status: this.taskInfoContainer.getByTestId('task-status'),
             title: this.taskInfoContainer.getByTestId('title'),
             description: this.taskInfoContainer.getByTestId('description'),
+            descriptionPreview: this.taskInfoContainer.getByTestId('description-preview'),
         }
 
         const contextContainer = this.editTaskForm.locator('#context-container');
@@ -60,6 +63,7 @@ export class TaskPageFixture {
         this.edit = {
             title: this.editTaskForm.getByTestId('edit-task-title'),
             description: this.editTaskForm.getByTestId('edit-task-description'),
+            descriptionPreview: this.editTaskForm.getByTestId('edit-task-description'),
             context: contextContainer,
             contextTrigger: contextContainer.locator('#context'),
             contextValue: contextContainer.locator('[name="contextId"]'),
