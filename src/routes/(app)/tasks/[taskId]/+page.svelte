@@ -112,11 +112,12 @@
             </div>
 
             {#if task.description}
-                <div data-testid="description">
+                <div data-testid="description-container">
                     <MarkdownEditor
                         hideControls
                         disableEditing
                         id="description"
+                        data-testid="description"
                         bind:value={task.description}
                     />
                 </div>
@@ -134,7 +135,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        gap: 3rem;
+        gap: 1.5rem;
         width: 100%;
         height: 100%;
 
