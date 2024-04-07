@@ -9,7 +9,7 @@
     import type { IApiError } from "$lib/utils/api-error";
     import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
     import Dropdown from "$lib/components/Dropdown.svelte";
-	import MarkdownEditor from "../MarkdownEditor.svelte";
+    import MarkdownEditor from "../MarkdownEditor.svelte";
 
     type FormField = 'title' | 'description';
 

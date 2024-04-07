@@ -17,8 +17,6 @@
         </label>
     {/if}
 
-    <slot />
-
     <textarea
         {id}
         {required}

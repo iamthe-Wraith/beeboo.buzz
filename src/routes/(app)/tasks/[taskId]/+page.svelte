@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { marked } from "marked";
     import type { Context, Task } from "@prisma/client";
     import type { PageData } from "./$types";
     import dayjs from "dayjs";
@@ -8,10 +7,10 @@
     import Link from "$lib/components/Link.svelte";
     import Icon from "$lib/components/Icon.svelte";
     import Status from "$lib/components/Status.svelte";
-	import UpdateTask from "$lib/components/forms/UpdateTask.svelte";
-	import CompleteTask from "$lib/components/forms/CompleteTask.svelte";
-	import DeleteTask from "$lib/components/forms/DeleteTask.svelte";
-	import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
+    import UpdateTask from "$lib/components/forms/UpdateTask.svelte";
+    import CompleteTask from "$lib/components/forms/CompleteTask.svelte";
+    import DeleteTask from "$lib/components/forms/DeleteTask.svelte";
+    import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
     export let data: PageData;
     
