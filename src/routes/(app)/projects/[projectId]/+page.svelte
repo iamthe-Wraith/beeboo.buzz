@@ -9,6 +9,7 @@
     import CompleteProject from "$lib/components/forms/CompleteProject.svelte";
     import Status from "$lib/components/Status.svelte";
     import dayjs from "dayjs";
+	import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
 
     export let data: PageData;
     
@@ -42,15 +43,17 @@
     }
 </script>
 
-<div class="project-container">
+<div class="project-container no-scrollbar">
     {#if editing}
-        <UpdateProject
-            {project}
-            onCancel={onCancelEdit}
-            onSave={onSave}
-        />
+        <div  class="update-project-container">
+            <UpdateProject
+                {project}
+                onCancel={onCancelEdit}
+                onSave={onSave}
+            />
+        </div>
     {:else}
-        <div data-testid="project-info-container">
+        <div data-testid="project-info-container" class="task-info-container no-scrollbar">
             <div class="buttons-container">
                 <div>
                     <Link
@@ -93,12 +96,20 @@
             <h1 data-testid="title">{project.title}</h1>
 
             {#if project.description}
-                <p data-testid="description">{project.description}</p>
+                <div data-testid="description-container">
+                    <MarkdownEditor
+                        hideControls
+                        disableEditing
+                        id="description"
+                        data-testid="description"
+                        bind:value={project.description}
+                    />
+                </div>
             {/if}
         </div>
     {/if}
 
-    <div class={editing ? 'hidden' : ''} data-testid="project-notes-container">
+    <div data-testid="project-notes-container">
         <h2 data-testid="notes-title">Notes</h2>
     </div>
 </div>
@@ -108,18 +119,12 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        gap: 3rem;
+        gap: 1.5rem;
         width: 100%;
         height: 100%;
         overflow: auto;
 
         & > div {
-            flex: unset;
-
-            &.hidden {
-                display: none;
-            }
-
             &:first-child {
                 display: flex;
                 flex-direction: column;
@@ -130,6 +135,10 @@
                 padding-left: 0;
                 border-left: 0 solid var(--dark-400);
             }
+        }
+
+        @media (max-width: 1100px) {
+            overflow: auto;
         }
 
         @media (min-width: 1100px) {
@@ -143,16 +152,12 @@
                 flex: 1;
                 overflow: auto;
 
-                &.hidden {
-                    display: block;
-                }
-
                 &:first-child {
-                    padding-right: 1rem;
+                    padding-right: 0.5rem;
                 }
 
                 &:last-child {
-                    padding-left: 1rem;
+                    padding-left: 0.5rem;
                     border-left: 1px solid var(--dark-400);
                 }
 
@@ -161,7 +166,17 @@
                 }
             }
         }
-    }   
+    }
+
+    .update-project-container {
+        flex-grow: 1;
+    }
+
+    .project-info-container {
+        @media (min-width: 1100px) {
+            overflow: auto;
+        }
+    }
 
     .buttons-container {
         display: flex;

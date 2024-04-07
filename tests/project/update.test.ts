@@ -312,7 +312,7 @@ test.describe('project - update', () => {
             
             await expect(projectPage.projectInfoContainer).toBeVisible();
     
-            await expect(projectPage.projectInfo.description).toHaveText('Updated description');
+            await expect(projectPage.projectInfo.descriptionPreview).toHaveText('Updated description');
     
             await signup.cleanup(email, database);
         });

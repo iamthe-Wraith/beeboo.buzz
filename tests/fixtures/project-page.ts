@@ -12,6 +12,7 @@ export class ProjectPageFixture {
         status: Locator;
         title: Locator;
         description: Locator;
+        descriptionPreview: Locator;
     }
 
     public edit: {
@@ -50,6 +51,7 @@ export class ProjectPageFixture {
             status: this.projectInfoContainer.getByTestId('project-status'),
             title: this.projectInfoContainer.getByTestId('title'),
             description: this.projectInfoContainer.getByTestId('description'),
+            descriptionPreview: this.projectInfoContainer.getByTestId('description-preview'),
         }
 
         this.edit = {

@@ -63,7 +63,7 @@ test.describe('project - read', () => {
         await expect(projectPage.delete.trigger).toBeVisible();
 
         await expect(projectPage.projectInfo.title).toHaveText(projects[0].title);
-        await expect(projectPage.projectInfo.description).toHaveText(projects[0].description);
+        await expect(projectPage.projectInfo.descriptionPreview).toHaveText(projects[0].description);
 
         // project notes
         await expect(projectPage.projectNotesContainer).toBeVisible();

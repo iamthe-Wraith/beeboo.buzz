@@ -137,6 +137,7 @@
         gap: 1.5rem;
         width: 100%;
         height: 100%;
+        overflow: auto;
 
         & > div {
             &:first-child {
@@ -165,10 +166,6 @@
             & > div {
                 flex: 1;
                 overflow: auto;
-
-                &.hidden {
-                    display: block;
-                }
 
                 &:first-child {
                     padding-right: 0.5rem;
