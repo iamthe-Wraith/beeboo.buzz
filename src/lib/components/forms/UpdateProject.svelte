@@ -8,6 +8,7 @@
     import type { IApiError } from "$lib/utils/api-error";
 	import { onMount } from "svelte";
 	import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
+	import MarkdownEditor from "../MarkdownEditor.svelte";
 
     type FormField = 'title' | 'description';
 
@@ -144,15 +145,17 @@
         on:blur={onBlur('title')}
     />
 
-    <Textarea
-        id="description"
-        label="Description"
-        data-testid="edit-project-description"
-        placeholder="Project Description"
-        error={descriptionError}
-        bind:value={description}
-        on:blur={onBlur('description')}
-    />
+    <div class="description-container">
+        <MarkdownEditor
+            id="description"
+            label="Description"
+            data-testid="edit-project-description"
+            placeholder="Project Description"
+            error={descriptionError}
+            bind:value={description}
+            on:blur={onBlur('description')}
+        />
+    </div>
 
     {#if genError}
         <p class="error" data-testid="edit--project-gen-error">{genError}</p>
@@ -192,6 +195,15 @@
         display: flex;
         flex-direction: column;
         gap: 1rem;
+    }
+
+    .description-container {
+        --markdown-editor-flex-grow: 1;
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        min-height: 40rem;
     }
 
     .buttons-container {
