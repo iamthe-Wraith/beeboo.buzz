@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { ActionResult } from "@sveltejs/kit";
-	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
-	import Button from "../Button.svelte";
-	import type { IApiError } from "$lib/utils/api-error";
-	import type { Project } from "@prisma/client";
+    import type { ActionResult } from "@sveltejs/kit";
+    import { enhance } from "$app/forms";
+    import { goto } from "$app/navigation";
+    import Button from "../Button.svelte";
+    import type { IApiError } from "$lib/utils/api-error";
+    import type { Project } from "@prisma/client";
 
     export let id: number;
     export let onCancel: () => void = () => {};

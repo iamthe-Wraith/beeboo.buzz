@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ConvertTaskToProject from "../forms/ConvertTaskToProject.svelte";
+    import ConvertTaskToProject from "../forms/ConvertTaskToProject.svelte";
     import Modal from "./Modal.svelte";
 
     const modalId = 'convert-task-to-project-modal';
@@ -14,8 +14,6 @@
     function onModalChange(e: CustomEvent<{ id: string; open: boolean, taskId: number }>) {
         taskId = e.detail.taskId;
         open = e.detail.open;
-
-        console.log('taskId: ', taskId);
     }
 </script>
 

@@ -11,8 +11,8 @@
     import CompleteTask from "$lib/components/forms/CompleteTask.svelte";
     import DeleteTask from "$lib/components/forms/DeleteTask.svelte";
     import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
-	import ConvertTaskToProjectModal from "$lib/components/modals/ConvertTaskToProjectModal.svelte";
-	import OpenModalEmitter from "$lib/components/OpenModalEmitter.svelte";
+    import ConvertTaskToProjectModal from "$lib/components/modals/ConvertTaskToProjectModal.svelte";
+    import OpenModalEmitter from "$lib/components/OpenModalEmitter.svelte";
 
     export let data: PageData;
     

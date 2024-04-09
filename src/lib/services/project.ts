@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 export interface ICreateProjectRequest {
     title: string;
     description: string;
+    convertedFromTask?: boolean;
 }
 
 export interface IUpdateProjectRequest {
@@ -105,6 +106,7 @@ export class ProjectService extends Service {
                 title,
                 description,
                 ownerId: this.user.id,
+                convertedFromTask: !!request.convertedFromTask,
                 createdAt: dayjs().utc().toDate(),
                 updatedAt: dayjs().utc().toDate(),
             },

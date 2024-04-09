@@ -21,6 +21,7 @@ export class TaskToProjectService extends Service {
             const project = await projectService.createProject({
                 title: task.title,
                 description: task.description || '',
+                convertedFromTask: true,
             });
 
             await taskService.deleteTask(taskId);
