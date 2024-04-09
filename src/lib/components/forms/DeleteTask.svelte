@@ -50,7 +50,7 @@
     kind="danger-transparent"
     on:click={onTriggerDelete}
 >
-    Delete
+    Delete Task
 </Button>
 
 <Modal

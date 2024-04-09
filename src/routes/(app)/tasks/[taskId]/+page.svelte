@@ -211,7 +211,9 @@
 
     .buttons-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
         gap: 1rem;
         margin-bottom: 1rem;
         padding-top: 0.25rem;
@@ -250,13 +252,5 @@
     .description-container {
         padding-bottom: 0.5rem;
         border-bottom: 1px solid var(--dark-400);
-    }
-
-    @container (min-width: 425px) {
-        .buttons-container {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-        }
     }
 </style>

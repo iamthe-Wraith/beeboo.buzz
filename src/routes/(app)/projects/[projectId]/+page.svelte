@@ -53,7 +53,7 @@
             />
         </div>
     {:else}
-        <div data-testid="project-info-container" class="task-info-container no-scrollbar">
+        <div data-testid="project-info-container" class="project-info-container no-scrollbar">
             <div class="buttons-container">
                 <div>
                     <Link
@@ -69,7 +69,7 @@
                 <div>
                     <Button
                         data-testid="edit-project-button"
-                        kind="transparent"
+                        kind="neutral"
                         on:click={() => editing = true}
                     >
                         Edit
@@ -78,25 +78,23 @@
                     <CompleteProject {project}>
                         <Button
                             type="submit" 
-                            kind="transparent"
+                            kind="primary"
                             data-testid="complete-project-button"
                         >
                             {project.completed ? 'Reopen' : 'Complete'}
                         </Button>
                     </CompleteProject>
-
-                    <DeleteProject projectId={project.id} />
                 </div>
             </div>
+
+            <h1 data-testid="title">{project.title}</h1>
 
             <div class="meta-container">
                 <Status status={getStatus()} data-testid="project-status" />
             </div>
 
-            <h1 data-testid="title">{project.title}</h1>
-
             {#if project.description}
-                <div data-testid="description-container">
+                <div data-testid="description-container" class="description-container">
                     <MarkdownEditor
                         hideControls
                         disableEditing
@@ -106,6 +104,14 @@
                     />
                 </div>
             {/if}
+
+            <div class="buttons-container bottom">
+                <div></div>
+
+                <div>
+                    <DeleteProject projectId={project.id} />
+                </div>
+            </div>
         </div>
     {/if}
 
@@ -187,6 +193,10 @@
         margin-bottom: 1rem;
         padding-top: 0.25rem;
 
+        &.bottom {
+            margin: 1rem 0 0.5rem;
+        }
+
         & > div {
             display: flex;
             align-items: center;
@@ -210,6 +220,11 @@
         border-bottom: 1px solid var(--dark-400);
     }
 
+    .description-container {
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--dark-400);
+    }
+
     h1,
     h2 {
         margin-bottom: 1rem;
@@ -217,12 +232,10 @@
     }
 
     h1 {
-        font-size: 2rem;
         text-align: left;
     }
 
     h2 {
         margin-bottom: 0;
-        font-size: 1.5rem;
     }
 </style>
