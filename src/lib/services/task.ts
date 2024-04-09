@@ -132,8 +132,8 @@ export class TaskService extends Service {
         };
 
         if (!options.includeInactive) query.isActive = true;
-        if (!options.includeCompleted) query.completed = true;
-    
+        if (!options.includeCompleted) query.completed = false;
+
         return this.transaction(async (tx) => tx.task.findFirst({
             where: { ...query },
         }));

@@ -7,6 +7,7 @@ import { HttpStatus } from '$lib/constants/error';
 import { type Context } from '@prisma/client';
 import { ContextService } from '$lib/services/context';
 import { ContextRole } from '../../../types/contexts';
+import { TaskToProjectService } from '$lib/services/task-to-project';
 
 export const actions: Actions = {
     create: async ({ request, locals }) => {
@@ -17,6 +18,21 @@ export const actions: Actions = {
         const description = data.get('description')! as string;
 
         console.log('creating full task: ', title, description);
+    },
+    convertToProject: async ({ request, locals }) => {
+        if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });
+
+        const data = await request.formData();
+        const id = parseInt(data.get('id')! as string);
+
+        try {
+            const taskToProjectService = new TaskToProjectService({ user: locals.session.user });
+            const project = await taskToProjectService.convertToProject(id);
+            return {project};
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
     },
     delete: async ({ request, locals }) => {
         if (!locals.session.user) return fail(HttpStatus.UNAUTHORIZED, { errors: ['Unauthorized'] });

@@ -14,6 +14,8 @@
     function onModalChange(e: CustomEvent<{ id: string; open: boolean, taskId: number }>) {
         taskId = e.detail.taskId;
         open = e.detail.open;
+
+        console.log('taskId: ', taskId);
     }
 </script>
 

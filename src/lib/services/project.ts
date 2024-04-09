@@ -93,6 +93,24 @@ export class ProjectService extends Service {
     //#region Static Methods
 
     //#region Public Methods
+    public createProject = async (request: ICreateProjectRequest) => {
+        const validationErrors = ProjectService.isValidNewProjectRequest(request);
+    
+        if (validationErrors.length) throw validationErrors;
+    
+        const { title, description } = request;
+
+        return this.transaction(async (tx) => tx.project.create({
+            data: {
+                title,
+                description,
+                ownerId: this.user.id,
+                createdAt: dayjs().utc().toDate(),
+                updatedAt: dayjs().utc().toDate(),
+            },
+        }))
+    };
+
     public deleteProject = async (projectId: number) => {
         return this.transaction(async (tx) => tx.project.delete({
             where: {
@@ -135,6 +153,8 @@ export class ProjectService extends Service {
                 title,
                 description,
                 ownerId: this.user.id,
+                createdAt: dayjs().utc().toDate(),
+                updatedAt: dayjs().utc().toDate(),
             },
         }))
     };

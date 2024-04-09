@@ -4,6 +4,7 @@
 	import { goto } from "$app/navigation";
 	import Button from "../Button.svelte";
 	import type { IApiError } from "$lib/utils/api-error";
+	import type { Project } from "@prisma/client";
 
     export let id: number;
     export let onCancel: () => void = () => {};
@@ -19,7 +20,7 @@
     function onSubmitResponse() {
         processing = true;
 
-        return ({ result }: { result: ActionResult<{ message: string }> }) => {
+        return ({ result }: { result: ActionResult<{ message: string, project?: Project }> }) => {
             if (result.type === 'redirect') {
                 goto(result.location);
             }
@@ -35,8 +36,13 @@
             }
 
             if (result.type === 'success') {
-                reset();
                 onCancel?.();
+
+                if (result.data?.project) {
+                    goto(`/projects/${result.data.project.id}`);
+                } else {
+                    goto('/projects');
+                }
             }
 
             processing = false;
@@ -61,6 +67,10 @@
     </div>
 
     <input type="hidden" name="id" value={id} />
+
+    {#if genError}
+        <p class="danger">{genError}</p>
+    {/if}
 
     <div class="buttons-container">
         <Button
