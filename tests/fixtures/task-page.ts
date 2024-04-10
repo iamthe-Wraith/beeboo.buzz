@@ -43,6 +43,15 @@ export class TaskPageFixture {
         cancelButton: Locator;
     }
 
+    public convertToProject: {
+        trigger: Locator;
+        modal: Locator;
+        header: Locator;
+        text: Locator;
+        confirmButton: Locator;
+        cancelButton: Locator;
+    }
+
     constructor(public readonly page: Page, public readonly viewport?: ViewportSize | null) {
         this.taskInfoContainer = this.page.getByTestId('task-info-container');
         this.editTaskForm = this.page.getByTestId('edit-task-form');
@@ -89,6 +98,18 @@ export class TaskPageFixture {
             text: deleteModal.getByTestId(`${deleteModalId}-text`),
             confirmButton: deleteModal.getByTestId('delete-task-button'),
             cancelButton: deleteModal.getByTestId('cancel-delete-task-button'),
+        }
+
+        const convertTaskToProjectModalId = 'convert-task-to-project';
+        const convertTaskToProjectModal = this.page.getByTestId(`${convertTaskToProjectModalId}-modal`);
+        
+        this.convertToProject = {
+            trigger: this.taskInfoContainer.getByTestId(`${convertTaskToProjectModalId}-trigger-button`),
+            modal: convertTaskToProjectModal,
+            header: convertTaskToProjectModal.getByTestId(`${convertTaskToProjectModalId}-modal-header`),
+            text: convertTaskToProjectModal.getByTestId(`${convertTaskToProjectModalId}-modal-message`),
+            confirmButton: convertTaskToProjectModal.getByTestId(`${convertTaskToProjectModalId}-submit`),
+            cancelButton: convertTaskToProjectModal.getByTestId(`cancel-${convertTaskToProjectModalId}`),
         }
     }
 }

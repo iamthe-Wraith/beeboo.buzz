@@ -6,6 +6,7 @@ import { NavFixture } from "../fixtures/nav";
 import { TaskPageFixture } from "../fixtures/task-page";
 import { ContextPageFixture } from "../fixtures/context-page";
 import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+import { ProjectPageFixture } from "../fixtures/project-page";
 
 test.describe('task - update', () => {
     test('user should be able to complete the task', async ({ page, viewport, database }) => {
@@ -623,4 +624,148 @@ test.describe('task - update', () => {
             await signup.cleanup(email, database);
         });
     })
+
+    test.describe('convert task to project', () => {
+        test('user should be able to convert a task to a project', async ({ page, viewport, database }) => {
+            const email = getEmail();
+            const password = 'Password123!';
+            const tasks = [
+                {
+                    title: 'Test Task 1',
+                    description: 'Test description 1',
+                },
+            ];
+
+            const signup = new SignUpFixture(page);
+            const nav = new NavFixture(page, viewport);
+            const quickActions = new QuickActionsFixture(page, viewport);
+            const inboxPage = new ContextPageFixture(page, viewport);
+
+            try {
+                await page.goto('/');
+
+                await signup.signUp({ email, password, confirmPassword: password });
+
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+
+                for (let i = 0; i < tasks.length; i++) {
+                    const task = tasks[i];
+                    await quickActions.openTaskModal();
+                    await quickActions.task.title.fill(task.title);
+                    if (task.description) await quickActions.task.description.fill(task.description);
+                    await quickActions.task.createButton.click();
+                    await expect(quickActions.task.modal).not.toBeVisible();
+                }
+
+                await nav.openMobileNav();
+                await expect(nav.contextLinks.inbox).toBeInViewport();
+                await nav.contextLinks.inbox.click({ force: true });
+
+                await page.waitForURL('/inbox', {waitUntil: 'networkidle'});
+
+                await expect(inboxPage.tasks).toHaveCount(1);
+
+                const [owner] = await database.executeQuery(`SELECT "id" FROM "User" WHERE "email" = '${email}'`);
+                const [task] = await database.executeQuery(`SELECT "id" FROM "Task" WHERE "owner_id" = '${owner.id}'`);
+
+                inboxPage.tasks.nth(0).click();
+
+                await page.waitForURL(`/tasks/${task.id}`, {waitUntil: 'networkidle'});
+
+                const taskPage = new TaskPageFixture(page, viewport);
+
+                await expect(taskPage.taskInfo.status).toBeVisible();
+                await expect(taskPage.taskInfo.status).toHaveText('In Progress');
+
+                await expect(taskPage.convertToProject.trigger).toBeVisible();
+                await taskPage.convertToProject.trigger.click();
+
+                await expect(taskPage.convertToProject.modal).toBeVisible();
+                await expect(taskPage.convertToProject.header).toHaveText('Turn this task into a project?');
+                await expect(taskPage.convertToProject.text).toHaveText('This task will be deleted, and a new project will be created from it.');
+                await expect(taskPage.convertToProject.confirmButton).toBeVisible();
+                await expect(taskPage.convertToProject.cancelButton).toBeVisible();
+
+                await taskPage.convertToProject.confirmButton.click();
+
+                const projectPage = new ProjectPageFixture(page, viewport);
+
+                await expect(projectPage.projectInfo.title).toBeVisible();
+                await expect(projectPage.projectInfo.title).toHaveText(tasks[0].title);
+            } finally {
+                await signup.cleanup(email, database);
+            }
+        });
+        
+        test('user should be able to cancel the conversion of a task to a project', async ({ page, viewport, database }) => {
+            const email = getEmail();
+            const password = 'Password123!';
+            const tasks = [
+                {
+                    title: 'Test Task 1',
+                    description: 'Test description 1',
+                },
+            ];
+
+            const signup = new SignUpFixture(page);
+            const nav = new NavFixture(page, viewport);
+            const quickActions = new QuickActionsFixture(page, viewport);
+            const inboxPage = new ContextPageFixture(page, viewport);
+
+            try {
+                await page.goto('/');
+
+                await signup.signUp({ email, password, confirmPassword: password });
+
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+
+                for (let i = 0; i < tasks.length; i++) {
+                    const task = tasks[i];
+                    await quickActions.openTaskModal();
+                    await quickActions.task.title.fill(task.title);
+                    if (task.description) await quickActions.task.description.fill(task.description);
+                    await quickActions.task.createButton.click();
+                    await expect(quickActions.task.modal).not.toBeVisible();
+                }
+
+                await nav.openMobileNav();
+                await expect(nav.contextLinks.inbox).toBeInViewport();
+                await nav.contextLinks.inbox.click({ force: true });
+
+                await page.waitForURL('/inbox', {waitUntil: 'networkidle'});
+
+                await expect(inboxPage.tasks).toHaveCount(1);
+
+                const [owner] = await database.executeQuery(`SELECT "id" FROM "User" WHERE "email" = '${email}'`);
+                const [task] = await database.executeQuery(`SELECT "id" FROM "Task" WHERE "owner_id" = '${owner.id}'`);
+
+                inboxPage.tasks.nth(0).click();
+
+                await page.waitForURL(`/tasks/${task.id}`, {waitUntil: 'networkidle'});
+
+                const taskPage = new TaskPageFixture(page, viewport);
+
+                await expect(taskPage.taskInfo.status).toBeVisible();
+                await expect(taskPage.taskInfo.status).toHaveText('In Progress');
+
+                await expect(taskPage.convertToProject.trigger).toBeVisible();
+                await taskPage.convertToProject.trigger.click();
+
+                await expect(taskPage.convertToProject.modal).toBeVisible();
+                await expect(taskPage.convertToProject.header).toHaveText('Turn this task into a project?');
+                await expect(taskPage.convertToProject.text).toHaveText('This task will be deleted, and a new project will be created from it.');
+                await expect(taskPage.convertToProject.confirmButton).toBeVisible();
+                await expect(taskPage.convertToProject.cancelButton).toBeVisible();
+
+                await taskPage.convertToProject.cancelButton.click();
+
+                await expect(taskPage.convertToProject.modal).not.toBeVisible();
+
+                await expect(taskPage.taskInfo.title).toBeVisible();
+                await expect(taskPage.taskInfo.status).toBeVisible();
+            } finally {
+                await signup.cleanup(email, database);
+            }
+        });
+    });
 });

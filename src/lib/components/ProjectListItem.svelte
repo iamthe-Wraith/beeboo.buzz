@@ -11,7 +11,10 @@
     const hasTags = false;
 </script>
 
-<div class="project-container {(daysUntilDue < 0 && !project.completed) ? 'past-due' : ''} {project.completed ? 'completed' : ''}">
+<div
+    data-testid="{project.id}"
+    class="project-container {(daysUntilDue < 0 && !project.completed) ? 'past-due' : ''} {project.completed ? 'completed' : ''}"
+>
     <div class="complete-project-container {daysUntilDue < 0 ? 'past-due' : ''}">
         <CompleteProject {project}>
             <button type="submit" class={project.completed ? 'completed' : ''} data-testid="project-complete-button">
@@ -25,7 +28,12 @@
     >
         <div class="project-main">
             <div>
-                <p class={`title ${project.completed ? 'completed' : ''}`}>{project.title}</p>
+                <p
+                    data-testid="project-title"
+                    class={`title ${project.completed ? 'completed' : ''}`}
+                >
+                    {project.title}
+                </p>
             </div>
 
             {#if project.dueDate && !project.completed}

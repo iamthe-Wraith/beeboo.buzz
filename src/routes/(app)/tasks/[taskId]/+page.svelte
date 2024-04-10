@@ -131,6 +131,7 @@
                     <OpenModalEmitter let:openModal>
                         <Button
                             kind="neutral"
+                            data-testid="convert-task-to-project-trigger-button"
                             on:click={() => openModal('convert-task-to-project-modal', { taskId: task.id })}
                         >
                             Convert to Project
