@@ -1,14 +1,33 @@
 <script lang="ts">
     import { PUBLIC_APP_ENV } from '$env/static/public';
     import './global.css';
+    import { onMount } from 'svelte';
     import type { LayoutData } from './$types';
     import { user } from '$lib/stores/user';
     import { featureFlags } from '$lib/stores/featureFlags';
+    import Toast from '$lib/components/modals/Toast.svelte';
+    import { toast } from '$lib/stores/toast';
 	
     export let data: LayoutData;
 
+    let cacheStores = false;
+
     $: if (data?.user) user.set(data.user);
     $: if (data?.featureFlags) featureFlags.set(data.featureFlags);
+
+    $: if (cacheStores && $toast) {
+        window.sessionStorage.setItem("toast", JSON.stringify($toast))
+    }
+
+    onMount(() => {
+        const toastData = window.sessionStorage.getItem("toast")
+
+        if (toastData) {
+            toast.init(JSON.parse(toastData));
+        }
+
+        cacheStores = true;
+    })
 </script>
 
 <svelte:head>
@@ -42,3 +61,5 @@
 </svelte:head>
 
 <slot></slot>
+
+<Toast />

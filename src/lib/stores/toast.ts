@@ -27,23 +27,6 @@ const defaultDuration = 3500;
 
 let interval: number | undefined = undefined;
 
-const tick = () => {
-    update(toasts => {
-        const updated = toasts.filter(t => t.exp > Date.now());
-    
-        if (!toasts.length) {
-            window.clearInterval(interval);
-            interval = undefined;
-        }
-    
-        return updated;
-    });
-}
-
-const remove = (id: string) => {
-    update(toasts => toasts.filter(t => t.id !== id));
-};
-
 const add = (t: IToastRequest) => {
     const newToast: IToast = {
         id: window.crypto.randomUUID(),
@@ -60,8 +43,34 @@ const add = (t: IToastRequest) => {
     }
 };
 
+const init = (data: IToast[]) => {
+    update(toasts => [...(toasts || []), ...data]);
+
+    if (interval === undefined) {
+        interval = window.setInterval(tick, 100);
+    }
+}
+
+const remove = (id: string) => {
+    update(toasts => toasts.filter(t => t.id !== id));
+};
+
+const tick = () => {
+    update(toasts => {
+        const updated = toasts.filter(t => t.exp > Date.now());
+    
+        if (!toasts.length) {
+            window.clearInterval(interval);
+            interval = undefined;
+        }
+    
+        return updated;
+    });
+}
+
 export const toast = {
   subscribe,
   add,
+  init,
   remove,
 };

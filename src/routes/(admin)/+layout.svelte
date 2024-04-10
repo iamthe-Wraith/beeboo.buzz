@@ -4,7 +4,6 @@
     import Logo from '$lib/components/Logo.svelte';
     import AdminNav from '$lib/components/AdminNav.svelte';
     import MobileAdminNav from '$lib/components/MobileAdminNav.svelte';
-    import Toast from '$lib/components/modals/Toast.svelte';
 </script>
 
 <svelte:head>
@@ -56,8 +55,6 @@
         <slot></slot>  
     </main>
 </div>
-
-<Toast />
 
 <style>
     .container {

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import type { ActionResult } from "@sveltejs/kit";
+    import type { ActionResult } from "@sveltejs/kit";
     import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
-	import Button from "../Button.svelte";
-	import Icon from "../Icon.svelte";
-	import Modal from "../modals/Modal.svelte";
+    import { goto } from "$app/navigation";
+    import Button from "../Button.svelte";
+    import Icon from "../Icon.svelte";
+    import Modal from "../modals/Modal.svelte";
+    import { toast } from "$lib/stores/toast";
 
     export let taskId: number;
 
@@ -21,12 +22,11 @@
 
         return ({ result }: { result: ActionResult<{ message: string }> }) => {
             if (result.type === 'failure') {
-                // TODO: Show toast message that deletion failed
-                console.log('Error deleting task', result);
+                toast.add({ message: 'Error deleting task', type: 'error' });
             }
 
             if (result.type === 'redirect') {
-                // TODO: Show toast message that task was deleted
+                toast.add({ message: 'Task deleted successfully' });
                 goto(result.location);
             }
 

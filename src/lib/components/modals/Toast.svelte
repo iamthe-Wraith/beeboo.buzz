@@ -73,6 +73,7 @@
         border: none;
         border-radius: 0.5rem;
         background: transparent;
+        outline: none;
         z-index: 1005;
     }
 
