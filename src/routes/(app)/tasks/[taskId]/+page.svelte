@@ -11,6 +11,8 @@
     import CompleteTask from "$lib/components/forms/CompleteTask.svelte";
     import DeleteTask from "$lib/components/forms/DeleteTask.svelte";
     import MarkdownEditor from "$lib/components/MarkdownEditor.svelte";
+    import ConvertTaskToProjectModal from "$lib/components/modals/ConvertTaskToProjectModal.svelte";
+    import OpenModalEmitter from "$lib/components/OpenModalEmitter.svelte";
 
     export let data: PageData;
     
@@ -84,7 +86,7 @@
                 <div>
                     <Button
                         data-testid="edit-task-button"
-                        kind="transparent"
+                        kind="neutral"
                         on:click={() => editing = true}
                     >
                         Edit
@@ -93,14 +95,12 @@
                     <CompleteTask {task}>
                         <Button
                             type="submit" 
-                            kind="transparent"
+                            kind="primary"
                             data-testid="complete-task-button"
                         >
                             {task.completed ? 'Reopen' : 'Complete'}
                         </Button>
                     </CompleteTask>
-
-                    <DeleteTask taskId={task.id} />
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
             </div>
 
             {#if task.description}
-                <div data-testid="description-container">
+                <div data-testid="description-container" class="description-container">
                     <MarkdownEditor
                         hideControls
                         disableEditing
@@ -121,6 +121,24 @@
                     />
                 </div>
             {/if}
+
+            <div class="buttons-container bottom">
+                <div></div>
+
+                <div>
+                    <DeleteTask taskId={task.id} />
+
+                    <OpenModalEmitter let:openModal>
+                        <Button
+                            kind="neutral"
+                            data-testid="convert-task-to-project-trigger-button"
+                            on:click={() => openModal('convert-task-to-project-modal', { taskId: task.id })}
+                        >
+                            Convert to Project
+                        </Button>
+                    </OpenModalEmitter>
+                </div>
+            </div>
         </div>
     {/if}
 
@@ -129,8 +147,11 @@
     </div>
 </div>
 
+<ConvertTaskToProjectModal />
+
 <style>
     .task-container {
+        container-type: inline-size;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -175,10 +196,6 @@
                     padding-left: 0.5rem;
                     border-left: 1px solid var(--dark-400);
                 }
-
-                & .buttons-container {
-                    gap: 0;
-                }
             }
         }
     }
@@ -196,20 +213,28 @@
     .buttons-container {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         gap: 1rem;
         margin-bottom: 1rem;
         padding-top: 0.25rem;
 
+        &.bottom {
+            margin: 1rem 0 0.5rem;
+        }
+
         & > div {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             padding: 0 var(--outline-offset);
 
             &.row-reverse {
                 flex-direction: row-reverse;
+            }
+
+            &:last-child {
+                justify-content: flex-end;
             }
         }
     }
@@ -217,11 +242,16 @@
     .meta-container {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: space-between;
         gap: 0.5rem;
         margin-bottom: 1rem;
         padding: 0.7rem 0.5rem;
         border-top: 1px solid var(--dark-400);
+        border-bottom: 1px solid var(--dark-400);
+    }
+
+    .description-container {
+        padding-bottom: 0.5rem;
         border-bottom: 1px solid var(--dark-400);
     }
 </style>

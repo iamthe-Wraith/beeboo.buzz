@@ -49,17 +49,18 @@ model FeatureFlag {
 }
 
 model Project {
-  id            Int           @id @default(autoincrement())
-  title         String        @db.VarChar(125)
-  description   String?       @db.VarChar(3000)
-  dueDate       DateTime?     @db.Timestamp(6) @map("due_date")
-  completed     Boolean       @default(false)
-  priority      Int           @default(0)
-  ownerId       Int           @map("owner_id")
-  owner         User          @relation(fields: [ownerId], references: [id])
-  tasks         Task[]
-  createdAt     DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
-  updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
+  id                Int           @id @default(autoincrement())
+  title             String        @db.VarChar(125)
+  description       String?       @db.VarChar(3000)
+  dueDate           DateTime?     @db.Timestamp(6) @map("due_date")
+  completed         Boolean       @default(false)
+  priority          Int           @default(0)
+  ownerId           Int           @map("owner_id")
+  owner             User          @relation(fields: [ownerId], references: [id])
+  tasks             Task[]
+  convertedFromTask Boolean       @map("converted_from_task") @default(false)
+  createdAt         DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt         DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
 
 model Task {

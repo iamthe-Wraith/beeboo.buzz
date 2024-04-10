@@ -52,7 +52,7 @@
     kind="danger-transparent"
     on:click={onTriggerDelete}
 >
-    Delete
+    Delete Project
 </Button>
 
 <Modal
