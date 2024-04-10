@@ -8,10 +8,13 @@
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
 	import { MAX_PROJECT_DESCRIPTION_LENGTH, MAX_PROJECT_TITLE_LENGTH } from "$lib/constants/project";
+	import { page } from "$app/stores";
+	import { toast } from "$lib/stores/toast";
 
     type FormField = 'title' | 'description';
 
     export let onCancel: () => void = () => {};
+    export let onComplete: () => void = () => {};
 
     let processing = false;
     let title = '';
@@ -63,8 +66,13 @@
             }
 
             if (result.type === 'success') {
-                reset();                
-                window.location.reload();
+                reset();
+                onComplete?.();
+                toast.add({ message: 'Project created successfully' });
+
+                if ($page.url.pathname.includes('projects')) {
+                    window.location.reload();
+                }
             }
 
             processing = false;
