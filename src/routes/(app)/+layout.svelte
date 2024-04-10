@@ -6,7 +6,8 @@
     import Logo from '$lib/components/Logo.svelte';
     import GlobalNav from '$lib/components/GlobalNav.svelte';
     import MobileGlobalNav from '$lib/components/MobileGlobalNav.svelte';
-	import MobileQuickActions from '$lib/components/MobileQuickActions.svelte';
+    import MobileQuickActions from '$lib/components/MobileQuickActions.svelte';
+    import Toast from '$lib/components/modals/Toast.svelte';
 	
     export let data: LayoutData;
 
@@ -35,6 +36,8 @@
 
     <MobileQuickActions />
 </div>
+
+<Toast />
 
 <style>
     .container {
