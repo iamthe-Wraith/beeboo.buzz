@@ -65,16 +65,25 @@
 <style>
     dialog {
         position: fixed;
-        top: 1rem;
-        right: 1rem;
-        left: auto;
-        width: 90vw;
-        max-width: 15rem;
+        top: 2rem;
+        right: unset;
+        left: 50%;
+        width: 80vw;
+        max-width: 20rem;
         border: none;
         border-radius: 0.5rem;
         background: transparent;
+        transform: translate(-50%, 0);
         outline: none;
         z-index: 1005;
+
+        @media (min-width: 768px) {
+            top: 1rem;
+            right: 1rem;
+            left: auto;
+            width: 90vw;
+            transform: translate(0, 0);
+        }
     }
 
     .toast-message {
@@ -97,6 +106,13 @@
         &.error {
             background: var(--danger-100);
             border: 1px solid var(--danger-500);
+        }
+
+        @media (max-width: 768px) {
+            top: 2rem;
+            right: 1rem;
+            left: 1rem;
+            max-width: unset;
         }
     }
 

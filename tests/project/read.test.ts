@@ -5,6 +5,7 @@ import { test, expect } from "../custom-test";
 import { NavFixture } from "../fixtures/nav";
 import { ProjectsPageFixture } from "../fixtures/projects-page";
 import { ProjectPageFixture } from "../fixtures/project-page";
+import { ToastFixture } from "../fixtures/toast";
 
 test.describe('project - read', () => {
     test('should display the project info', async ({ page, viewport, database }) => {
@@ -21,6 +22,7 @@ test.describe('project - read', () => {
         const nav = new NavFixture(page, viewport);
         const quickActions = new QuickActionsFixture(page, viewport);
         const projectsPage = new ProjectsPageFixture(page, viewport);
+        const toast = new ToastFixture(page);
 
         await page.goto('/');
 
@@ -35,6 +37,9 @@ test.describe('project - read', () => {
             if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
+
+            await toast.assertToastMessageExists('Project created successfully');
+            await toast.closeToastMessage(0);
         }
 
         await nav.openMobileNav();
@@ -91,6 +96,7 @@ test.describe('project - read', () => {
         const nav = new NavFixture(page, viewport);
         const quickActions = new QuickActionsFixture(page, viewport);
         const projectsPage = new ProjectsPageFixture(page, viewport);
+        const toast = new ToastFixture(page);
 
         await page.goto('/');
 
@@ -105,6 +111,9 @@ test.describe('project - read', () => {
             if (project.description) await quickActions.project.description.fill(project.description);
             await quickActions.project.createButton.click();
             await expect(quickActions.project.modal).not.toBeVisible();
+
+            await toast.assertToastMessageExists('Project created successfully');
+            await toast.closeToastMessage(0);
         }
 
         await nav.openMobileNav();
