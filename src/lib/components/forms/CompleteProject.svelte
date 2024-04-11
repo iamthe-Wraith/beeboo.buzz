@@ -3,6 +3,7 @@
     import { enhance } from "$app/forms";
     import type { Project } from "@prisma/client";
     import type { ActionResult } from "@sveltejs/kit";
+    import { toast } from "$lib/stores/toast";
 
     export let project: Project;
 
@@ -17,8 +18,7 @@
             }
             
             if (result.type === 'failure') {
-                // TODO: Show toast message when completing project fails
-                console.log('Error completing project', result);
+                toast.add({ message: 'Error completing project', type: 'error' });
             }
 
             if (result.type === 'success') {            

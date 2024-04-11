@@ -4,7 +4,7 @@
 
     let open = false;
     
-    function onCancel() {
+    function close() {
         open = false;
     }
 
@@ -26,5 +26,5 @@
     on:modal-change={onModalChange}
     style="--modal-max-width: 30rem"
 >
-    <NewQuickTask {onCancel} />
+    <NewQuickTask onCancel={close} onComplete={close} />
 </Modal>

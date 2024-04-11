@@ -8,10 +8,13 @@
     import type { IApiError } from "$lib/utils/api-error";
     import { goto } from "$app/navigation";
 	import { MAX_TASK_DESCRIPTION_LENGTH, MAX_TASK_TITLE_LENGTH } from "$lib/constants/task";
+	import { toast } from "$lib/stores/toast";
+	import { page } from "$app/stores";
 
     type FormField = 'title' | 'description';
 
     export let onCancel: () => void = () => {};
+    export let onComplete: () => void = () => {};
 
     let processing = false;
     let title = '';
@@ -64,8 +67,13 @@
             }
 
             if (result.type === 'success') {
-                reset();                
-                window.location.reload();
+                reset();
+                onComplete?.();
+                toast.add({ message: 'Task created successfully' });
+
+                if ($page.url.pathname.includes('inbox')) {
+                    window.location.reload();
+                }
             }
 
             processing = false;
