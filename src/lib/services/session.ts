@@ -20,11 +20,15 @@ export class Session {
     private _metadata: ISessionMetadata | null = null;
     private _token = '';
     private _options: jwt.SignOptions = {
-        expiresIn: 1000 * 60 * 60 * 24 * 30, // 30 days
+        expiresIn: 1000 * 60 * 60 * 24 * 30, // 30 days,
     }
 
     constructor(token?: string) {
         if (token) this._token = token;
+
+        if (PUBLIC_APP_ENV === 'test' || PUBLIC_APP_ENV === 'ci') {
+            this._options.expiresIn = 1000 * 10; // 10 seconds
+        }
     }
 
     //#region Getters
