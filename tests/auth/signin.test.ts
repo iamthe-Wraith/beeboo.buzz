@@ -233,32 +233,34 @@ test.describe('sign in button', () => {
         const signin = new SignInFixture(page);
         const nav = new NavFixture(page, viewport);
     
-        signin.createUser({ email, password }, database);
+        try {
+            signin.createUser({ email, password }, database);
     
-        await page.goto('/');
-    
-        await signin.trigger.click();
-    
-        await expect(signin.form).toBeVisible();
-    
-        await signin.fillForm({ emailOrUsername: email, password });
-    
-        await signin.submitButton.click();
-    
-        const dashboard = await page.getByTestId('dashboard');
-        await expect(dashboard).toBeVisible();
+            await page.goto('/');
+        
+            await signin.trigger.click();
+        
+            await expect(signin.form).toBeVisible();
+        
+            await signin.fillForm({ emailOrUsername: email, password });
+        
+            await signin.submitButton.click();
+        
+            const dashboard = await page.getByTestId('dashboard');
+            await expect(dashboard).toBeVisible();
 
-        await expect(signin.trigger).not.toBeVisible();
+            await expect(signin.trigger).not.toBeVisible();
 
-        if (nav.isMobile) {
-            await expect(nav.menuButton).toBeVisible();
-            await expect(nav.menuButtonIcon).toBeVisible();
-            await nav.openMobileNav();
+            if (nav.isMobile) {
+                await expect(nav.menuButton).toBeVisible();
+                await expect(nav.menuButtonIcon).toBeVisible();
+                await nav.openMobileNav();
+            }
+        
+            await expect(nav.signoutButton).toBeVisible();
+        } finally {
+            await signin.cleanup(email, database);
         }
-    
-        await expect(nav.signoutButton).toBeVisible();
-    
-        await signin.cleanup(email, database);
     });
 
     test('sign in submission should fail if user with submitted email isn\'t found', async ({ page, database }) => {

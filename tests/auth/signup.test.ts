@@ -547,23 +547,26 @@ test.describe('sign up', () => {
             const email = getEmail();
             const password = 'Password123!';
         
-            await page.goto('/');
-        
             const signup = new SignUpFixture(page);
-            await signup.signUp({
-                email, 
-                password, 
-                confirmPassword: password,
-            });
 
-            await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
-        
-            const dashboard = await page.getByTestId('dashboard');
-            await expect(dashboard).toBeVisible();
-        
-            await expect(signup.trigger).not.toBeVisible();
-        
-            await signup.cleanup(email, database);
+            try {
+                await page.goto('/');
+                
+                await signup.signUp({
+                    email, 
+                    password, 
+                    confirmPassword: password,
+                });
+
+                await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+            
+                const dashboard = await page.getByTestId('dashboard');
+                await expect(dashboard).toBeVisible();
+            
+                await expect(signup.trigger).not.toBeVisible();
+            } finally {
+                await signup.cleanup(email, database);
+            }
         })
 
         test('signup submission should fail if email is already in use', async ({ page, database }) => {

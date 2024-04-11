@@ -59,7 +59,7 @@ test('clicking the sign out button signs the user out', async ({ page, database,
         await page.waitForURL('/', {waitUntil: 'networkidle'});
 
         await expect(signout.button).toBeHidden();
-    } catch (err) {
+    } finally {
         await signout.cleanup(email, database);
     }
 });
