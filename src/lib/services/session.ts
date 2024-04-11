@@ -20,7 +20,7 @@ export class Session {
     private _metadata: ISessionMetadata | null = null;
     private _token = '';
     private _options: jwt.SignOptions = {
-        expiresIn: 60 * 60 * 24 * 30, // 30 days
+        expiresIn: 1000 * 60 * 60 * 24 * 30, // 30 days
     }
 
     constructor(token?: string) {
