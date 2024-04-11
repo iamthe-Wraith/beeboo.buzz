@@ -11,17 +11,17 @@ test('sign out button exists in nav when user is signed in', async ({ page, data
     const signin = new SignInFixture(page);
     const signout = new SignOutFixture(page, viewport);
     const nav = new NavFixture(page, viewport);
-    
-    await page.goto('/');
 
     try {
-        signin.createUser({ email: emailOrUsername, password }, database);
+        await page.goto('/');
+
+        await signin.createUser({ email: emailOrUsername, password }, database);
 
         await signin.signIn({ emailOrUsername, password });
 
         await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
-        nav.openMobileNav();
+        await nav.openMobileNav();
         await expect(signout.button).toBeInViewport();
         await expect(signout.button).toBeVisible();
     } finally {
@@ -30,34 +30,36 @@ test('sign out button exists in nav when user is signed in', async ({ page, data
 });
 
 test('user cannot access sign out button when not signed in', async ({ page }) => {
-    await page.goto('/');
-
     const signup = new SignUpFixture(page);
     const signout = new SignOutFixture(page);
+    
+    await page.goto('/');
 
     await expect(signup.trigger).toBeVisible();
     await expect(signout.button).toBeHidden();
 });
 
 test('clicking the sign out button signs the user out', async ({ page, database, viewport }) => {
-    await page.goto('/');
-
     const email = getEmail();
     const password = 'Password123!';
 
     const signin = new SignInFixture(page);
     const signout = new SignOutFixture(page, viewport);
 
-    signin.createUser({ email, password }, database);
-    signin.signIn({ emailOrUsername: email, password });
+    try {
+        await page.goto('/');
 
-    await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
+        await signin.createUser({ email, password }, database);
+        await signin.signIn({ emailOrUsername: email, password });
 
-    await signout.signOut();   
+        await page.waitForURL('/dashboard', {waitUntil: 'networkidle'});
 
-    await page.waitForURL('/', {waitUntil: 'networkidle'});
+        await signout.signOut();   
 
-    await expect(signout.button).toBeHidden();
+        await page.waitForURL('/', {waitUntil: 'networkidle'});
 
-    await signout.cleanup(email, database);
+        await expect(signout.button).toBeHidden();
+    } finally {
+        await signout.cleanup(email, database);
+    }
 });
