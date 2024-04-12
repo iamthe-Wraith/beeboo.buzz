@@ -62,10 +62,5 @@
 
     main {
         min-height: calc(100vh - 7rem);
-        padding: 0.5rem;
-
-        @media (min-width: 1100px) {
-            padding: 1rem;
-        }
     }
 </style>
