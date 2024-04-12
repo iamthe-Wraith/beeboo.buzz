@@ -6,9 +6,12 @@
     import Button from "../Button.svelte";
     import TextInput from "../TextInput.svelte";
 	import type { IApiError } from '$lib/utils/api-error';
+	import { toast } from '$lib/stores/toast';
+	import { HttpStatus } from '$lib/constants/error';
 
     let email = '';
     let emailError = '';
+    let emailMessage = '';
 
     let processing = false;
 
@@ -28,7 +31,9 @@
 			}
             
             if (result.type === 'failure') {
-                if (result.data?.errors) {
+                if (result.status === HttpStatus.CONFLICT) {
+                    emailMessage = 'This email is already on the waitlist.';
+                } else if (result.data?.errors) {
                     result.data.errors.map((e: IApiError) => {
                         emailError = e.message;
                     })
@@ -39,7 +44,7 @@
 
             if (result.type === 'success') {
                 reset();
-                window.location.href = '/dashboard';
+                toast.add({ message: 'You\'ve joined the waitlist!' });
             }
 
             processing = false;
@@ -49,6 +54,7 @@
     function reset() {
         email = '';
         emailError = '';
+        emailMessage = '';
     }
 </script>
 
@@ -67,7 +73,7 @@
         <div>
             <TextInput
                 bind:value={email}
-                id="waitlist-email"
+                id="email"
                 data-testid="waitlist-email"
                 type="email"
                 placeholder="Your email address"
@@ -75,7 +81,11 @@
             />
 
             {#if emailError}
-                <p class="error m-error">{ emailError }</p>
+                <p class="error message m-message">{ emailError }</p>
+            {/if}
+
+            {#if emailMessage && !emailError}
+                <p class="message m-message">{ emailMessage }</p>
             {/if}
 
             <Button
@@ -88,7 +98,11 @@
         </div>
 
         {#if emailError}
-            <p class="error dt-error">{ emailError }</p>
+            <p class="error message dt-message">{ emailError }</p>
+        {/if}
+
+        {#if emailMessage && !emailError}
+            <p class="message dt-message">{ emailMessage }</p>
         {/if}
     </form>
 </div>
@@ -137,16 +151,20 @@
         }
     }
 
-    .error {
+    .message {
         margin: 0;
         text-align: center;
+
+        &:not(.error) {
+            color: var(--secondary-500);
+        }
     }
 
-    .m-error {
+    .m-message {
         display: none;
     }
 
-    .dt-error {
+    .dt-message {
         display: block;
     }
 
@@ -163,12 +181,12 @@
             flex-direction: column;
         }
 
-        .m-error {
+        .m-message {
             display: block;
             margin-bottom: 1rem;
         }
 
-        .dt-error {
+        .dt-message {
             display: none;
         }
     }

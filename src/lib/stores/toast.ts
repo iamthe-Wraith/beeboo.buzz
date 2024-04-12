@@ -23,7 +23,7 @@ export interface IToast {
 
 const { subscribe, update } = writable<IToast[]>([]);
 
-const defaultDuration = 60000; // 3500;
+const defaultDuration = 3500;
 
 let interval: number | undefined = undefined;
 

@@ -1,7 +1,12 @@
 <script>
+    import { browser } from '$app/environment';
     import { user } from "$lib/stores/user";
     import { featureFlags } from "$lib/stores/featureFlags";
     import JoinWaitlist from "$lib/components/forms/JoinWaitlist.svelte";
+
+    let canJoinWaitlist = false;
+
+    $: canJoinWaitlist = browser && !$user && $featureFlags['waitlist']?.isEnabled;
 </script>
 
 <section>
@@ -10,12 +15,11 @@
     </p>
 </section>
 
-    <!-- {#if !$user && $featureFlags['allow-new-users']?.isEnabled} -->
-    {#if $featureFlags['waitlist']?.isEnabled}
-        <section>
-            <JoinWaitlist />
-        </section>
-    {/if}
+{#if canJoinWaitlist}
+    <section>
+        <JoinWaitlist />
+    </section>
+{/if}
 
 <style>
     section {
