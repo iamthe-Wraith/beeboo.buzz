@@ -83,6 +83,13 @@ model Task {
   updatedAt     DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
 }
 
+model Waitlist {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  createdAt    DateTime      @default(now()) @db.Timestamp(6) @map("created_at")
+  updatedAt    DateTime      @default(now()) @db.Timestamp(6) @map("updated_at")
+}
+
 // !IMPORTANT this must match the enum found in src/types/user.ts
 enum AccountType {
   FREE
