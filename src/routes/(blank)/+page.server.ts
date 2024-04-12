@@ -3,8 +3,22 @@ import type { Actions } from './$types';
 import { AuthService } from '$lib/services/auth';
 import { ApiError } from '$lib/utils/api-error';
 import { ApiResponse } from '$lib/utils/api-response';
+import { WaitlistService } from '$lib/services/waitlist';
 
 export const actions: Actions = {
+    joinWaitlist: async ({ request }) => {
+        const data = await request.formData();
+        const email = data.get('email')! as string;
+
+        const waitlistService = new WaitlistService();
+
+        try {
+            await waitlistService.join(email);
+        } catch (err) {
+            const response = new ApiResponse({ errors: ApiError.parse(err) });
+            return fail(response.statusCode, { errors: response.errors });
+        }
+    },
     signin: async ({ request, cookies }) => {
         const authService = new AuthService(cookies);
 

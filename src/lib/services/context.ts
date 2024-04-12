@@ -1,9 +1,12 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { ApiError } from "$lib/utils/api-error";
 import { HttpStatus } from "$lib/constants/error";
 import { Service, type IServiceProps } from "./service";
 import { ContextRole, type IContextRole } from "../../types/contexts";
 import { MAX_CONTEXT_DESCRIPTION_LENGTH, MAX_CONTEXT_NAME_LENGTH } from "$lib/constants/context";
+
+dayjs.extend(utc);
 
 export interface ICreateContextRequest {
     name: string;
